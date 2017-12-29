@@ -128,6 +128,14 @@ void Camera::rotateToTargetRad(const vec3 rot) {
     createViewMatrix();
 }
 
+void Camera::rotateToTargetQuat(const quat rotQuat) {
+    quat targetQuat = rotQuat;
+    rotationQuat = quaternion_slerp(rotationQuat,targetQuat,smoothStep,0.0f);
+    //Create Rotation Matrix of cam
+    quaternion_quatToViewMat(&rotationMat,rotationQuat);
+    createViewMatrix();
+}
+
 void Camera::move(vec3 &pos){
     vec3_add(&position,&position,&pos);
     //Update Transition Matrix

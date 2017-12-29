@@ -47,7 +47,8 @@ TEMPLATEAPP templateApp = {
         /* This function will be triggered when an existing touche is released from the the screen. */
         AppToucheEnded,
         AppSetCameraRotation,
-
+        AppSetCameraRotationQuat,
+    
         AppSetPinDatas,
         AppBindCameraTexture,
         AppInitCamera,
@@ -141,6 +142,7 @@ void AppToucheEnded( float x, float y, unsigned int tap_count )
 }
 
 vec3 deviceRot;
+quat deviceRotQuat;
 quat targetRot;
 void AppSetCameraRotation(float x, float y,float z){
     //LOGI("AppSetCameraRotation called %f %f %f\n",x,y,z);
@@ -152,6 +154,15 @@ void AppSetCameraRotation(float x, float y,float z){
     deviceRot.x = x;
     deviceRot.y = y;
     deviceRot.z = z;
+}
+
+void AppSetCameraRotationQuat(const quat rotQ){
+    //LOGI("AppSetCameraRotation called %f %f %f\n",x,y,z);
+    /*deviceRot.x = x*RAD_TO_DEG;
+     deviceRot.y = y*RAD_TO_DEG;
+     deviceRot.z = z*RAD_TO_DEG;*/
+    
+    targetRot = rotQ;
 }
 
 pinData *tempPinData;

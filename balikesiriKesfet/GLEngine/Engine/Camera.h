@@ -42,6 +42,7 @@ public:
     void setRotation(quat rotation);
     void rotateToTarget(const vec3 rot);
     void rotateToTargetRad(const vec3 rot);
+    void rotateToTargetQuat(const quat rotQuat);
 
     void move(vec3 &pos);
 

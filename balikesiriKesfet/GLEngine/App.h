@@ -35,6 +35,7 @@ typedef struct
     void ( *ToucheMoved        )( float x, float y, unsigned int tap_count );
     void ( *ToucheEnded        )( float x, float y, unsigned int tap_count );
     void ( *SetCameraRotation        )( float x, float y, float z);
+    void ( *SetCameraRotationQuat    )( const quat deviceQuat );
     void ( *SetPinDatas        )( pinData *pins,int size,float pinTextMaxOffset);
     void ( *BindCameraTexture        )( int textureId);
     void ( *InitCamera        )(float fieldOfView, float nearClip, float farClip, float smoothStep, bool enableSmooth);
@@ -53,6 +54,7 @@ void AppToucheBegan( float x, float y, unsigned int tap_count );
 void AppToucheMoved( float x, float y, unsigned int tap_count );
 void AppToucheEnded( float x, float y, unsigned int tap_count );
 void AppSetCameraRotation( float x, float y, float z );
+void AppSetCameraRotationQuat (const quat deviceQuat);
 void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset);
 void AppInitCamera(float fieldOfView, float nearClip, float farClip, float smoothStep, bool enableSmooth);
 void AppBindCameraTexture(int cameraTextureId);

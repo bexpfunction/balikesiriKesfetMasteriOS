@@ -33,6 +33,7 @@ float cPitch, cYaw, cRoll, initYaw, heading;
 NSString *curLat, *curLng;
 CLLocation *currentLocation;
 pinData *pinList;
+
 int pinCount = 0;
 
 - (void)viewDidLoad {
@@ -51,9 +52,6 @@ int pinCount = 0;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    // remove the view's background color; this allows us not to use the opaque property (self.view.opaque = NO) since we remove the background color drawing altogether
-    self.view.backgroundColor = [UIColor clearColor];
-    
     
     initYaw = 0.0f;
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -83,24 +81,20 @@ int pinCount = 0;
     CGFloat screenHeight = screenRect.size.height;
     
     //TEMPLATE APP
-#ifdef __IPHONE_6_0
-    screenHeight *= 2.0f;
-    screenWidth *= 2.0f;
-    LOGI("\n\n\n IOS 6 \n\n\n");
-#endif
     templateApp.InitCamera(65.0f,1.0f,1000.0f,0.5f,true);
     templateApp.Init((int)screenWidth,(int)screenHeight);
     glInitialized = true;
  
     
     //Start location manager to get current location
+    
     [self startCaptureLocation];
     
     //Start motion manager for camera orientation
     self.motionManager = [[CMMotionManager alloc] init];
-    self.motionManager.deviceMotionUpdateInterval = 1.0f/60.0f;
-    self.motionManager.accelerometerUpdateInterval = 1.0f/60.0f;
-    self.motionManager.gyroUpdateInterval = 1.0f/60.0f;
+    self.motionManager.deviceMotionUpdateInterval = 1.0f/30.0f;
+    self.motionManager.accelerometerUpdateInterval = 1.0f/30.0f;
+    self.motionManager.gyroUpdateInterval = 1.0f/30.0f;
     
     [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue]
                                             withHandler:^(CMDeviceMotion* motion, NSError *error) {
@@ -136,7 +130,8 @@ bool pInited = false;
         if(pInited)
             templateApp.Draw();
     }
-
+    
+    
     ///////////////////////////
     //Framebuffer check
     if(checkFrameBuffer) {
@@ -167,6 +162,7 @@ bool pInited = false;
 - (void)stopCaptureLocation
 {
     [self.locationManager stopUpdatingLocation];
+    [self.locationManager stopUpdatingHeading];
     self.locationManager = nil;
     NSLog(@"Update location stopped...",nil);
 }
@@ -206,7 +202,18 @@ bool pInited = false;
 
     if(glInitialized && pinCount > 0) {
         templateApp.ToucheBegan(x,y,1);
+        pinData* tmpPinData;
+        tmpPinData = templateApp.GetSelectedPin();
         templateApp.ToucheEnded(x,y,1);
+        if(tmpPinData != NULL){
+            for(int i=0; i<pinCount; i++){
+                if(&pinList[i] == tmpPinData)
+                    pinList[i].borderColor = {1.0f, 0.0f, 0.0f};
+                else
+                    pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
+            }
+           templateApp.SetPinDatas(pinList, pinCount, 1.0f);
+        }
     }
 }
 
@@ -218,23 +225,24 @@ bool pInited = false;
 
 -(void)outputMotionData:(CMDeviceMotion*) motion {
     CMQuaternion quat = motion.attitude.quaternion;
-    
+
 //    CGFloat roll  = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
 //    CGFloat pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z);
 //    CGFloat yaw   =  asin(2*(quat.x*quat.y + quat.w*quat.z));
     
     CGFloat pitch = atan2(2*(quat.y*quat.z + quat.w*quat.x), quat.w*quat.w - quat.x*quat.x - quat.y*quat.y + quat.z*quat.z);
     CGFloat yaw = asin(-2*(quat.x*quat.z - quat.w*quat.y));
-    CGFloat roll = atan2(2*(quat.x*quat.y + quat.w*quat.z), quat.w*quat.w + quat.x*quat.x - quat.y*quat.y - quat.z*quat.z);
+    CGFloat roll = atan2(2*(quat.x*quat.y + quat.w*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
 
-
+    
+    
     if(pitch<0.0f) pitch = degToRad(360.0f) + pitch;
     if(roll<0.0f) roll = degToRad(360.0f) + roll;
     if(yaw<0.0f) yaw = degToRad(360.0f) + yaw;
     
 //    cPitch = -pitch+(degToRad(90.0f)); cRoll = -roll; cYaw = -yaw;
 //    cPitch = 0.0f; cRoll = 0.0f; cYaw = 0.0f;
-
+    
     cPitch = degToRad(90.0f)-pitch; cRoll = 0.0f;
     infoLabel.text = [NSString stringWithFormat:@"pitch: %f yaw: %f roll: %f",
                       radToDeg(cPitch),
@@ -274,8 +282,6 @@ bool pInited = false;
                                                       pinList = (pinData*)malloc(sizeof(pinData)*jsonArray.count);
                                                       
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
-                                                          pinData* tmpPinData;
-                                                          tmpPinData = templateApp.GetSelectedPin();
                                                           
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
                                                           float pLng = [(jsonArray[cnt][@"lng"]) floatValue];
@@ -289,9 +295,8 @@ bool pInited = false;
                                                           pinList[cnt].text = (char*)[(jsonArray[cnt][@"title"]) UTF8String];
                                                           pinList[cnt].size = 4.0f;
                                                           pinList[cnt].fontSize = 0.65f;
-                                                          pinList[cnt].color = {0.0f, 0.0f, 1.0f, 1.0f};
-                                                          pinList[cnt].borderColor = {1.0f, 0.0f, 0.0f, 1.0f};
-                                                          
+                                                          pinList[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
+                                                          pinList[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
                                                           NSLog(@"Pin text: %s posx: %f posz: %f",pinList[cnt].text,pinList[cnt].position.x,pinList[cnt].position.z);
                                                       }
                                                       templateApp.SetPinDatas(pinList,jsonArray.count,1.0f);
@@ -320,6 +325,8 @@ bool pInited = false;
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopAccelerometerUpdates];
     [self stopCaptureLocation];
+    
+    //Dealloc
     free(pinList);
 }
 
