@@ -601,8 +601,10 @@ void programDrawCallback(void *ptr){
 char uniform,attribute;
 vec3 targetRotVec = {0,0,0};
 void AppDraw() {
-    glClearColor(0.5f,0.5f,0.5f,0.0f);
+    glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
     //DrawCamera();
     if(gonnaInitPins){
         //LOGI("Gonna Init pins\n");
@@ -796,6 +798,9 @@ void AppDraw() {
     //xOff;1.000000 xOff2;51.000000
     //yOff;-59.000000 yOff2;0.000000
     //xAdvance;51.799999
+    
+    glBindBuffer (GL_ARRAY_BUFFER, 0);
+    glFlush();
 
 }
 quat mq = quaternion_fromEuler(0,0,0);
@@ -804,6 +809,7 @@ void drawPin(pinData data){
     modelMat.m[3].x = data.position.x * worldScale;
     modelMat.m[3].y = data.position.y;
     modelMat.m[3].z = data.position.z * worldScale;
+    
     
     modelMat.m[0].x = data.size;
     modelMat.m[1].y = data.size;

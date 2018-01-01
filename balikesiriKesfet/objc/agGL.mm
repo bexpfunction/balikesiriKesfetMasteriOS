@@ -14,23 +14,33 @@
 #import <malloc/malloc.h>
 #import <AVFoundation/AVFoundation.h>
 
-@interface agGL () <CLLocationManagerDelegate> {
+@interface agGL () <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
     Reachability *internetReachableFoo;
 }
 
 @property (nonatomic, strong) EAGLContext* context;
 @property (nonatomic, strong) GLKBaseEffect* bEffect;
 
+@property CGRect videoPreviewViewBounds;
+@property AVCaptureDevice *videoDevice;
+@property AVCaptureSession *captureSession;
+@property dispatch_queue_t captureSessionQueue;
+@property GLKView *videoPreviewView;
+@property CIContext *ciContext;
+@property EAGLContext *eaglContext;
+
 @end
 
 @implementation agGL
 
+GLKView* glView;
 #define radToDeg(x) (180.0f/M_PI)*x
 #define degToRad(x) (M_PI/180.0f)*x
 //For the draw test
-bool checkFrameBuffer, drawTest, drawApp, glInitialized, iAvailable, locationInited;
+bool checkFrameBuffer, drawTest, drawApp, glInitialized, iAvailable, locationInited, drawAppCalled;
 float cPitch, cYaw, cRoll, initYaw, heading;
-NSString *curLat, *curLng;
+float rateSumX, rateSumY, rateSumZ;
+NSString *curLat, *curLng, *gyroStr, *accStr, *acStr, *apStr, *arStr;
 CLLocation *currentLocation;
 pinData *pinList;
 
@@ -46,6 +56,8 @@ int pinCount = 0;
     iAvailable = false;
     locationInited = false;
 
+    rateSumX = degToRad(90.0f);  rateSumY = 0.0f; rateSumZ = 0.0f;
+    
     [self testInternetConnection];
 }
 
@@ -53,15 +65,20 @@ int pinCount = 0;
 {
     [super viewDidAppear:animated];
     
+    [self startCameraPreview];
+    
     initYaw = 0.0f;
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    GLKView* glView = (GLKView*)self.view;
+    glView = (GLKView*)self.view;
     glView.context = self.context;
+    
     [EAGLContext setCurrentContext:self.context];
     
     self.bEffect = [[GLKBaseEffect alloc] init];
     //Generate framebuffer and bind to the view
     [((GLKView *) self.view) bindDrawable];
+    ((GLKView *) self.view).opaque = NO;
+    [((GLKView *) self.view) setBackgroundColor:[UIColor clearColor]];
     
     printf("GLSL Version = %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
     printf("GL Version = %s\n", glGetString(GL_VERSION));
@@ -84,7 +101,7 @@ int pinCount = 0;
     templateApp.InitCamera(65.0f,1.0f,1000.0f,0.5f,true);
     templateApp.Init((int)screenWidth,(int)screenHeight);
     glInitialized = true;
- 
+    
     
     //Start location manager to get current location
     
@@ -100,6 +117,14 @@ int pinCount = 0;
                                             withHandler:^(CMDeviceMotion* motion, NSError *error) {
                                                 [self outputMotionData:motion];
                                             }];
+    [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue]
+                                    withHandler:^(CMGyroData* gyro, NSError *error) {
+                                        [self outputGyroData:gyro];
+                                    }];
+    
+    [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData* acceleration, NSError *error) {
+        [self outputAccelerationData:acceleration];
+    }];
 
     //Tap handler for the pinclick
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHandler:)];
@@ -107,13 +132,14 @@ int pinCount = 0;
     [self.view addGestureRecognizer:tap];
     
     //Debug rect
-    infoLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 60, 370, 40)];
+    infoLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 500, 370, 100)];
     infoLabel.text = @"";
     [infoLabel setBackgroundColor:[UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:1.0f]];
     [infoLabel setFont:[UIFont boldSystemFontOfSize:14]];
     [infoLabel setTextColor:[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f]];
+    [infoLabel setNumberOfLines:5];
     [self.view addSubview:infoLabel];
-
+    
 }
 
 
@@ -125,10 +151,13 @@ int pinCount = 0;
 
 bool pInited = false;
 -(void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+    drawAppCalled = false;
     if(drawApp && glInitialized) {
         templateApp.SetCameraRotation(cPitch, cYaw, cRoll);
-        if(pInited)
+        if(pInited) {
             templateApp.Draw();
+            drawAppCalled = true;
+        }
     }
     
     
@@ -143,7 +172,9 @@ bool pInited = false;
 }
 
 -(void)update {
-    
+    infoLabel.text = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@",gyroStr,accStr,acStr,apStr,arStr];
+//    [infoLabel setNumberOfLines:0]
+//    [infoLabel sizeToFit];
 }
 
 //Location Manager delegates
@@ -223,36 +254,45 @@ bool pInited = false;
     cYaw = degToRad(heading);
 }
 
+-(void)outputGyroData:(CMGyroData*) gyro {
+    gyroStr = [NSString stringWithFormat:@"Raw Rot rate x: %.2f y: %.2f z: %.2f",gyro.rotationRate.x, gyro.rotationRate.y, gyro.rotationRate.z];
+    if(gyro.rotationRate.x > 0.005f || gyro.rotationRate.x < -0.005f) {
+        rateSumX -= gyro.rotationRate.x;
+        if(radToDeg(rateSumX) > 360.0f) rateSumX = degToRad(0.0f);
+        if(radToDeg(rateSumX) < 0.0f) rateSumX = degToRad(360.0f);
+    }
+    //cPitch = rateSumX;
+    //NSLog(@"pitch: %f pitchRate: %f",cPitch,gyro.rotationRate.x);
+}
+
+-(void)outputAccelerationData:(CMAccelerometerData*) acceleration {
+    accStr = [NSString stringWithFormat:@"Raw Acceleration x: %.2f y: %.2f z: %.2f",acceleration.acceleration.x, acceleration.acceleration.y, acceleration.acceleration.z];
+}
+
 -(void)outputMotionData:(CMDeviceMotion*) motion {
-    CMQuaternion quat = motion.attitude.quaternion;
+//    CMQuaternion quat = motion.attitude.quaternion;
 
 //    CGFloat roll  = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
 //    CGFloat pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z);
 //    CGFloat yaw   =  asin(2*(quat.x*quat.y + quat.w*quat.z));
     
-    CGFloat pitch = atan2(2*(quat.y*quat.z + quat.w*quat.x), quat.w*quat.w - quat.x*quat.x - quat.y*quat.y + quat.z*quat.z);
-    CGFloat yaw = asin(-2*(quat.x*quat.z - quat.w*quat.y));
-    CGFloat roll = atan2(2*(quat.x*quat.y + quat.w*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
+//    CGFloat pitch = atan2(2*(quat.y*quat.z + quat.w*quat.x), quat.w*quat.w - quat.x*quat.x - quat.y*quat.y + quat.z*quat.z);
+//    CGFloat yaw = asin(-2*(quat.x*quat.z - quat.w*quat.y));
+//    CGFloat roll = atan2(2*(quat.x*quat.y + quat.w*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
+//
+//
+//    if(pitch<0.0f) pitch = degToRad(360.0f) + pitch;
+//    if(roll<0.0f) roll = degToRad(360.0f) + roll;
+//    if(yaw<0.0f) yaw = degToRad(360.0f) + yaw;
 
-    
-    
-    if(pitch<0.0f) pitch = degToRad(360.0f) + pitch;
-    if(roll<0.0f) roll = degToRad(360.0f) + roll;
-    if(yaw<0.0f) yaw = degToRad(360.0f) + yaw;
-    
-//    cPitch = -pitch+(degToRad(90.0f)); cRoll = -roll; cYaw = -yaw;
-//    cPitch = 0.0f; cRoll = 0.0f; cYaw = 0.0f;
-    
-    cPitch = degToRad(90.0f)-pitch; cRoll = 0.0f;
-    infoLabel.text = [NSString stringWithFormat:@"pitch: %f yaw: %f roll: %f",
-                      radToDeg(cPitch),
-                      radToDeg(cYaw),
-                      radToDeg(cRoll)];
+    apStr = [NSString stringWithFormat:@"Attitude pitch: %.2f yaw: %.2f roll: %.2f",motion.attitude.pitch, motion.attitude.yaw, motion.attitude.roll];
+    arStr = [NSString stringWithFormat:@"Attitude rot rate x: %.2f y: %.2f z: %.2f",motion.rotationRate.x, motion.rotationRate.y, motion.rotationRate.z];
+    acStr = [NSString stringWithFormat:@"Attitude acceleration x: %.2f y: %.2f z: %.2f",motion.userAcceleration.x, motion.userAcceleration.y, motion.userAcceleration.z];
 }
 
 -(void) updatePins {
     pInited = false;
-    NSString *generatedURL = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=20",curLat,curLng];
+    NSString *generatedURL = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=5",curLat,curLng];
     NSURLRequest *request = [NSURLRequest requestWithURL:
                              [NSURL URLWithString:generatedURL]];
     NSURLSession *session = [NSURLSession sharedSession];
@@ -314,8 +354,135 @@ bool pInited = false;
     [dataTask resume];
 }
 
--(void) startCameraSession {
+-(void) startCameraPreview {
+    self.view.backgroundColor = [UIColor clearColor];
+    self.eaglContext = [[EAGLContext alloc] initWithAPI:[self.context API] sharegroup:[self.context sharegroup]];
+    self.videoPreviewView = [[GLKView alloc] initWithFrame:[UIScreen mainScreen].bounds context:self.eaglContext];
+    self.videoPreviewView.enableSetNeedsDisplay = NO;
+    self.videoPreviewView.transform = CGAffineTransformMakeRotation(M_PI_2);
+    self.videoPreviewView.frame = [UIScreen mainScreen].bounds;
+    [self.view insertSubview:self.videoPreviewView atIndex:0];
+    //[self.view sendSubviewToBack:_videoPreviewView];
+    [self.videoPreviewView bindDrawable];
+    self.videoPreviewViewBounds = CGRectZero;
+    _videoPreviewViewBounds.size.width = self.videoPreviewView.drawableWidth;
+    _videoPreviewViewBounds.size.height = self.videoPreviewView.drawableHeight;
+    self.ciContext = [CIContext contextWithEAGLContext:self.eaglContext options:@{kCIContextWorkingColorSpace : [NSNull null]} ];
     
+    if ([[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count] > 0)
+    {
+        // get the input device and also validate the settings
+        NSArray *videoDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
+        
+        AVCaptureDevicePosition position = AVCaptureDevicePositionBack;
+        
+        for (AVCaptureDevice *device in videoDevices)
+        {
+            if (device.position == position) {
+                self.videoDevice = device;
+                break;
+            }
+        }
+        
+        // obtain device input
+        NSError *error = nil;
+        AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:self.videoDevice error:&error];
+        if (!videoDeviceInput)
+        {
+            NSLog(@"%@", [NSString stringWithFormat:@"Unable to obtain video device input, error: %@", error]);
+            return;
+        }
+        
+        // obtain the preset and validate the preset
+        NSString *preset = AVCaptureSessionPresetHigh;
+        if (![self.videoDevice supportsAVCaptureSessionPreset:preset])
+        {
+            NSLog(@"%@", [NSString stringWithFormat:@"Capture session preset not supported by video device: %@", preset]);
+            return;
+        }
+        
+        // create the capture session
+        self.captureSession = [[AVCaptureSession alloc] init];
+        self.captureSession.sessionPreset = preset;
+        
+        // CoreImage wants BGRA pixel format
+        NSDictionary *outputSettings = @{ (id)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithInteger:kCVPixelFormatType_32BGRA]};
+        // create and configure video data output
+        AVCaptureVideoDataOutput *videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
+        videoDataOutput.videoSettings = outputSettings;
+        
+        // create the dispatch queue for handling capture session delegate method calls
+        self.captureSessionQueue = dispatch_queue_create("capture_session_queue", NULL);
+        [videoDataOutput setSampleBufferDelegate:self queue:self.captureSessionQueue];
+        
+        videoDataOutput.alwaysDiscardsLateVideoFrames = YES;
+        
+        // begin configure capture session
+        [self.captureSession beginConfiguration];
+        
+        if (![self.captureSession canAddOutput:videoDataOutput])
+        {
+            NSLog(@"Cannot add video data output");
+            self.captureSession = nil;
+            return;
+        }
+        
+        // connect the video device input and video data and still image outputs
+        [self.captureSession addInput:videoDeviceInput];
+        [self.captureSession addOutput:videoDataOutput];
+        
+        [self.captureSession commitConfiguration];
+        
+        // then start everything
+        [self.captureSession startRunning];
+    }
+    else
+    {
+        NSLog(@"No device with AVMediaTypeVideo");
+    }
+}
+//AV Outputdelegate
+- (void)captureOutput:(AVCaptureOutput *)output
+didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+       fromConnection:(AVCaptureConnection *)connection {
+    
+    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    CIImage *sourceImage = [CIImage imageWithCVPixelBuffer:(CVPixelBufferRef)imageBuffer options:nil];
+    CGRect sourceExtent = sourceImage.extent;
+    
+    CGFloat sourceAspect = sourceExtent.size.width / sourceExtent.size.height;
+    CGFloat previewAspect = self.videoPreviewViewBounds.size.width  / self.videoPreviewViewBounds.size.height;
+    
+    // we want to maintain the aspect radio of the screen size, so we clip the video image
+    CGRect drawRect = sourceExtent;
+    if (sourceAspect > previewAspect)
+    {
+        // use full height of the video image, and center crop the width
+        drawRect.origin.x += (drawRect.size.width - drawRect.size.height * previewAspect) / 2.0;
+        drawRect.size.width = drawRect.size.height * previewAspect;
+    }
+    else
+    {
+        // use full width of the video image, and center crop the height
+        drawRect.origin.y += (drawRect.size.height - drawRect.size.width / previewAspect) / 2.0;
+        drawRect.size.height = drawRect.size.width / previewAspect;
+    }
+
+    [EAGLContext setCurrentContext:self.eaglContext];
+    [self.videoPreviewView bindDrawable];
+
+    // clear eagl view to grey
+    glClearColor(0.5, 0.5, 0.5, 1.0);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    // set the blend mode to "source over" so that CI will use that
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    
+    [self.ciContext drawImage:sourceImage inRect:self.videoPreviewViewBounds fromRect:drawRect];
+
+    [self.videoPreviewView display];
+    [EAGLContext setCurrentContext:self.context];
 }
 
 -(void)viewWillDisappear:(BOOL)animated {

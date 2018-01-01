@@ -36,6 +36,7 @@
 		B920278E1FE930FB00B25F4D /* roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B920277D1FE930FA00B25F4D /* roboto.ttf */; };
 		B920278F1FE930FB00B25F4D /* arial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B920277E1FE930FA00B25F4D /* arial.ttf */; };
 		B92027901FE930FB00B25F4D /* plane.obj in Resources */ = {isa = PBXBuildFile; fileRef = B920277F1FE930FA00B25F4D /* plane.obj */; };
+		B9242AC61FFA342A00A4E788 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9242AC51FFA342A00A4E788 /* CoreMedia.framework */; };
 		B92BE4741F9E0AAD0039D7B8 /* bizeYazin.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92BE4731F9E0AAD0039D7B8 /* bizeYazin.swift */; };
 		B92BE4781F9F18C80039D7B8 /* junk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B92BE4771F9F18C80039D7B8 /* junk.cpp */; };
 		B92BE48B1FA131270039D7B8 /* notificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B92BE48A1FA131270039D7B8 /* notificationCell.swift */; };
@@ -176,6 +177,7 @@
 		B920277D1FE930FA00B25F4D /* roboto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = roboto.ttf; sourceTree = "<group>"; };
 		B920277E1FE930FA00B25F4D /* arial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = arial.ttf; sourceTree = "<group>"; };
 		B920277F1FE930FA00B25F4D /* plane.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = plane.obj; sourceTree = "<group>"; };
+		B9242AC51FFA342A00A4E788 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		B92BE4731F9E0AAD0039D7B8 /* bizeYazin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bizeYazin.swift; sourceTree = "<group>"; };
 		B92BE4751F9E1A110039D7B8 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		B92BE4761F9F189F0039D7B8 /* junk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = junk.h; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9242AC61FFA342A00A4E788 /* CoreMedia.framework in Frameworks */,
 				B9DF58E31FF0DCD20076A083 /* CoreLocation.framework in Frameworks */,
 				B9D9FC7C1FEE81C800463609 /* CoreMotion.framework in Frameworks */,
 				B94671301F5B224600FDA6D3 /* GLKit.framework in Frameworks */,
@@ -658,6 +661,7 @@
 		B9C31D701F5761D60055E2CA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B9242AC51FFA342A00A4E788 /* CoreMedia.framework */,
 				B91C189C1FF0DC5400101101 /* CoreLocation.framework */,
 				B9D9FC7B1FEE7E2E00463609 /* CoreMotion.framework */,
 				B93BD6061FEB9FFC003342B9 /* SystemConfiguration.framework */,
