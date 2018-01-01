@@ -855,17 +855,17 @@
                         <viewControllerLayoutGuide type="top" id="chc-2o-Isg"/>
                         <viewControllerLayoutGuide type="bottom" id="8hR-0w-L9u"/>
                     </layoutGuides>
-                    <glkView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" id="H35-w6-f7S">
+                    <glkView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" id="XGs-l1-1Zf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <connections>
-                            <outlet property="delegate" destination="PD7-vy-1HA" id="KY2-ZO-EmL"/>
+                            <outlet property="delegate" destination="PD7-vy-1HA" id="aT9-bR-a3E"/>
                         </connections>
                     </glkView>
                 </glkViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1l7-DJ-sK7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2034" y="2093"/>
+            <point key="canvasLocation" x="-2034.4000000000001" y="2092.8035982008996"/>
         </scene>
         <!--Duyurular-->
         <scene sceneID="kFP-dP-0cV">

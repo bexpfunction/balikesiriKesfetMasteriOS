@@ -65,8 +65,6 @@ int pinCount = 0;
 {
     [super viewDidAppear:animated];
     
-    [self startCameraPreview];
-    
     initYaw = 0.0f;
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     glView = (GLKView*)self.view;
@@ -77,8 +75,6 @@ int pinCount = 0;
     self.bEffect = [[GLKBaseEffect alloc] init];
     //Generate framebuffer and bind to the view
     [((GLKView *) self.view) bindDrawable];
-    ((GLKView *) self.view).opaque = NO;
-    [((GLKView *) self.view) setBackgroundColor:[UIColor clearColor]];
     
     printf("GLSL Version = %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
     printf("GL Version = %s\n", glGetString(GL_VERSION));
@@ -99,6 +95,7 @@ int pinCount = 0;
     
     //TEMPLATE APP
     templateApp.InitCamera(65.0f,1.0f,1000.0f,0.5f,true);
+    templateApp.BindCameraTexture(0);
     templateApp.Init((int)screenWidth,(int)screenHeight);
     glInitialized = true;
     
@@ -261,7 +258,7 @@ bool pInited = false;
         if(radToDeg(rateSumX) > 360.0f) rateSumX = degToRad(0.0f);
         if(radToDeg(rateSumX) < 0.0f) rateSumX = degToRad(360.0f);
     }
-    //cPitch = rateSumX;
+    cPitch = rateSumX;
     //NSLog(@"pitch: %f pitchRate: %f",cPitch,gyro.rotationRate.x);
 }
 
@@ -471,18 +468,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [EAGLContext setCurrentContext:self.eaglContext];
     [self.videoPreviewView bindDrawable];
 
-    // clear eagl view to grey
-    glClearColor(0.5, 0.5, 0.5, 1.0);
-    glClear(GL_COLOR_BUFFER_BIT);
-    
-    // set the blend mode to "source over" so that CI will use that
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    
+    NSLog(@"1Using context: %@",[EAGLContext currentContext]);
     [self.ciContext drawImage:sourceImage inRect:self.videoPreviewViewBounds fromRect:drawRect];
 
     [self.videoPreviewView display];
     [EAGLContext setCurrentContext:self.context];
+    NSLog(@"2Using context: %@",[EAGLContext currentContext]);
 }
 
 -(void)viewWillDisappear:(BOOL)animated {

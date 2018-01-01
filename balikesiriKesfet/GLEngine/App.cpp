@@ -601,10 +601,9 @@ void programDrawCallback(void *ptr){
 char uniform,attribute;
 vec3 targetRotVec = {0,0,0};
 void AppDraw() {
-    glClearColor(0.0f,0.0f,0.0f,0.0f);
+    glClearColor(0.2f,0.4f,0.5f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+
     //DrawCamera();
     if(gonnaInitPins){
         //LOGI("Gonna Init pins\n");
@@ -798,9 +797,7 @@ void AppDraw() {
     //xOff;1.000000 xOff2;51.000000
     //yOff;-59.000000 yOff2;0.000000
     //xAdvance;51.799999
-    
-    glBindBuffer (GL_ARRAY_BUFFER, 0);
-    glFlush();
+
 
 }
 quat mq = quaternion_fromEuler(0,0,0);
@@ -1027,7 +1024,7 @@ void DrawCamera(){
     
     glActiveTexture( GL_TEXTURE0 );
     //glBindTexture( GL_TEXTURE_EXTERNAL_OES,cameraTextureId);      //OES NOT ENABLED
-    //glBindTexture(GL_TEXTURE_2D,GL_TEXTURE0);                     //USING THIS INSTEAD
+    glBindTexture(GL_TEXTURE_2D,GL_TEXTURE0);                     //USING THIS INSTEAD
     glDrawArrays(GL_TRIANGLE_STRIP,0,4);
     
     glDisableVertexAttribArray(attribute);
