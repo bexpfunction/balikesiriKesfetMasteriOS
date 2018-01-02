@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '38DD0CE5F73DC4EA306F7F030D495EC1'
-               BlueprintName = 'Pods-balikesiriKesfet'
+               BlueprintIdentifier = 'FF808EA7C31BE8E88BAA4E4888F8C2EA'
+               BlueprintName = 'GTMNSStringHTMLAdditions'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'libPods-balikesiriKesfet.a'>
+               BuildableName = 'libGTMNSStringHTMLAdditions.a'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

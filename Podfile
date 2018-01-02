@@ -5,4 +5,5 @@ target 'balikesiriKesfet' do
 pod ‘Firebase/Core’
 pod ‘Firebase/Messaging’
 pod 'freetype', '~> 2.6’
+pod ‘GTMNSStringHTMLAdditions’
 end

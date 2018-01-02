@@ -36,6 +36,7 @@
 GLKView* glView;
 #define radToDeg(x) (180.0f/M_PI)*x
 #define degToRad(x) (M_PI/180.0f)*x
+#define kFilteringFactor 0.1
 //For the draw test
 bool checkFrameBuffer, drawTest, drawApp, glInitialized, iAvailable, locationInited, drawAppCalled;
 float cPitch, cYaw, cRoll, initYaw, heading;
@@ -227,21 +228,28 @@ bool pInited = false;
     CGPoint location = [sender locationInView:self.view];
     CGFloat x = location.x;
     CGFloat y = location.y;
-
+    
+    
     if(glInitialized && pinCount > 0) {
         templateApp.ToucheBegan(x,y,1);
-        pinData* tmpPinData;
-        tmpPinData = templateApp.GetSelectedPin();
+
+        pinData* tmpPinData = (pinData*)malloc(sizeof(pinData));
+        memcpy(tmpPinData, templateApp.GetSelectedPin(), sizeof(pinData));
         templateApp.ToucheEnded(x,y,1);
-        if(tmpPinData != NULL){
-            for(int i=0; i<pinCount; i++){
-                if(&pinList[i] == tmpPinData)
+
+        if(tmpPinData != NULL) {
+            LOGI("\n\ntmp text: %s\n\n",tmpPinData->text);
+            for(int i=0; i<pinCount; i++) {
+                if(&pinList[i] == tmpPinData) {
                     pinList[i].borderColor = {1.0f, 0.0f, 0.0f};
-                else
+                }
+                else {
                     pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
+                }
             }
            templateApp.SetPinDatas(pinList, pinCount, 1.0f);
         }
+        free(tmpPinData);
     }
 }
 
@@ -254,16 +262,24 @@ bool pInited = false;
 -(void)outputGyroData:(CMGyroData*) gyro {
     gyroStr = [NSString stringWithFormat:@"Raw Rot rate x: %.2f y: %.2f z: %.2f",gyro.rotationRate.x, gyro.rotationRate.y, gyro.rotationRate.z];
     if(gyro.rotationRate.x > 0.005f || gyro.rotationRate.x < -0.005f) {
-        rateSumX -= gyro.rotationRate.x;
+        rateSumX -= gyro.rotationRate.x*1.0f/30.0f;
+        
         if(radToDeg(rateSumX) > 360.0f) rateSumX = degToRad(0.0f);
         if(radToDeg(rateSumX) < 0.0f) rateSumX = degToRad(360.0f);
     }
-    cPitch = rateSumX;
-    //NSLog(@"pitch: %f pitchRate: %f",cPitch,gyro.rotationRate.x);
+    if(gyro.rotationRate.z > 0.005f || gyro.rotationRate.z < -0.005f) {
+        rateSumZ += gyro.rotationRate.z*1.0f/30.0f;
+        
+        if(radToDeg(rateSumZ) > 360.0f) rateSumZ = degToRad(0.0f);
+        if(radToDeg(rateSumZ) < 0.0f) rateSumZ = degToRad(360.0f);
+    }
+    cPitch = rateSumX; cRoll = rateSumZ;
+    //NSLog(@"pitch: %f roll: %f",radToDeg(cPitch),radToDeg(cRoll));
 }
 
 -(void)outputAccelerationData:(CMAccelerometerData*) acceleration {
     accStr = [NSString stringWithFormat:@"Raw Acceleration x: %.2f y: %.2f z: %.2f",acceleration.acceleration.x, acceleration.acceleration.y, acceleration.acceleration.z];
+
 }
 
 -(void)outputMotionData:(CMDeviceMotion*) motion {
@@ -285,6 +301,8 @@ bool pInited = false;
     apStr = [NSString stringWithFormat:@"Attitude pitch: %.2f yaw: %.2f roll: %.2f",motion.attitude.pitch, motion.attitude.yaw, motion.attitude.roll];
     arStr = [NSString stringWithFormat:@"Attitude rot rate x: %.2f y: %.2f z: %.2f",motion.rotationRate.x, motion.rotationRate.y, motion.rotationRate.z];
     acStr = [NSString stringWithFormat:@"Attitude acceleration x: %.2f y: %.2f z: %.2f",motion.userAcceleration.x, motion.userAcceleration.y, motion.userAcceleration.z];
+    
+    
 }
 
 -(void) updatePins {
@@ -326,7 +344,7 @@ bool pInited = false;
 
                                                           pLat = (tmpPinLoc.coordinate.latitude - currentLocation.coordinate.latitude)*10000;
                                                           pLng = (tmpPinLoc.coordinate.longitude - currentLocation.coordinate.longitude)*10000;
-                                                          
+
                                                           pinList[cnt].id = cnt;
                                                           pinList[cnt].position = {-pLat, 0.0f, pLng};
                                                           pinList[cnt].text = (char*)[(jsonArray[cnt][@"title"]) UTF8String];
@@ -334,7 +352,8 @@ bool pInited = false;
                                                           pinList[cnt].fontSize = 0.65f;
                                                           pinList[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
                                                           pinList[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
-                                                          NSLog(@"Pin text: %s posx: %f posz: %f",pinList[cnt].text,pinList[cnt].position.x,pinList[cnt].position.z);
+                                                          auto pp = std::addressof(pinList[cnt].text);
+                                                          NSLog(@"%d Pin textaddress: %p text: %s posx: %f posz: %f",cnt,pp,pinList[cnt].text,pinList[cnt].position.x,pinList[cnt].position.z);
                                                       }
                                                       templateApp.SetPinDatas(pinList,jsonArray.count,1.0f);
                                                   } else {

@@ -103,18 +103,19 @@ int cameraTextureId;
 
 void AppToucheBegan( float x, float y, unsigned int tap_count )
 {
+    
     App::selectedPin = NULL;
     LOGI("templateAppToucheBegan,touche: %f,%ftap: %d\n", x, y, tap_count );
     touchBegan = true;
-    touchPos.x= x;
+    touchPos.x = x;
     touchPos.y = y;
     
     for(int i=0;i<pinSize;i++) {
         Raycast *r = RAYCAST_createFromScreenPos(x,y,cam);
         bool hit = CheckPinHit(r,&App::pinDatas[i]);
-        if(hit){
+        if(hit) {
             //Callback(App::pinDatas[i].id);
-            LOGI("\nPin hit true!!! %s\n",App::pinDatas[i].text);
+            
             if(App::selectedPin != &App::pinDatas[i])
                 App::selectedPin = &App::pinDatas[i];
             else
@@ -137,6 +138,7 @@ void AppToucheMoved( float x, float y, unsigned int tap_count )
 
 void AppToucheEnded( float x, float y, unsigned int tap_count )
 {
+    LOGI("\nPin hit true!!!\npinText: %s\n",App::pinDatas[0].text);
     LOGI("templateAppToucheEnded,touche: %f,%ftap: %d\n", x, y, tap_count );
     touchBegan = false;
 }
@@ -169,8 +171,7 @@ pinData *tempPinData;
 int tempPinSize;
 float tempPinMaxOffset;
 void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset){
-    LOGI("AppSetPinDatas called\n");
-    //deletePins();
+    deletePins();
     //pinSize = size;
     //pinTextOffset = pinTextMaxOffset;
     //App::pinDatas = pins;
@@ -554,22 +555,38 @@ void initFont(){
     LOGI("Init Font Complete!!!\n");
 }
 
-void initPins(){
+void initPins() {
     //LOGI("\ninitPins called\n");
-    //deletePins();
+    deletePins();
     pinSize = tempPinSize;
     pinTextOffset = tempPinMaxOffset;
     App::pinDatas = tempPinData;
-    //app.pinDatas = tempPinData;
-    
-    for(int i=0;i<pinSize;i++){
+    for(int i=0; i<tempPinSize; i++){
+        LOGI("Before text3d inited for temppin[%d] text: %s\n",i,tempPinData[i].text);
+    }
+    LOGI("\n\n");
+    for(int i=0; i<pinSize; i++){
+        LOGI("Before text3d inited for pin[%d] text: %s\n",i,App::pinDatas[i].text);
+    }
+    LOGI("\n\n");
+    for(int i=0;i<pinSize;i++) {
         //vec3 p = {App::pinDatas[i].position.x,App::pinDatas[i].position.y+3.0f,App::pinDatas[i].position.z};
         vec3 p = {0,3.0f,0};
+        
+        //!!!!!!!!!!!!!!!!!!Veri bozuluyor!!!!!!!!!!!!!!!!!!!!
         App::pinDatas[i].text3D = TEXT3D_init(App::pinDatas[i].text,font,p,App::pinDatas[i].fontSize/100.0f);
+        
         //LOGI("Init text3d completed! With font: %s\n", App::pinDatas[i].text3D->font->name);
     }
     isPinInited = true;
-    //LOGI("Pins Inited\n");
+    for(int i=0; i<pinSize; i++){
+        LOGI("After text3d inited for pin[%d] text: %s\n",i,App::pinDatas[i].text);
+    }
+    LOGI("\n\n");
+    for(int i=0; i<pinSize; i++){
+        LOGI("After text3d inited for temppin[%d] text: %s\n",i,tempPinData[i].text);
+    }
+    LOGI("\n\n");
 }
 
 void deletePins(){
@@ -729,14 +746,16 @@ void AppDraw() {
         uniform = PROGRAM_get_uniform_location(program,(char *)"VIEWMAT");
         glUniformMatrix4fv(uniform,1,GL_FALSE,(float *)cam->getViewMatrix());
         
+        
         for(int i=0;i<pinSize;i++) {
             drawPin(App::pinDatas[i]);
+            
         }
         glBindVertexArrayOES(0);
         //glBindVertexArray(0);
     }
     
-    //DRAW TEXTS                        //Don't draw text3d yet BURAK
+    //DRAW TEXTS
     if(isPinInited){
         for(int i=0;i<pinSize;i++) {
             //Position
