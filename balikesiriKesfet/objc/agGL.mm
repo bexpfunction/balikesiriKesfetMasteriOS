@@ -11,6 +11,7 @@
 #import "EngineBase.h"
 #import "Logger.h"
 #import "Reachability.h"
+#import <string>
 #import <malloc/malloc.h>
 #import <AVFoundation/AVFoundation.h>
 
@@ -31,6 +32,10 @@
 
 @end
 
+struct miniGLMembers{
+   static App tApp;
+};
+
 @implementation agGL
 
 GLKView* glView;
@@ -43,13 +48,17 @@ float cPitch, cYaw, cRoll, initYaw, heading;
 float rateSumX, rateSumY, rateSumZ;
 NSString *curLat, *curLng, *gyroStr, *accStr, *acStr, *apStr, *arStr;
 CLLocation *currentLocation;
-pinData *pinList;
+//static pinData *pinList=NULL;
+//bTest *burakP = NULL;
 
 int pinCount = 0;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    pinList = NULL;
+    //pinList = NULL;
+    _miniGLMembers = new miniGLMembers;
+    _miniGLMembers->tApp.pinDatas = NULL;
+    
     glInitialized = false;
     checkFrameBuffer = false;
     drawTest = false;
@@ -149,6 +158,12 @@ int pinCount = 0;
 
 bool pInited = false;
 -(void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+//    if(pinCount>0 && _miniGLMembers->tApp.pinDatas != NULL){
+//        for(int i=0; i<pinCount; i++){
+//            LOGI("obj-c pin[%d] posx: %.3f textaddress: %p text: %s\n",i,_miniGLMembers->tApp.pinDatas[i].position.x,_miniGLMembers->tApp.pinDatas[i].text,_miniGLMembers->tApp.pinDatas[i].text);
+//        }
+//        LOGI("\n\n");
+//    }
     drawAppCalled = false;
     if(drawApp && glInitialized) {
         templateApp.SetCameraRotation(cPitch, cYaw, cRoll);
@@ -173,6 +188,7 @@ bool pInited = false;
     infoLabel.text = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@",gyroStr,accStr,acStr,apStr,arStr];
 //    [infoLabel setNumberOfLines:0]
 //    [infoLabel sizeToFit];
+    
 }
 
 //Location Manager delegates
@@ -212,14 +228,12 @@ bool pInited = false;
         curLng = [NSString stringWithFormat:@"%.8f",newLocation.coordinate.longitude];
         [self updatePins];
         initYaw = degToRad(heading);
-        pInited = true;
     }
     if(locationInited && lDistance > 100.0f){
         curLat = [NSString stringWithFormat:@"%.8f",newLocation.coordinate.latitude];
         curLng = [NSString stringWithFormat:@"%.8f",newLocation.coordinate.longitude];
         //[self updatePins];
         initYaw = degToRad(heading);
-        pInited = true;
     }
 }
 
@@ -232,24 +246,22 @@ bool pInited = false;
     
     if(glInitialized && pinCount > 0) {
         templateApp.ToucheBegan(x,y,1);
-
-        pinData* tmpPinData = (pinData*)malloc(sizeof(pinData));
-        memcpy(tmpPinData, templateApp.GetSelectedPin(), sizeof(pinData));
         templateApp.ToucheEnded(x,y,1);
 
-        if(tmpPinData != NULL) {
-            LOGI("\n\ntmp text: %s\n\n",tmpPinData->text);
+        if(templateApp.GetSelectedPin() != NULL) {
+            LOGI("\n\ntmp text: %s\n\n",templateApp.GetSelectedPin()->text);
             for(int i=0; i<pinCount; i++) {
-                if(&pinList[i] == tmpPinData) {
-                    pinList[i].borderColor = {1.0f, 0.0f, 0.0f};
+                if(&_miniGLMembers->tApp.pinDatas[i] == templateApp.GetSelectedPin()) {
+                    _miniGLMembers->tApp.pinDatas[i].borderColor = {1.0f, 0.0f, 0.0f};
                 }
                 else {
-                    pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
+                    _miniGLMembers->tApp.pinDatas[i].borderColor = {1.0f, 1.0f, 1.0f};
                 }
+                LOGI("pin[%d] reset, text: %s colB: %f\n",i, _miniGLMembers->tApp.pinDatas[i].text, _miniGLMembers->tApp.pinDatas[i].borderColor.y);
             }
-           templateApp.SetPinDatas(pinList, pinCount, 1.0f);
+           //templateApp.SetPinDatas(pinList, pinCount, 1.0f);
         }
-        free(tmpPinData);
+        //free(templateApp.GetSelectedPin());
     }
 }
 
@@ -273,7 +285,7 @@ bool pInited = false;
         if(radToDeg(rateSumZ) > 360.0f) rateSumZ = degToRad(0.0f);
         if(radToDeg(rateSumZ) < 0.0f) rateSumZ = degToRad(360.0f);
     }
-    cPitch = rateSumX; cRoll = rateSumZ;
+    cPitch = rateSumX; //cRoll = rateSumZ;
     //NSLog(@"pitch: %f roll: %f",radToDeg(cPitch),radToDeg(cRoll));
 }
 
@@ -307,7 +319,7 @@ bool pInited = false;
 
 -(void) updatePins {
     pInited = false;
-    NSString *generatedURL = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=5",curLat,curLng];
+    NSString *generatedURL = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=1",curLat,curLng];
     NSURLRequest *request = [NSURLRequest requestWithURL:
                              [NSURL URLWithString:generatedURL]];
     NSURLSession *session = [NSURLSession sharedSession];
@@ -332,10 +344,10 @@ bool pInited = false;
                                                   NSArray *jsonArray = (NSArray *)jsonObj;
                                                   if(jsonArray.count>0 && glInitialized) {
                                                       
-                                                      pinCount = jsonArray.count;
-                                                      free(pinList);
-                                                      pinList = (pinData*)malloc(sizeof(pinData)*jsonArray.count);
-                                                      
+                                                      pinCount = (int)jsonArray.count;
+                                                      free(_miniGLMembers->tApp.pinDatas);
+                                                      //pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
+                                                      _miniGLMembers->tApp.pinDatas = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
                                                           
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
@@ -345,29 +357,37 @@ bool pInited = false;
                                                           pLat = (tmpPinLoc.coordinate.latitude - currentLocation.coordinate.latitude)*10000;
                                                           pLng = (tmpPinLoc.coordinate.longitude - currentLocation.coordinate.longitude)*10000;
 
-                                                          pinList[cnt].id = cnt;
-                                                          pinList[cnt].position = {-pLat, 0.0f, pLng};
-                                                          pinList[cnt].text = (char*)[(jsonArray[cnt][@"title"]) UTF8String];
-                                                          pinList[cnt].size = 4.0f;
-                                                          pinList[cnt].fontSize = 0.65f;
-                                                          pinList[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
-                                                          pinList[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
-                                                          auto pp = std::addressof(pinList[cnt].text);
-                                                          NSLog(@"%d Pin textaddress: %p text: %s posx: %f posz: %f",cnt,pp,pinList[cnt].text,pinList[cnt].position.x,pinList[cnt].position.z);
+                                                          _miniGLMembers->tApp.pinDatas[cnt].id = cnt;
+                                                          _miniGLMembers->tApp.pinDatas[cnt].position = {-pLat, 0.0f, pLng};
+                                                          _miniGLMembers->tApp.pinDatas[cnt].text = (char*)malloc(sizeof(char)*(strlen([jsonArray[cnt][@"title"] cStringUsingEncoding:NSUTF8StringEncoding])));
+                                                          _miniGLMembers->tApp.pinDatas[cnt].text = (char*)[jsonArray[cnt][@"title"] cStringUsingEncoding:NSUTF8StringEncoding];
+                                                          _miniGLMembers->tApp.pinDatas[cnt].size = 4.0f;
+                                                          _miniGLMembers->tApp.pinDatas[cnt].fontSize = 0.65f;
+                                                          _miniGLMembers->tApp.pinDatas[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
+                                                          _miniGLMembers->tApp.pinDatas[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
+
+                                                          LOGI("pin [%d] text: %s address: %p\n", cnt, _miniGLMembers->tApp.pinDatas[cnt].text, _miniGLMembers->tApp.pinDatas[cnt].text);
                                                       }
-                                                      templateApp.SetPinDatas(pinList,jsonArray.count,1.0f);
+                                                      LOGI("\n\n");
+                                                      templateApp.SetPinDatas(_miniGLMembers->tApp.pinDatas,(int)jsonArray.count,1.0f);
+                                                      pInited = true;
+                                                      //free(_miniGLMembers->tApp.pinDatas);
                                                   } else {
                                                       pinCount = 0;
                                                   }
                                               }
-                                              else {
-                                                  //NSLog(@"it is a dictionary");
-                                                  NSDictionary *jsonDictionary = (NSDictionary *)jsonObj;
-                                                  //NSLog(@"jsonDictionary - %@",jsonDictionary);
-                                              }
+//                                              else {
+//                                                  //NSLog(@"it is a dictionary");
+//                                                  NSDictionary *jsonDictionary = (NSDictionary *)jsonObj;
+//                                                  //NSLog(@"jsonDictionary - %@",jsonDictionary);
+//                                              }
                                           }
                                       }];
     [dataTask resume];
+}
+
+-(void) fetchPins {
+    
 }
 
 -(void) startCameraPreview {
@@ -497,14 +517,16 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    glInitialized = false; drawApp = false;
     [self.motionManager stopDeviceMotionUpdates];
     [self.motionManager stopGyroUpdates];
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopAccelerometerUpdates];
     [self stopCaptureLocation];
-    
+    templateApp.Exit();
     //Dealloc
-    free(pinList);
+    free(_miniGLMembers->tApp.pinDatas);
+    pinCount = 0;
 }
 
 // Checks if we have an internet connection or not

@@ -804,6 +804,9 @@
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -1150,6 +1153,8 @@
 			baseConfigurationReference = 29C6E82AAF171C20738224C2 /* Pods-balikesiriKesfet.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ADDRESS_SANITIZER_CONTAINER_OVERFLOW = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = balikesiriKesfet/balikesiriKesfet.entitlements;
 				DEVELOPMENT_TEAM = GDRK82278T;
@@ -1226,6 +1231,8 @@
 			baseConfigurationReference = 7CB1937B018A557ED4106823 /* Pods-balikesiriKesfet.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ADDRESS_SANITIZER_CONTAINER_OVERFLOW = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = balikesiriKesfet/balikesiriKesfet.entitlements;
 				DEVELOPMENT_TEAM = GDRK82278T;
@@ -1306,7 +1313,7 @@
 				B9C31D6C1F57507F0055E2CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		B9C31D6D1F57507F0055E2CA /* Build configuration list for PBXNativeTarget "balikesiriKesfet" */ = {
 			isa = XCConfigurationList;
@@ -1315,7 +1322,7 @@
 				B9C31D6F1F57507F0055E2CA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

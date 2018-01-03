@@ -2,12 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key></key>
-	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Balıkesir&apos;i Keşfet</string>
+	<string>Balıkesir'i Keşfet</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -34,7 +32,7 @@
 	<key>FacebookAppID</key>
 	<string>136571520285648</string>
 	<key>FacebookDisplayName</key>
-	<string>Balıkesir&apos;i Keşfet</string>
+	<string>Balıkesir'i Keşfet</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>
@@ -59,14 +57,18 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Artırılmış Gerçeklik Modu</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Konum Bilgisi</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Konum Bilgisi</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Konum Bilgisi</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Konum Bilgisi</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Artırılmış Gerçeklik Modu</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

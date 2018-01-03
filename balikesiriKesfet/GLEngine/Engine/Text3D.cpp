@@ -8,7 +8,7 @@
 #include "types.h"
 
 TEXT3D *TEXT3D_init(char *text, FONT *font,vec3 pos,float size) {
-    //LOGI("\n\ntext: %s\n\n", text);
+    LOGI("Text 3d init with text: %s\n\n", text);
     TEXT3D *text3d = (TEXT3D *)calloc(1,sizeof(TEXT3D));
     text3d->font = font;
     text3d->text = text;
@@ -17,7 +17,7 @@ TEXT3D *TEXT3D_init(char *text, FONT *font,vec3 pos,float size) {
     
     float x = 0;
     
-    int l = strlen(text);
+    int l = static_cast<int>(strlen(text));
     int row = 0;
     text3d->length = l;
     
@@ -28,7 +28,8 @@ TEXT3D *TEXT3D_init(char *text, FONT *font,vec3 pos,float size) {
     vertex_start = vertex_array;
     
     unsigned  char * ind_array = NULL, * ind_start = NULL;
-    ind_array = (unsigned char *)malloc(sizeof(unsigned short)*6*l);
+    //ind_array = (unsigned char *)malloc(sizeof(unsigned short)*6*l);
+    ind_array = (unsigned char *)malloc(sizeof(unsigned char)*6*l);
     ind_start = ind_array;
     
     //text3d->textVertices = (GLfloat *)malloc(sizeof(GLfloat)*l*8);

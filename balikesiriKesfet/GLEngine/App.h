@@ -40,7 +40,8 @@ typedef struct
     void ( *BindCameraTexture        )( int textureId);
     void ( *InitCamera        )(float fieldOfView, float nearClip, float farClip, float smoothStep, bool enableSmooth);
     void ( *SetCameraPosition        )( float x, float y, float z);
-    void ( *SetWorldScale    )( float scale);
+    void ( *SetWorldScale   )( float scale);
+    void ( *Exit            )();
     pinData *( *GetSelectedPin )();
     //void ( *Accelerometer   )( float x, float y, float z );
 } TEMPLATEAPP;

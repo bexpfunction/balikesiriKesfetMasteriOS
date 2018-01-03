@@ -12,8 +12,11 @@
 #import "CaptureSessionManager.h"
 
 UILabel *infoLabel;
+struct miniGLMembers;
 
-@interface agGL : GLKViewController
+@interface agGL : GLKViewController{
+    struct miniGLMembers *_miniGLMembers;
+}
 @property (strong, nonatomic) CMMotionManager *motionManager;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
