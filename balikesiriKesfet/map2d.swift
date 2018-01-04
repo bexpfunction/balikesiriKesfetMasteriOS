@@ -27,10 +27,19 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate{
     let locationManager = CLLocationManager()
     var currentLocation = CLLocation();
     
+    @IBOutlet weak var pinTitle: UILabel!
+    @IBOutlet var annotationPopup: UIView!
     @IBOutlet weak var mapKitView: MKMapView!
+    @IBOutlet weak var visualEffectView: UIVisualEffectView!
+    var effect:UIVisualEffect!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        effect = visualEffectView.effect
+        visualEffectView.effect = nil
+        annotationPopup.layer.cornerRadius = 5
+        
         mapKitView.showsUserLocation = true
         
         //Ask authorisation
@@ -46,16 +55,49 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate{
             getPinInfoFromWebMap()
         }
     }
+    
+    func animateIn() {
+        self.view.addSubview(annotationPopup)
+        annotationPopup.center = self.view.center
+        
+        annotationPopup.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        annotationPopup.alpha = 0
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            self.visualEffectView.effect = self.effect
+            self.annotationPopup.alpha = 1
+            self.annotationPopup.transform = CGAffineTransform.identity
+        })
+    }
+    
+    func animateOut() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.annotationPopup.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.annotationPopup.alpha = 0
+            
+            self.visualEffectView.effect = nil
+            
+        }, completion: {
+            (success:Bool) in
+                self.annotationPopup.removeFromSuperview()
+        })
+    }
+    
     @IBAction func updateViewToggle(_ sender: Any) {
         updateView = !updateView
     }
 
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-       
+        pinTitle.text = view.annotation?.title.unsafelyUnwrapped
+        animateIn()
     }
     func mapView(_ mapView: MKMapView,
                  didUpdate userLocation: MKUserLocation){
-        NSLog("mapview update...")
+
+    }
+    
+    @IBAction func dismissAnnPopup(_ sender: Any) {
+        animateOut()
     }
     
     func getPinInfoFromWebMap() {

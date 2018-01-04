@@ -25,7 +25,6 @@
 @end
 
 #pragma mark - AVFoundation Variables
-AVCaptureVideoPreviewLayer* previewLayer;
 AVCaptureSession* captureSession;
 
 @implementation agGL
@@ -71,6 +70,8 @@ int pinCount = 0;
     [super viewDidAppear:animated];
     
     initYaw = 0.0f;
+    
+    //Init engine
     [self initTemplateAppWithGL];
     
     
@@ -372,11 +373,11 @@ bool pInited = false;
                                                       pinCount = 0;
                                                   }
                                               }
-                                              else {
-                                                  //NSLog(@"it is a dictionary");
-                                                  NSDictionary *jsonDictionary = (NSDictionary *)jsonObj;
-                                                  //NSLog(@"jsonDictionary - %@",jsonDictionary);
-                                              }
+//                                              else {
+//                                                  //NSLog(@"it is a dictionary");
+//                                                  NSDictionary *jsonDictionary = (NSDictionary *)jsonObj;
+//                                                  //NSLog(@"jsonDictionary - %@",jsonDictionary);
+//                                              }
                                           }
                                       }];
     [dataTask resume];
@@ -400,11 +401,7 @@ bool pInited = false;
         assert(0);
     [captureSession addInput:input];
     //preview layer
-    previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:captureSession];
-    previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-    
-    [previewLayer setFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width)];
-    [self.view.layer addSublayer:previewLayer];
+
     [captureSession startRunning];
 }
 //AV Outputdelegate
