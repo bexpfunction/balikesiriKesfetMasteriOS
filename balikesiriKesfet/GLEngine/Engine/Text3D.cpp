@@ -193,9 +193,9 @@ void TEXT3D_print(TEXT3D *text,PROGRAM *program, Camera *cam,mat4 *modelMat,floa
             
             
         } else
-        LOGI("TEXT3D PROGRAM ERRORRRR");
+            LOGI("TEXT3D PROGRAM ERRORRRR");
     } else
-    LOGI("TEXT3D TEXT ERRORRRR");
+        LOGI("TEXT3D TEXT ERRORRRR");
     glDisable(GL_BLEND);
     
 }
@@ -217,8 +217,8 @@ void TEXT3D_setPosition(TEXT3D *text, vec3 pos) {
 }
 
 void Text3D_free(TEXT3D *text) {
+    LOGI("\n\n\nTEXT3D_free called!!\n\n\n");
     glDeleteBuffers(1,&text->vbo);
     glDeleteBuffers(1,&text->triVbo);
     free(text);
 }
-

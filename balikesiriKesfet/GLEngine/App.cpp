@@ -185,6 +185,7 @@ void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset){
      
      vec3 p3 = {0,0,-4};
      App::pinDatas[2].position = p3;*/
+    
 }
 
 void AppBindCameraTexture(int texId){
@@ -551,29 +552,28 @@ void initFont(){
     FONT_loadFreeType(font,font->name,1,72.0f,1024,1024,32,138);
     LOGI("Init Font Complete!!!\n");
 }
-
+#pragma mark-Init Pins
 void initPins() {
     //LOGI("\ninitPins called\n");
     deletePins();
     pinSize = tempPinSize;
     pinTextOffset = tempPinMaxOffset;
     App::pinDatas = tempPinData;
+
+    if(pinSize>0){
+        for(int i=0; i<pinSize; i++){
+            LOGI("c++ initPins pin[%d] posx: %.3f textaddress: %p text: %s\n",i,App::pinDatas[i].position.x,App::pinDatas[i].text,App::pinDatas[i].text);
+        }
+        LOGI("\n\n");
+    }
     
-    LOGI("\n\n");
     for(int i=0;i<pinSize;i++) {
         //vec3 p = {App::pinDatas[i].position.x,App::pinDatas[i].position.y+3.0f,App::pinDatas[i].position.z};
         vec3 p = {0,3.0f,0};
 
         //App::pinDatas[i].text3D = TEXT3D_init(App::pinDatas[i].text,font,p,App::pinDatas[i].fontSize/100.0f);
-//        for(int j=0; j<strlen(App::pinDatas[i].text);j++){
-//            LOGI("chars[%d] for pin[%d] : %s\n",j,i,&App::pinDatas[i].text[j]);
-//        }
-//        //LOGI("Init text3d completed! With font: %s\n", App::pinDatas[i].text3D->font->name);
+
     }
-    for(int i = 0; i<pinSize; i++){
-        LOGI("After pin [%d] text: %s charcount: %d\n",i ,App::pinDatas[i].text,static_cast<int>(strlen(App::pinDatas[i].text)));
-    }
-    LOGI("\n\n");
     isPinInited = true;
 }
 
@@ -604,12 +604,12 @@ void programDrawCallback(void *ptr){
 char uniform,attribute;
 vec3 targetRotVec = {0,0,0};
 void AppDraw() {
-//    if(pinSize>0){
-//        for(int i=0; i<pinSize; i++){
-//            LOGI("c++ pin[%d] posx: %.3f textaddress: %p text: %s\n",i,App::pinDatas[i].position.x,App::pinDatas[i].text,App::pinDatas[i].text);
-//        }
-//        LOGI("\n\n");
-//    }
+    if(pinSize>0){
+        for(int i=0; i<pinSize; i++){
+            LOGI("c++ appDraw pin[%d] posx: %.3f textaddress: %p text: %s\n",i,App::pinDatas[i].position.x,App::pinDatas[i].text,App::pinDatas[i].text);
+        }
+        LOGI("\n\n");
+    }
     glClearColor(0.2f,0.4f,0.5f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -748,6 +748,7 @@ void AppDraw() {
     }
     
     //DRAW TEXTS
+#pragma mark-Draw Texts
 //    if(isPinInited){
 //        for(int i=0;i<pinSize;i++) {
 //            //Position
@@ -846,7 +847,7 @@ void drawPin(pinData data){
      GL_UNSIGNED_SHORT,
      ( void * )NULL );*/
     
-    glDrawArrays(GL_TRIANGLES,0,mVertexCount);
+    glDrawArrays(GL_TRIANGLES,0,(int)mVertexCount);
     
     //Draw Collider
     /*attribute = PROGRAM_get_vertex_attrib_location(program,(char *)"POSITION");

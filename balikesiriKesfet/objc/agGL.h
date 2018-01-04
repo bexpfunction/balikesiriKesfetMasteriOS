@@ -7,15 +7,19 @@
 //
 
 #import <GLKit/GLKit.h>
+#import <OpenGLES/EAGL.h>
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
 #import "CaptureSessionManager.h"
+#import "App.h"
+#import "EngineBase.h"
+#import "Logger.h"
 
 UILabel *infoLabel;
-struct miniGLMembers;
+static pinData* pinList;
 
 @interface agGL : GLKViewController{
-    struct miniGLMembers *_miniGLMembers;
+
 }
 @property (strong, nonatomic) CMMotionManager *motionManager;
 @property (strong, nonatomic) CLLocationManager *locationManager;

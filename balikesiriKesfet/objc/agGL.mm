@@ -22,43 +22,38 @@
 @property (nonatomic, strong) EAGLContext* context;
 @property (nonatomic, strong) GLKBaseEffect* bEffect;
 
-@property CGRect videoPreviewViewBounds;
-@property AVCaptureDevice *videoDevice;
-@property AVCaptureSession *captureSession;
-@property dispatch_queue_t captureSessionQueue;
-@property GLKView *videoPreviewView;
-@property CIContext *ciContext;
-@property EAGLContext *eaglContext;
-
 @end
 
-struct miniGLMembers{
-   static App tApp;
-};
+#pragma mark - AVFoundation Variables
+AVCaptureVideoPreviewLayer* previewLayer;
+AVCaptureSession* captureSession;
 
 @implementation agGL
 
+#pragma mark - GL view
 GLKView* glView;
+
+#pragma mark - Custom macros
 #define radToDeg(x) (180.0f/M_PI)*x
 #define degToRad(x) (M_PI/180.0f)*x
 #define kFilteringFactor 0.1
-//For the draw test
+
+#pragma mark - Global Bools
 bool checkFrameBuffer, drawTest, drawApp, glInitialized, iAvailable, locationInited, drawAppCalled;
+#pragma mark - Global floats
 float cPitch, cYaw, cRoll, initYaw, heading;
 float rateSumX, rateSumY, rateSumZ;
+#pragma mark - Global Strings
 NSString *curLat, *curLng, *gyroStr, *accStr, *acStr, *apStr, *arStr;
+#pragma mark - Global Location
 CLLocation *currentLocation;
 //static pinData *pinList=NULL;
-//bTest *burakP = NULL;
-
+#pragma mark - Global Integers
 int pinCount = 0;
 
+#pragma mark - ViewController Methods And Delegates
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //pinList = NULL;
-    _miniGLMembers = new miniGLMembers;
-    _miniGLMembers->tApp.pinDatas = NULL;
-    
     glInitialized = false;
     checkFrameBuffer = false;
     drawTest = false;
@@ -76,38 +71,7 @@ int pinCount = 0;
     [super viewDidAppear:animated];
     
     initYaw = 0.0f;
-    self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    glView = (GLKView*)self.view;
-    glView.context = self.context;
-    
-    [EAGLContext setCurrentContext:self.context];
-    
-    self.bEffect = [[GLKBaseEffect alloc] init];
-    //Generate framebuffer and bind to the view
-    [((GLKView *) self.view) bindDrawable];
-    
-    printf("GLSL Version = %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
-    printf("GL Version = %s\n", glGetString(GL_VERSION));
-    
-    
-    // Do any additional setup after loading the view.
-    if(checkFrameBuffer) {
-        if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            LOGI("\nNo framebuffer!!!\n");
-        else
-            LOGI("\nThere IS framebuffer!!!\n");
-    }
-
-    //Get resolution
-    CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
-    CGFloat screenHeight = screenRect.size.height;
-    
-    //TEMPLATE APP
-    templateApp.InitCamera(65.0f,1.0f,1000.0f,0.5f,true);
-    templateApp.BindCameraTexture(0);
-    templateApp.Init((int)screenWidth,(int)screenHeight);
-    glInitialized = true;
+    [self initTemplateAppWithGL];
     
     
     //Start location manager to get current location
@@ -156,18 +120,53 @@ int pinCount = 0;
     printf("Memory warning!!!\n");
 }
 
+-(void) initTemplateAppWithGL {
+    self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    glView = (GLKView*)self.view;
+    glView.context = self.context;
+    
+    [EAGLContext setCurrentContext:self.context];
+    
+    self.bEffect = [[GLKBaseEffect alloc] init];
+    //Generate framebuffer and bind to the view
+    [((GLKView *) self.view) bindDrawable];
+    
+    printf("GLSL Version = %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+    printf("GL Version = %s\n", glGetString(GL_VERSION));
+    
+    
+    // Do any additional setup after loading the view.
+    if(checkFrameBuffer) {
+        if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+            LOGI("\nNo framebuffer!!!\n");
+        else
+            LOGI("\nThere IS framebuffer!!!\n");
+    }
+    
+    //Get resolution
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
+    
+    //TEMPLATE APP
+    templateApp.InitCamera(65.0f,1.0f,1000.0f,0.5f,true);
+    templateApp.BindCameraTexture(0);
+    templateApp.Init((int)screenWidth,(int)screenHeight);
+    glInitialized = true;
+}
+
 bool pInited = false;
 -(void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
-//    if(pinCount>0 && _miniGLMembers->tApp.pinDatas != NULL){
-//        for(int i=0; i<pinCount; i++){
-//            LOGI("obj-c pin[%d] posx: %.3f textaddress: %p text: %s\n",i,_miniGLMembers->tApp.pinDatas[i].position.x,_miniGLMembers->tApp.pinDatas[i].text,_miniGLMembers->tApp.pinDatas[i].text);
-//        }
-//        LOGI("\n\n");
-//    }
     drawAppCalled = false;
     if(drawApp && glInitialized) {
         templateApp.SetCameraRotation(cPitch, cYaw, cRoll);
         if(pInited) {
+            if(pinCount>0 && pinList != NULL){
+                for(int i=0; i<pinCount; i++){
+                    LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
+                }
+                LOGI("\n\n");
+            }
             templateApp.Draw();
             drawAppCalled = true;
         }
@@ -251,13 +250,13 @@ bool pInited = false;
         if(templateApp.GetSelectedPin() != NULL) {
             LOGI("\n\ntmp text: %s\n\n",templateApp.GetSelectedPin()->text);
             for(int i=0; i<pinCount; i++) {
-                if(&_miniGLMembers->tApp.pinDatas[i] == templateApp.GetSelectedPin()) {
-                    _miniGLMembers->tApp.pinDatas[i].borderColor = {1.0f, 0.0f, 0.0f};
+                if(&pinList[i] == templateApp.GetSelectedPin()) {
+                    pinList[i].borderColor = {1.0f, 0.0f, 0.0f};
                 }
                 else {
-                    _miniGLMembers->tApp.pinDatas[i].borderColor = {1.0f, 1.0f, 1.0f};
+                    pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
                 }
-                LOGI("pin[%d] reset, text: %s colB: %f\n",i, _miniGLMembers->tApp.pinDatas[i].text, _miniGLMembers->tApp.pinDatas[i].borderColor.y);
+                LOGI("pin[%d] reset, text: %s colB: %f\n",i, pinList[i].text, pinList[i].borderColor.y);
             }
            //templateApp.SetPinDatas(pinList, pinCount, 1.0f);
         }
@@ -345,9 +344,8 @@ bool pInited = false;
                                                   if(jsonArray.count>0 && glInitialized) {
                                                       
                                                       pinCount = (int)jsonArray.count;
-                                                      free(_miniGLMembers->tApp.pinDatas);
-                                                      //pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
-                                                      _miniGLMembers->tApp.pinDatas = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
+                                                      free(pinList);
+                                                      pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
                                                           
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
@@ -357,30 +355,28 @@ bool pInited = false;
                                                           pLat = (tmpPinLoc.coordinate.latitude - currentLocation.coordinate.latitude)*10000;
                                                           pLng = (tmpPinLoc.coordinate.longitude - currentLocation.coordinate.longitude)*10000;
 
-                                                          _miniGLMembers->tApp.pinDatas[cnt].id = cnt;
-                                                          _miniGLMembers->tApp.pinDatas[cnt].position = {-pLat, 0.0f, pLng};
-                                                          _miniGLMembers->tApp.pinDatas[cnt].text = (char*)malloc(sizeof(char)*(strlen([jsonArray[cnt][@"title"] cStringUsingEncoding:NSUTF8StringEncoding])));
-                                                          _miniGLMembers->tApp.pinDatas[cnt].text = (char*)[jsonArray[cnt][@"title"] cStringUsingEncoding:NSUTF8StringEncoding];
-                                                          _miniGLMembers->tApp.pinDatas[cnt].size = 4.0f;
-                                                          _miniGLMembers->tApp.pinDatas[cnt].fontSize = 0.65f;
-                                                          _miniGLMembers->tApp.pinDatas[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
-                                                          _miniGLMembers->tApp.pinDatas[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
+                                                          pinList[cnt].id = cnt;
+                                                          pinList[cnt].position = {-pLat, 0.0f, pLng};
+                                                          pinList[cnt].text = (char*)[jsonArray[cnt][@"title"] cStringUsingEncoding:NSUTF8StringEncoding];
+                                                          pinList[cnt].size = 4.0f;
+                                                          pinList[cnt].fontSize = 0.65f;
+                                                          pinList[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
+                                                          pinList[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
 
-                                                          LOGI("pin [%d] text: %s address: %p\n", cnt, _miniGLMembers->tApp.pinDatas[cnt].text, _miniGLMembers->tApp.pinDatas[cnt].text);
+                                                          LOGI("obj-c pin init [%d] text: %s address: %p\n", cnt, pinList[cnt].text, pinList[cnt].text);
                                                       }
                                                       LOGI("\n\n");
-                                                      templateApp.SetPinDatas(_miniGLMembers->tApp.pinDatas,(int)jsonArray.count,1.0f);
+                                                      templateApp.SetPinDatas(pinList,(int)jsonArray.count,1.0f);
                                                       pInited = true;
-                                                      //free(_miniGLMembers->tApp.pinDatas);
                                                   } else {
                                                       pinCount = 0;
                                                   }
                                               }
-//                                              else {
-//                                                  //NSLog(@"it is a dictionary");
-//                                                  NSDictionary *jsonDictionary = (NSDictionary *)jsonObj;
-//                                                  //NSLog(@"jsonDictionary - %@",jsonDictionary);
-//                                              }
+                                              else {
+                                                  //NSLog(@"it is a dictionary");
+                                                  NSDictionary *jsonDictionary = (NSDictionary *)jsonObj;
+                                                  //NSLog(@"jsonDictionary - %@",jsonDictionary);
+                                              }
                                           }
                                       }];
     [dataTask resume];
@@ -391,91 +387,25 @@ bool pInited = false;
 }
 
 -(void) startCameraPreview {
-    self.view.backgroundColor = [UIColor clearColor];
-    self.eaglContext = [[EAGLContext alloc] initWithAPI:[self.context API] sharegroup:[self.context sharegroup]];
-    self.videoPreviewView = [[GLKView alloc] initWithFrame:[UIScreen mainScreen].bounds context:self.eaglContext];
-    self.videoPreviewView.enableSetNeedsDisplay = NO;
-    self.videoPreviewView.transform = CGAffineTransformMakeRotation(M_PI_2);
-    self.videoPreviewView.frame = [UIScreen mainScreen].bounds;
-    [self.view insertSubview:self.videoPreviewView atIndex:0];
-    //[self.view sendSubviewToBack:_videoPreviewView];
-    [self.videoPreviewView bindDrawable];
-    self.videoPreviewViewBounds = CGRectZero;
-    _videoPreviewViewBounds.size.width = self.videoPreviewView.drawableWidth;
-    _videoPreviewViewBounds.size.height = self.videoPreviewView.drawableHeight;
-    self.ciContext = [CIContext contextWithEAGLContext:self.eaglContext options:@{kCIContextWorkingColorSpace : [NSNull null]} ];
+    //Video Device
+    captureSession = [[AVCaptureSession alloc] init];
+    AVCaptureDevice* videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    if(videoDevice == nil)
+        assert(0);
     
-    if ([[AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo] count] > 0)
-    {
-        // get the input device and also validate the settings
-        NSArray *videoDevices = [AVCaptureDevice devicesWithMediaType:AVMediaTypeVideo];
-        
-        AVCaptureDevicePosition position = AVCaptureDevicePositionBack;
-        
-        for (AVCaptureDevice *device in videoDevices)
-        {
-            if (device.position == position) {
-                self.videoDevice = device;
-                break;
-            }
-        }
-        
-        // obtain device input
-        NSError *error = nil;
-        AVCaptureDeviceInput *videoDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:self.videoDevice error:&error];
-        if (!videoDeviceInput)
-        {
-            NSLog(@"%@", [NSString stringWithFormat:@"Unable to obtain video device input, error: %@", error]);
-            return;
-        }
-        
-        // obtain the preset and validate the preset
-        NSString *preset = AVCaptureSessionPresetHigh;
-        if (![self.videoDevice supportsAVCaptureSessionPreset:preset])
-        {
-            NSLog(@"%@", [NSString stringWithFormat:@"Capture session preset not supported by video device: %@", preset]);
-            return;
-        }
-        
-        // create the capture session
-        self.captureSession = [[AVCaptureSession alloc] init];
-        self.captureSession.sessionPreset = preset;
-        
-        // CoreImage wants BGRA pixel format
-        NSDictionary *outputSettings = @{ (id)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithInteger:kCVPixelFormatType_32BGRA]};
-        // create and configure video data output
-        AVCaptureVideoDataOutput *videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
-        videoDataOutput.videoSettings = outputSettings;
-        
-        // create the dispatch queue for handling capture session delegate method calls
-        self.captureSessionQueue = dispatch_queue_create("capture_session_queue", NULL);
-        [videoDataOutput setSampleBufferDelegate:self queue:self.captureSessionQueue];
-        
-        videoDataOutput.alwaysDiscardsLateVideoFrames = YES;
-        
-        // begin configure capture session
-        [self.captureSession beginConfiguration];
-        
-        if (![self.captureSession canAddOutput:videoDataOutput])
-        {
-            NSLog(@"Cannot add video data output");
-            self.captureSession = nil;
-            return;
-        }
-        
-        // connect the video device input and video data and still image outputs
-        [self.captureSession addInput:videoDeviceInput];
-        [self.captureSession addOutput:videoDataOutput];
-        
-        [self.captureSession commitConfiguration];
-        
-        // then start everything
-        [self.captureSession startRunning];
-    }
-    else
-    {
-        NSLog(@"No device with AVMediaTypeVideo");
-    }
+    //Add device to session
+    NSError* error;
+    AVCaptureInput* input = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error: &error];
+    if(error)
+        assert(0);
+    [captureSession addInput:input];
+    //preview layer
+    previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:captureSession];
+    previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    
+    [previewLayer setFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.width)];
+    [self.view.layer addSublayer:previewLayer];
+    [captureSession startRunning];
 }
 //AV Outputdelegate
 - (void)captureOutput:(AVCaptureOutput *)output
@@ -483,36 +413,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection {
     
     CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
-    CIImage *sourceImage = [CIImage imageWithCVPixelBuffer:(CVPixelBufferRef)imageBuffer options:nil];
-    CGRect sourceExtent = sourceImage.extent;
-    
-    CGFloat sourceAspect = sourceExtent.size.width / sourceExtent.size.height;
-    CGFloat previewAspect = self.videoPreviewViewBounds.size.width  / self.videoPreviewViewBounds.size.height;
-    
-    // we want to maintain the aspect radio of the screen size, so we clip the video image
-    CGRect drawRect = sourceExtent;
-    if (sourceAspect > previewAspect)
-    {
-        // use full height of the video image, and center crop the width
-        drawRect.origin.x += (drawRect.size.width - drawRect.size.height * previewAspect) / 2.0;
-        drawRect.size.width = drawRect.size.height * previewAspect;
-    }
-    else
-    {
-        // use full width of the video image, and center crop the height
-        drawRect.origin.y += (drawRect.size.height - drawRect.size.width / previewAspect) / 2.0;
-        drawRect.size.height = drawRect.size.width / previewAspect;
-    }
-
-    [EAGLContext setCurrentContext:self.eaglContext];
-    [self.videoPreviewView bindDrawable];
-
-    NSLog(@"1Using context: %@",[EAGLContext currentContext]);
-    [self.ciContext drawImage:sourceImage inRect:self.videoPreviewViewBounds fromRect:drawRect];
-
-    [self.videoPreviewView display];
-    [EAGLContext setCurrentContext:self.context];
-    NSLog(@"2Using context: %@",[EAGLContext currentContext]);
+    //Have to create openGL texture using this imageBuffer and pass it to the engine
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
@@ -525,7 +426,7 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     [self stopCaptureLocation];
     templateApp.Exit();
     //Dealloc
-    free(_miniGLMembers->tApp.pinDatas);
+    free(pinList);
     pinCount = 0;
 }
 
