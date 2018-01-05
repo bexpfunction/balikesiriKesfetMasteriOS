@@ -15,6 +15,7 @@ class notificationCell: UITableViewCell {
     @IBOutlet weak var nDate: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.selectionStyle = UITableViewCellSelectionStyle.none
         // Initialization code
     }
 

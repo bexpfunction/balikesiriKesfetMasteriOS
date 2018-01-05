@@ -110,6 +110,8 @@
 		B990885E1FAE4E2A005B0B2E /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B990884F1FAE4E2A005B0B2E /* texture.cpp */; };
 		B990885F1FAE4E2A005B0B2E /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B99088511FAE4E2A005B0B2E /* vector.cpp */; };
 		B99B8D621FA5DA8A00C41020 /* openGlIncludeTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B99B8D601FA5DA8A00C41020 /* openGlIncludeTest.cpp */; };
+		B9A1235A1FFF743500F8DB0F /* pinListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A123591FFF743500F8DB0F /* pinListCell.swift */; };
+		B9A1235C1FFFA99200F8DB0F /* pinPicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A1235B1FFFA99200F8DB0F /* pinPicCell.swift */; };
 		B9A1D19B1FAC8C37005929EE /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = B9A1D19A1FAC8C37005929EE /* test.txt */; };
 		B9A1D19F1FAC97A4005929EE /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B9A1D19E1FAC97A4005929EE /* vertex.glsl */; };
 		B9A1D1A11FAC97AC005929EE /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B9A1D1A01FAC97AC005929EE /* fragment.glsl */; };
@@ -293,6 +295,8 @@
 		B99088521FAE4E2A005B0B2E /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = matrix.h; sourceTree = "<group>"; };
 		B99B8D601FA5DA8A00C41020 /* openGlIncludeTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = openGlIncludeTest.cpp; sourceTree = "<group>"; };
 		B99B8D611FA5DA8A00C41020 /* openGlIncludeTest.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = openGlIncludeTest.hpp; sourceTree = "<group>"; };
+		B9A123591FFF743500F8DB0F /* pinListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pinListCell.swift; sourceTree = "<group>"; };
+		B9A1235B1FFFA99200F8DB0F /* pinPicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pinPicCell.swift; sourceTree = "<group>"; };
 		B9A1D19A1FAC8C37005929EE /* test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = test.txt; path = balikesiriKesfet/Resources/test.txt; sourceTree = SOURCE_ROOT; };
 		B9A1D19E1FAC97A4005929EE /* vertex.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vertex.glsl; sourceTree = "<group>"; };
 		B9A1D1A01FAC97AC005929EE /* fragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
@@ -610,6 +614,8 @@
 				B92D6B491F979E3E0095007B /* newsPicCell.swift */,
 				B90D34E11F90D0B300A1BB68 /* articleCell.swift */,
 				B92BE48A1FA131270039D7B8 /* notificationCell.swift */,
+				B9A123591FFF743500F8DB0F /* pinListCell.swift */,
+				B9A1235B1FFFA99200F8DB0F /* pinPicCell.swift */,
 			);
 			name = HelperClasses;
 			sourceTree = "<group>";
@@ -996,6 +1002,7 @@
 				B936BC9D1FADF07A00D34EE4 /* pngwtran.c in Sources */,
 				B936BC971FADF07A00D34EE4 /* pngrutil.c in Sources */,
 				B974489E1FAC7BD600C71F53 /* uncompr.c in Sources */,
+				B9A1235C1FFFA99200F8DB0F /* pinPicCell.swift in Sources */,
 				B9817B561FA1E6170073DF7F /* CLLocation+Extensions.swift in Sources */,
 				B92BE48D1FA13BB10039D7B8 /* duyurular.swift in Sources */,
 				B97448921FAC7BD600C71F53 /* memory.cpp in Sources */,
@@ -1024,6 +1031,7 @@
 				B92BE4741F9E0AAD0039D7B8 /* bizeYazin.swift in Sources */,
 				B9F2A5A51FADC567004FC439 /* VertexCache.cpp in Sources */,
 				B9F2A8301FADC995004FC439 /* utf8-utils.c in Sources */,
+				B9A1235A1FFF743500F8DB0F /* pinListCell.swift in Sources */,
 				B9F2A82A1FADC995004FC439 /* font-manager.c in Sources */,
 				B9817B531FA1E6170073DF7F /* FloatingPoint+Radians.swift in Sources */,
 				B936BC951FADF07A00D34EE4 /* pngrio.c in Sources */,
