@@ -18,7 +18,9 @@ class guestEntryForm: UIViewController, FBSDKLoginButtonDelegate {
         super.viewDidLoad()
         
         //animations
-        
+        fbLoginButton.layer.cornerRadius = 5
+        fbLoginButton.layer.borderWidth = 1
+        fbLoginButton.layer.borderColor = (UIColor(red: 1, green: 1, blue: 1, alpha: 1) as! CGColor)
         
         fbLoginButton.readPermissions = ["public_profile", "email", "user_friends"]
         fbLoginButton.delegate = self

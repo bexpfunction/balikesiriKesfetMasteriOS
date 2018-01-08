@@ -6,3 +6,4 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <GLKit/GLKit.h>
 #import <CommonCrypto/CommonCrypto.h>
+#import "SWRevealViewController.h"

@@ -66,6 +66,8 @@
 		B946712E1F5B224000FDA6D3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B946712D1F5B224000FDA6D3 /* OpenGLES.framework */; };
 		B94671301F5B224600FDA6D3 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B946712F1F5B224600FDA6D3 /* GLKit.framework */; };
 		B946713B1F5B51A200FDA6D3 /* agModu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B946713A1F5B51A200FDA6D3 /* agModu.swift */; };
+		B94EDB942003A743004D4655 /* AnaSayfa.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94EDB932003A743004D4655 /* AnaSayfa.swift */; };
+		B94EDB982003B391004D4655 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B94EDB962003B391004D4655 /* SWRevealViewController.m */; };
 		B952C4911FA867F70075CB8B /* App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B952C4901FA867F70075CB8B /* App.cpp */; };
 		B97448921FAC7BD600C71F53 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B97448731FAC7BD600C71F53 /* memory.cpp */; };
 		B97448931FAC7BD600C71F53 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = B97448771FAC7BD600C71F53 /* adler32.c */; };
@@ -216,6 +218,9 @@
 		B946712D1F5B224000FDA6D3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		B946712F1F5B224600FDA6D3 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
 		B946713A1F5B51A200FDA6D3 /* agModu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = agModu.swift; sourceTree = "<group>"; };
+		B94EDB932003A743004D4655 /* AnaSayfa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnaSayfa.swift; sourceTree = "<group>"; };
+		B94EDB962003B391004D4655 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		B94EDB972003B391004D4655 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		B952C48F1FA867F70075CB8B /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		B952C4901FA867F70075CB8B /* App.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = App.cpp; sourceTree = "<group>"; };
 		B952C4CA1FA9BCB50075CB8B /* Logger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
@@ -455,6 +460,15 @@
 			path = Dependincies;
 			sourceTree = "<group>";
 		};
+		B94EDB952003B33F004D4655 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B94EDB972003B391004D4655 /* SWRevealViewController.h */,
+				B94EDB962003B391004D4655 /* SWRevealViewController.m */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		B952C48E1FA867DB0075CB8B /* GLEngine */ = {
 			isa = PBXGroup;
 			children = (
@@ -564,6 +578,7 @@
 		B9817B5E1FA231B70073DF7F /* objc */ = {
 			isa = PBXGroup;
 			children = (
+				B94EDB952003B33F004D4655 /* Helpers */,
 				B9A5634D1FF52C5D0048F1D1 /* AVFoundation */,
 				B93BD6071FEBA029003342B9 /* Dependincies */,
 				B9817B651FA240570073DF7F /* agGL.h */,
@@ -697,6 +712,7 @@
 				B946713A1F5B51A200FDA6D3 /* agModu.swift */,
 				B98B09C81F8CC82C0080D7EB /* map2d.swift */,
 				B91DEFEE1F93AF9900F80A27 /* haberDetaylari.swift */,
+				B94EDB932003A743004D4655 /* AnaSayfa.swift */,
 			);
 			name = ViewControllerClasses;
 			sourceTree = "<group>";
@@ -948,6 +964,7 @@
 				B974489F1FAC7BD600C71F53 /* unzip.c in Sources */,
 				B9F2A82D1FADC995004FC439 /* text-buffer.c in Sources */,
 				B9817B571FA1E6170073DF7F /* SceneLocationView.swift in Sources */,
+				B94EDB982003B391004D4655 /* SWRevealViewController.m in Sources */,
 				B946713B1F5B51A200FDA6D3 /* agModu.swift in Sources */,
 				B9817B641FA233F30073DF7F /* hello.cpp in Sources */,
 				B9F2A8281FADC995004FC439 /* distance-field.c in Sources */,
@@ -988,6 +1005,7 @@
 				B936BC901FADF07A00D34EE4 /* pnggccrd.c in Sources */,
 				B99B8D621FA5DA8A00C41020 /* openGlIncludeTest.cpp in Sources */,
 				B936BC8E1FADF07A00D34EE4 /* png.c in Sources */,
+				B94EDB942003A743004D4655 /* AnaSayfa.swift in Sources */,
 				B99088531FAE4E2A005B0B2E /* shader.cpp in Sources */,
 				B9817B5B1FA1E6170073DF7F /* SCNNode+Extensions.swift in Sources */,
 				B990885B1FAE4E2A005B0B2E /* obj.cpp in Sources */,

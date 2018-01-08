@@ -393,6 +393,176 @@
             </objects>
             <point key="canvasLocation" x="-815" y="206"/>
         </scene>
+        <!--ANA SAYFA-->
+        <scene sceneID="DRF-fL-fTk">
+            <objects>
+                <viewController title="ANA SAYFA" id="ZYu-Ll-96Z" userLabel="ANA SAYFA" customClass="AnaSayfa" customModule="balikesiriKesfet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wQF-Vg-5uU"/>
+                        <viewControllerLayoutGuide type="bottom" id="ah1-O7-ee9"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ERf-N2-njo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="spC-7y-4OD" userLabel="agBut">
+                                <rect key="frame" x="199" y="80" width="150" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="pic_ag" translatesAutoresizingMaskIntoConstraints="NO" id="yMh-is-Tf2">
+                                        <rect key="frame" x="9" y="11" width="130" height="130"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="1Yu-Ou-qwn">
+                                        <rect key="frame" x="0.0" y="1" width="150" height="150"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
+                                        <state key="normal">
+                                            <string key="title">Artırılmış
+Gerçeklik</string>
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hIT-3R-KGN" userLabel="haberlerBut">
+                                <rect key="frame" x="27" y="80" width="150" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="pic_haberler" translatesAutoresizingMaskIntoConstraints="NO" id="Gf5-6g-NdJ">
+                                        <rect key="frame" x="9" y="11" width="130" height="130"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="VdH-Xf-dHI">
+                                        <rect key="frame" x="0.0" y="1" width="150" height="150"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
+                                        <state key="normal" title="Haberler">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686274509802" green="0.39215686274509803" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lrx-fc-Z30" userLabel="haritaBut">
+                                <rect key="frame" x="27" y="249" width="150" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="pic_harita" translatesAutoresizingMaskIntoConstraints="NO" id="xYC-vZ-AJL">
+                                        <rect key="frame" x="9" y="11" width="130" height="130"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="8Le-Ha-cAo">
+                                        <rect key="frame" x="0.0" y="1" width="150" height="150"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
+                                        <state key="normal" title="Harita">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yFA-SH-suC" userLabel="duyuruBut">
+                                <rect key="frame" x="199" y="249" width="150" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="pic_duyurular" translatesAutoresizingMaskIntoConstraints="NO" id="YOO-f0-SRi">
+                                        <rect key="frame" x="9" y="11" width="130" height="130"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="r2Y-kd-25B">
+                                        <rect key="frame" x="0.0" y="1" width="150" height="150"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
+                                        <state key="normal" title="Duyurular">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HL7-x3-tQL" userLabel="webBut">
+                                <rect key="frame" x="199" y="420" width="150" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="pic_web" translatesAutoresizingMaskIntoConstraints="NO" id="g4B-Q1-py2">
+                                        <rect key="frame" x="9" y="11" width="130" height="130"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="pGA-kZ-dEh">
+                                        <rect key="frame" x="0.0" y="1" width="150" height="150"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
+                                        <state key="normal" title="WEB">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vzc-Z2-w5H" userLabel="bizeYazinBut">
+                                <rect key="frame" x="27" y="420" width="150" height="150"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="pic_bize_yazin" translatesAutoresizingMaskIntoConstraints="NO" id="Ot8-ce-5CD">
+                                        <rect key="frame" x="9" y="11" width="130" height="130"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="sQQ-5z-TwE">
+                                        <rect key="frame" x="0.0" y="1" width="150" height="150"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <edgeInsets key="layoutMargins" top="0.0" left="0.0" bottom="0.0" right="0.0"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
+                                        <state key="normal" title="Bize Yazın">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="qng-E3-oPQ">
+                                <rect key="frame" x="27" y="591" width="150" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
+                                <state key="normal" title="Uygulama Hakkında">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="PZE-o6-otm">
+                                <rect key="frame" x="199" y="591" width="150" height="40"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="13"/>
+                                <state key="normal" title="Çıkış">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="a4I-77-MYE"/>
+                    <connections>
+                        <outlet property="bizeYazinBut" destination="sQQ-5z-TwE" id="H7x-TF-jiB"/>
+                        <outlet property="duyurularBut" destination="r2Y-kd-25B" id="y37-JS-Zwl"/>
+                        <outlet property="haberlerBut" destination="VdH-Xf-dHI" id="KzE-gG-cQo"/>
+                        <outlet property="haritaBut" destination="8Le-Ha-cAo" id="kut-Z9-AA1"/>
+                        <outlet property="quitBut" destination="PZE-o6-otm" id="850-Xf-On1"/>
+                        <outlet property="uygHakkindaBut" destination="qng-E3-oPQ" id="pWm-XD-V1i"/>
+                        <outlet property="webBut" destination="pGA-kZ-dEh" id="jG4-o7-JNU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="33b-nM-6vn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-63.200000000000003" y="205.54722638680661"/>
+        </scene>
         <!--HABERLER-->
         <scene sceneID="TDg-Eb-SLe">
             <objects>
@@ -831,11 +1001,19 @@
                                     <action selector="updateViewToggle:" destination="7pK-FQ-N5F" eventType="touchUpInside" id="1Rg-vL-5VR"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bhy-jt-uX7">
+                                <rect key="frame" x="16" y="342" width="343" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" red="0.11764705882352941" green="0.28235294117647058" blue="0.41176470588235292" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                     <toolbarItems/>
                     <connections>
+                        <outlet property="addressLabel" destination="Bhy-jt-uX7" id="7Mb-Df-bD2"/>
                         <outlet property="annotationPopup" destination="EA4-6H-nyE" id="ZNA-1w-CIj"/>
                         <outlet property="annotationPopupExitBut" destination="lIT-8y-XDy" id="b0u-qh-Dee"/>
                         <outlet property="mapFollowButton" destination="FkM-QL-KAY" id="5rj-yI-azE"/>
@@ -1195,34 +1373,39 @@
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="balikesir_bb_logo" translatesAutoresizingMaskIntoConstraints="NO" id="qBI-np-hO7">
+                            <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="balikesir_bb_logo" translatesAutoresizingMaskIntoConstraints="NO" id="qBI-np-hO7">
                                 <rect key="frame" x="146" y="523" width="83" height="89"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="qBI-np-hO7" secondAttribute="height" multiplier="83:89" id="tS7-Ys-p8h"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zyt-gy-KjM">
-                                <rect key="frame" x="136" y="620" width="96" height="22"/>
+                                <rect key="frame" x="126" y="620" width="116" height="22"/>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="3Ye-MD-J3m"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="10"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="14"/>
                                 <state key="normal" title="Uygulama Hakkında">
                                     <color key="titleColor" red="1" green="1" blue="0.99987989659999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54x-AV-N9M" customClass="FBSDKLoginButton">
-                                <rect key="frame" x="164.5" y="268" width="46" height="31"/>
+                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54x-AV-N9M" customClass="FBSDKLoginButton">
+                                <rect key="frame" x="102.5" y="268" width="170" height="31"/>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="31" id="Ydo-Ut-qiS"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="a5u-JO-8Z1"/>
                                 </constraints>
-                                <state key="normal" title="Button">
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Facebook İle Devam Et">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8bL-Or-MsD">
-                                <rect key="frame" x="87" y="444" width="194" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="8bL-Or-MsD">
+                                <rect key="frame" x="76" y="441" width="216" height="33"/>
+                                <color key="backgroundColor" red="0.19215686274509802" green="0.39215686274509803" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="MİSAFİR OLARAK GİRİŞ YAP">
                                     <color key="titleColor" red="1" green="1" blue="0.99987989659999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -1231,7 +1414,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.078893713653087616" green="0.46698695421218872" blue="0.68715590238571167" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="8bL-Or-MsD" firstAttribute="centerX" secondItem="EgI-jq-KS2" secondAttribute="centerX" id="4Bs-eN-wwD"/>
                             <constraint firstItem="L3c-cW-1Pt" firstAttribute="centerX" secondItem="0pV-Iq-nei" secondAttribute="centerX" id="7dy-hT-tds"/>
@@ -1254,6 +1437,7 @@
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="aboutButton" destination="Zyt-gy-KjM" id="eNA-Wz-W9Q"/>
                         <outlet property="bbImage" destination="qBI-np-hO7" id="U97-gm-grA"/>
                         <outlet property="guestEntryButton" destination="8bL-Or-MsD" id="oCz-If-CYS"/>
                         <outlet property="loginButton" destination="54x-AV-N9M" id="bNp-eg-kpt"/>
@@ -1393,28 +1577,14 @@
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QJ2-RY-TmW">
-                                <rect key="frame" x="48" y="322" width="278.5" height="20"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="vdr-Q5-LHR"/>
-                                </constraints>
-                                <attributedString key="attributedText">
-                                    <fragment content="ve daha birçok özellikten faydalanabilirsiniz.">
-                                        <attributes>
-                                            <color key="NSColor" red="1" green="1" blue="0.99987989664077759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <font key="NSFont" size="14" name="Helvetica"/>
-                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kBS-r7-Kjz">
-                                <rect key="frame" x="90.5" y="499" width="194" height="30"/>
+                                <rect key="frame" x="79.5" y="499" width="216" height="30"/>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="X94-hO-cHh"/>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="rXC-ZL-Xve"/>
                                 </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                 <state key="normal" title="MİSAFİR OLARAK GİRİŞ YAP">
                                     <color key="titleColor" red="1" green="1" blue="0.99987989659999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
@@ -1429,22 +1599,21 @@
                                     <constraint firstAttribute="width" constant="83" id="J47-jl-WpI"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LX8-iq-jbE" customClass="FBSDKLoginButton">
-                                <rect key="frame" x="164.5" y="376" width="46" height="31"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="44" id="LOS-Fw-oB5"/>
-                                </constraints>
-                                <state key="normal" title="Button">
+                            <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LX8-iq-jbE" customClass="FBSDKLoginButton">
+                                <rect key="frame" x="102.5" y="374" width="170" height="33"/>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                <state key="normal" title="Facebook İle Devam Et">
                                     <color key="titleColor" red="1" green="1" blue="0.99987989659999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kFa-L9-MCh">
-                                <rect key="frame" x="48" y="289" width="278.5" height="20"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="wordWrap" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QJ2-RY-TmW">
+                                <rect key="frame" x="48" y="320" width="278.5" height="20"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="20" id="n8x-Oo-UYK"/>
+                                    <constraint firstAttribute="height" constant="20" id="vdr-Q5-LHR"/>
                                 </constraints>
                                 <attributedString key="attributedText">
-                                    <fragment content="Şehre kendi toteminizi yerleştirebilir,">
+                                    <fragment content="ve daha bir çok özellikten faydalanabilirsiniz.">
                                         <attributes>
                                             <color key="NSColor" red="1" green="1" blue="0.99987989664077759" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <font key="NSFont" size="14" name="Helvetica"/>
@@ -1455,11 +1624,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="0.078893713653087616" green="0.46698695421218872" blue="0.68715590238571167" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="E8y-lX-xfb" firstAttribute="top" secondItem="poh-OL-kvl" secondAttribute="top" constant="187" id="1cu-JE-Xbm"/>
                             <constraint firstItem="kBS-r7-Kjz" firstAttribute="centerX" secondItem="xrJ-ot-ZE5" secondAttribute="centerX" id="7Vd-UX-pIv"/>
                             <constraint firstItem="Gyo-zB-MS9" firstAttribute="top" secondItem="kBS-r7-Kjz" secondAttribute="bottom" constant="138" id="8HU-TM-nhE"/>
+                            <constraint firstItem="LX8-iq-jbE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="poh-OL-kvl" secondAttribute="leading" id="CDG-F4-l13"/>
                             <constraint firstItem="kBS-r7-Kjz" firstAttribute="centerX" secondItem="FC7-WK-USL" secondAttribute="centerX" id="DeO-6u-1XZ"/>
                             <constraint firstItem="IAQ-Hu-I8Z" firstAttribute="top" secondItem="FC7-WK-USL" secondAttribute="bottom" constant="11" id="ETv-T2-q4H"/>
                             <constraint firstItem="E8y-lX-xfb" firstAttribute="top" secondItem="IAQ-Hu-I8Z" secondAttribute="bottom" constant="8" symbolic="YES" id="Gi6-If-NOc"/>
@@ -1468,18 +1638,14 @@
                             <constraint firstItem="kBS-r7-Kjz" firstAttribute="centerX" secondItem="QJ2-RY-TmW" secondAttribute="centerX" id="Iig-Uq-dHi"/>
                             <constraint firstItem="LX8-iq-jbE" firstAttribute="top" secondItem="QJ2-RY-TmW" secondAttribute="bottom" constant="34" id="Krp-WA-X8U"/>
                             <constraint firstItem="D90-28-M9s" firstAttribute="leading" secondItem="poh-OL-kvl" secondAttribute="leadingMargin" constant="32" id="Lfz-dc-vjm"/>
-                            <constraint firstItem="kBS-r7-Kjz" firstAttribute="centerX" secondItem="kFa-L9-MCh" secondAttribute="centerX" id="NzH-om-nq9"/>
                             <constraint firstItem="D90-28-M9s" firstAttribute="leading" secondItem="Vi7-LO-fbx" secondAttribute="leading" id="Sp3-Xw-cuj"/>
                             <constraint firstItem="kBS-r7-Kjz" firstAttribute="top" secondItem="LX8-iq-jbE" secondAttribute="bottom" constant="92" id="VuL-x1-i1J"/>
-                            <constraint firstItem="kFa-L9-MCh" firstAttribute="top" secondItem="RnQ-38-gHI" secondAttribute="bottom" constant="-3" id="VwG-cp-MzR"/>
                             <constraint firstItem="D90-28-M9s" firstAttribute="leading" secondItem="dv3-sb-fkP" secondAttribute="leading" id="XPM-5b-5BL"/>
+                            <constraint firstAttribute="trailing" secondItem="LX8-iq-jbE" secondAttribute="trailing" constant="102.5" id="YEq-Mm-wxk"/>
                             <constraint firstItem="kBS-r7-Kjz" firstAttribute="centerX" secondItem="RnQ-38-gHI" secondAttribute="centerX" id="ZNx-KP-vQN"/>
                             <constraint firstItem="D90-28-M9s" firstAttribute="top" secondItem="dv3-sb-fkP" secondAttribute="bottom" constant="17" id="cIN-hu-Xx7"/>
-                            <constraint firstItem="kFa-L9-MCh" firstAttribute="centerX" secondItem="LX8-iq-jbE" secondAttribute="centerX" id="gVh-w7-vZc"/>
                             <constraint firstItem="D90-28-M9s" firstAttribute="leading" secondItem="QJ2-RY-TmW" secondAttribute="leading" id="gWR-O7-vN2"/>
                             <constraint firstItem="RnQ-38-gHI" firstAttribute="top" secondItem="xrJ-ot-ZE5" secondAttribute="bottom" constant="16" id="gaE-96-shM"/>
-                            <constraint firstItem="QJ2-RY-TmW" firstAttribute="top" secondItem="kFa-L9-MCh" secondAttribute="bottom" constant="13" id="gwa-ap-lth"/>
-                            <constraint firstItem="D90-28-M9s" firstAttribute="leading" secondItem="kFa-L9-MCh" secondAttribute="leading" id="hLJ-Vb-o6v"/>
                             <constraint firstItem="kBS-r7-Kjz" firstAttribute="centerX" secondItem="IAQ-Hu-I8Z" secondAttribute="centerX" id="hT4-fo-C3f"/>
                             <constraint firstItem="D90-28-M9s" firstAttribute="leading" secondItem="E8y-lX-xfb" secondAttribute="leading" id="hoB-Kg-SVL"/>
                             <constraint firstItem="kBS-r7-Kjz" firstAttribute="centerX" secondItem="Vi7-LO-fbx" secondAttribute="centerX" id="hzY-52-7XA"/>
@@ -1526,7 +1692,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="VwD-Cq-ANO"/>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="VOj-cP-Xlu"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EQg-cq-aqR" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1539,8 +1705,14 @@
         <image name="BalikesiriKesfetLogo" width="1290" height="233"/>
         <image name="balikesir_bb_logo" width="482" height="520"/>
         <image name="locat" width="40" height="40"/>
+        <image name="pic_ag" width="857" height="859"/>
+        <image name="pic_bize_yazin" width="795" height="734"/>
+        <image name="pic_duyurular" width="658" height="742"/>
+        <image name="pic_haberler" width="848" height="798"/>
+        <image name="pic_harita" width="738" height="775"/>
+        <image name="pic_web" width="834" height="811"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="KhB-kp-v5B"/>
+        <segue reference="YT3-av-oVh"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -39,12 +39,14 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     @IBOutlet weak var mapKitView: MKMapView!
     @IBOutlet weak var pinGalleryColView: UICollectionView!
     @IBOutlet weak var mapFollowButton: UIButton!
+    @IBOutlet weak var addressLabel: UILabel!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.selectedPinId = -1
-        mapFollowButton.setImage(#imageLiteral(resourceName: "locat"), for: .normal)
+        self.addressLabel.text = ""
+        self.mapFollowButton.setImage(#imageLiteral(resourceName: "locat"), for: .normal)
 
         annotationPopup.layer.cornerRadius = 5
         annotationPopup.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
@@ -129,15 +131,52 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                     self.pinGalleryColView.isHidden = true
                 }
                 let indPath = NSIndexPath(item: self.selectedPinId, section: 0)
-                self.pinListTV.scrollToRow(at: indPath as IndexPath, at: .middle, animated: true)
+                self.pinListTV.selectRow(at: indPath as IndexPath, animated: true, scrollPosition: UITableViewScrollPosition.middle)
+                //self.pinListTV.scrollToRow(at: indPath as IndexPath, at: .middle, animated: true)
                 animateIn()
                 break
             }
         }
     }
+    
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        self.selectedPinId = -1
+        self.pinListTV.deselectRow(at: self.pinListTV.indexPathForSelectedRow!, animated: true)
+    }
+    
     //Update userLocation on map view
     func mapView(_ mapView: MKMapView,
                  didUpdate userLocation: MKUserLocation) {
+        //Get user's region and adress
+        self.geocode(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude) { placemark, error in
+            guard let placemark = placemark, error == nil else { return }
+            // you should always update your UI in the main thread
+            DispatchQueue.main.async {
+                //  update UI here
+//                print("address1:", placemark.thoroughfare ?? "")
+//                print("address2:", placemark.subThoroughfare ?? "")
+//                print("city:",     placemark.locality ?? "")
+//                print("state:",    placemark.administrativeArea ?? "")
+//                print("zip code:", placemark.postalCode ?? "")
+//                print("country:",  placemark.country ?? "")
+                self.addressLabel.text = "\(placemark.thoroughfare!) \(placemark.locality!) \(placemark.administrativeArea!)"
+            }
+        }
+    }
+    
+    //reverse geocoder
+    func geocode(latitude: Double, longitude: Double, completion: @escaping (CLPlacemark?, Error?) -> ())  {
+        CLGeocoder().reverseGeocodeLocation(CLLocation(latitude: latitude, longitude: longitude)) { placemarks, error in
+            guard let placemark = placemarks?.first, error == nil else {
+                completion(nil, error)
+                return
+            }
+            completion(placemark, nil)
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        
     }
     
     @IBAction func dismissAnnPopup(_ sender: Any) {
@@ -149,7 +188,6 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         //http://app.balikesirikesfet.com/json?l=1000
         
         let urlString = "http://app.balikesirikesfet.com/json_distance?lat=\(self.currentLocation.coordinate.latitude)&lng=\(self.currentLocation.coordinate.longitude)&dis=2"
-        NSLog("generated url: \(urlString)")
         let urlRequest = URLRequest(url: URL(string: urlString)!)
         
         let task = URLSession.shared.dataTask(with: urlRequest){(data, response, error) in
@@ -279,17 +317,13 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         pinLocation = CLLocation(latitude: Double(self.pinList[indexPath.item].lat!)!, longitude: Double(self.pinList[indexPath.item].lng!)!)
         distance = currentLocation.distance(from: pinLocation) / 1000.0
         cell.distanceLabel.text = String(format: "%.1f KM", distance)
-        NSLog("Updating pin: \(indexPath.item) for selectedIndex \(self.selectedPinId)")
-        if(self.selectedPinId == indexPath.item) {
-            cell.cardView.backgroundColor = UIColor(red: 54/255, green: 105/255, blue: 152/255, alpha: 1.0)
-        } else {
-            cell.cardView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)
-        }
+        cell.cardView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)
         cell.openInfoBut.tag = indexPath.row
         cell.openInfoBut.addTarget(self, action: #selector(self.openInfoButClicked(_:)), for: UIControlEvents.touchUpInside)
         return cell
-        
     }
+    
+    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -334,4 +368,6 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
+    
+    
 }

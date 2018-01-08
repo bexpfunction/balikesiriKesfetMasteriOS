@@ -20,11 +20,20 @@ class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var text2: UILabel!
     @IBOutlet weak var text3: UIButton!
     @IBOutlet weak var guestEntryButton: UIButton!
+    @IBOutlet weak var aboutButton: UIButton!
     
     @IBOutlet weak var loginButton: FBSDKLoginButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        guestEntryButton.layer.cornerRadius = 5
+        guestEntryButton.layer.borderWidth = 1
+        guestEntryButton.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        
+        aboutButton.layer.cornerRadius = 5
+        aboutButton.layer.borderWidth = 1
+        aboutButton.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         
         if((FBSDKAccessToken.current()) != nil){
             loginButton.isHidden = false
