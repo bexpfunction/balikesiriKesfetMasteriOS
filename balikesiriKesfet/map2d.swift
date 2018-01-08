@@ -12,6 +12,7 @@ import MapKit
 import CoreLocation
 
 struct Pin {
+    var id : Int!
     var title : String!
     var info : String!
     var lat : String!
@@ -23,9 +24,9 @@ struct Pin {
 
 class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
     var updateView = false
-    
+    var locatFirstUpdated = false
     var pinList = [Pin]()
-    
+    var selectedPinId : Int!
     let locationManager = CLLocationManager()
     var currentLocation = CLLocation();
     
@@ -37,15 +38,14 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     @IBOutlet var annotationPopup: UIView!
     @IBOutlet weak var mapKitView: MKMapView!
     @IBOutlet weak var pinGalleryColView: UICollectionView!
-    @IBOutlet weak var visualEffectView: UIVisualEffectView!
-    var effect:UIVisualEffect!
+    @IBOutlet weak var mapFollowButton: UIButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        visualEffectView.alpha = 0.75
-        effect = visualEffectView.effect
-        visualEffectView.effect = nil
-        visualEffectView.isHidden = true
+        self.selectedPinId = -1
+        mapFollowButton.setImage(#imageLiteral(resourceName: "locat"), for: .normal)
+
         annotationPopup.layer.cornerRadius = 5
         annotationPopup.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         annotationPopup.layer.borderWidth = 1
@@ -67,19 +67,20 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         self.locationManager.requestAlwaysAuthorization()
         //Foreground use
         self.locationManager.requestWhenInUseAuthorization()
-        
         if CLLocationManager.locationServicesEnabled(){
-            locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
-            locationManager.startUpdatingLocation()
-            locationManager.startUpdatingHeading()
-            getPinInfoFromWebMap()
+            self.locationManager.delegate = self
+            self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
+            self.locationManager.startUpdatingLocation()
+            self.locationManager.startUpdatingHeading()
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         
     }
     
     func animateIn() {
-        self.visualEffectView.isHidden = false
         self.view.addSubview(annotationPopup)
         annotationPopup.center = self.view.center
         
@@ -87,7 +88,6 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         annotationPopup.alpha = 0
         
         UIView.animate(withDuration: 0.4, animations: {
-            self.visualEffectView.effect = self.effect
             self.annotationPopup.alpha = 1
             self.annotationPopup.transform = CGAffineTransform.identity
         })
@@ -98,26 +98,46 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
             self.annotationPopup.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
             self.annotationPopup.alpha = 0
             
-            self.visualEffectView.effect = nil
-            
         }, completion: {
             (success:Bool) in
                 self.annotationPopup.removeFromSuperview()
-                self.visualEffectView.isHidden = true
         })
     }
     
     @IBAction func updateViewToggle(_ sender: Any) {
         updateView = !updateView
+        if(!updateView){
+            mapFollowButton.setImage(#imageLiteral(resourceName: "locat"), for: .normal)
+        } else {
+            mapFollowButton.setImage(#imageLiteral(resourceName: "locatFollow"), for: .normal)
+        }
     }
 
+    //Click pin from 2d map
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        pinTitle.text = view.annotation?.title.unsafelyUnwrapped
-        animateIn()
+        for pin in self.pinList {
+            if pin.title == (view.annotation?.title)! {
+                self.selectedPinId = pin.id
+                self.pinTitle.text = pin.title
+                self.pinInfo.text = pin.info
+                if(self.pinList[self.selectedPinId].gallery.count > 0) {
+                    self.pinGalleryColView.isHidden = false
+                    DispatchQueue.main.async {
+                        self.pinGalleryColView.reloadData()
+                    }
+                } else {
+                    self.pinGalleryColView.isHidden = true
+                }
+                let indPath = NSIndexPath(item: self.selectedPinId, section: 0)
+                self.pinListTV.scrollToRow(at: indPath as IndexPath, at: .middle, animated: true)
+                animateIn()
+                break
+            }
+        }
     }
+    //Update userLocation on map view
     func mapView(_ mapView: MKMapView,
-                 didUpdate userLocation: MKUserLocation){
-
+                 didUpdate userLocation: MKUserLocation) {
     }
     
     @IBAction func dismissAnnPopup(_ sender: Any) {
@@ -126,8 +146,11 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     
     func getPinInfoFromWebMap() {
         //http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=1
-      
-        let urlRequest = URLRequest(url: URL(string: "http://app.balikesirikesfet.com/json?l=1000")!)
+        //http://app.balikesirikesfet.com/json?l=1000
+        
+        let urlString = "http://app.balikesirikesfet.com/json_distance?lat=\(self.currentLocation.coordinate.latitude)&lng=\(self.currentLocation.coordinate.longitude)&dis=2"
+        NSLog("generated url: \(urlString)")
+        let urlRequest = URLRequest(url: URL(string: urlString)!)
         
         let task = URLSession.shared.dataTask(with: urlRequest){(data, response, error) in
             if error != nil {
@@ -140,6 +163,8 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
             do{
                 let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [[String:AnyObject]]
                 var tmpPin = Pin()
+                var count : Int
+                count = 0
                 for pin in json {
                     if let title = pin["title"] as? String{
                         tmpPin.title = title
@@ -181,6 +206,9 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                     
                     self.mapKitView.addAnnotation(annotation)
                     
+                    tmpPin.id = count
+                    count = count + 1
+                    
                     self.pinList.append(tmpPin)
                 }
                 self.pinList.sort{$0.distance! < $1.distance!}
@@ -200,8 +228,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-
-        currentLocation = locations.last!;
+        self.currentLocation = locations.last!;
         let location = locations.last! as CLLocation
 
         let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
@@ -211,8 +238,14 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         if updateView == true {
             self.mapKitView.setRegion(region, animated: true)
         }
+        
+        if self.locatFirstUpdated == false {
+            self.locatFirstUpdated = true
+            self.mapKitView.setRegion(region, animated: true)
+            self.getPinInfoFromWebMap()
+        }
     }
-    var selectedPinId : Int!
+    
     //Pinlist table view
     func openInfoButClicked(_ sender: UIButton) {
         selectedPinId = sender.tag
@@ -228,6 +261,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         }
         animateIn()
     }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "pinListCell", for: indexPath) as! pinListCell
         cell.cardView.layer.cornerRadius = 5
@@ -245,7 +279,12 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         pinLocation = CLLocation(latitude: Double(self.pinList[indexPath.item].lat!)!, longitude: Double(self.pinList[indexPath.item].lng!)!)
         distance = currentLocation.distance(from: pinLocation) / 1000.0
         cell.distanceLabel.text = String(format: "%.1f KM", distance)
-        cell.cardView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)
+        NSLog("Updating pin: \(indexPath.item) for selectedIndex \(self.selectedPinId)")
+        if(self.selectedPinId == indexPath.item) {
+            cell.cardView.backgroundColor = UIColor(red: 54/255, green: 105/255, blue: 152/255, alpha: 1.0)
+        } else {
+            cell.cardView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)
+        }
         cell.openInfoBut.tag = indexPath.row
         cell.openInfoBut.addTarget(self, action: #selector(self.openInfoButClicked(_:)), for: UIControlEvents.touchUpInside)
         return cell
@@ -268,7 +307,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         var span : MKCoordinateSpan!
         span = MKCoordinateSpanMake(0.00025, 0.00025)
         region = MKCoordinateRegion(center: CLLocationCoordinate2DMake(Double(self.pinList[indexPath.item].lat!)!, Double(self.pinList[indexPath.item].lng!)!), span: span)
-        mapKitView.setRegion(region, animated: true)
+        self.mapKitView.setRegion(region, animated: true)
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -285,7 +324,6 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pinPicCell", for: indexPath) as! pinPicCell
         cell.detailPic.downloadImage(from: self.pinList[selectedPinId].gallery[indexPath.item])
-        print("downloading image: \(self.pinList[selectedPinId].gallery[indexPath.item])")
         return cell
     }
     
