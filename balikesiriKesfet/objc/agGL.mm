@@ -81,6 +81,8 @@ int pinCount = 0;
     
     initYaw = 0.0f;
     
+    [self startCameraPreview];
+    
     //Init engine
     [self initTemplateAppWithGL];
     
