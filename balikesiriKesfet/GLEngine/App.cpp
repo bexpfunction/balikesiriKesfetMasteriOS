@@ -604,16 +604,17 @@ void programDrawCallback(void *ptr){
 char uniform,attribute;
 vec3 targetRotVec = {0,0,0};
 void AppDraw() {
-    if(pinSize>0){
-        for(int i=0; i<pinSize; i++){
-            LOGI("c++ appDraw pin[%d] posx: %.3f textaddress: %p text: %s\n",i,App::pinDatas[i].position.x,App::pinDatas[i].text,App::pinDatas[i].text);
-        }
-        LOGI("\n\n");
-    }
+//    if(pinSize>0){
+//        for(int i=0; i<pinSize; i++){
+//            LOGI("c++ appDraw pin[%d] posx: %.3f textaddress: %p text: %s\n",i,App::pinDatas[i].position.x,App::pinDatas[i].text,App::pinDatas[i].text);
+//        }
+//        LOGI("\n\n");
+//    }
     glClearColor(0.2f,0.4f,0.5f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //DrawCamera();
+    DrawCamera();
     if(gonnaInitPins){
         //LOGI("Gonna Init pins\n");
         initPins();
@@ -1035,7 +1036,7 @@ void DrawCamera(){
     //if( color ) glUniform4fv( PROGRAM_get_uniform_location( font->program, ( char * )"COLOR" ), 1, ( float * )color );
     
     glActiveTexture( GL_TEXTURE0 );
-    //glBindTexture( GL_TEXTURE_EXTERNAL_OES,cameraTextureId);      //OES NOT ENABLED
+    glBindTexture(GL_TEXTURE_2D,cameraTextureId);                     //USING THIS INSTEAD
     glBindTexture(GL_TEXTURE_2D,GL_TEXTURE0);                     //USING THIS INSTEAD
     glDrawArrays(GL_TRIANGLE_STRIP,0,4);
     

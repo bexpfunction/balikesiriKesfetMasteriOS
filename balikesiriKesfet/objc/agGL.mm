@@ -27,6 +27,8 @@
 
 #pragma mark - AVFoundation Variables
 AVCaptureSession* captureSession;
+CVOpenGLESTextureCacheRef _videoTextureCache;
+CVOpenGLESTextureRef camTextureRef;
 
 @implementation agGL
 
@@ -78,6 +80,9 @@ int pinCount = 0;
     [super viewDidAppear:animated];
     
     initYaw = 0.0f;
+    
+    //Init camera
+    [self startCameraPreview];
     
     //Init engine
     [self initTemplateAppWithGL];
@@ -170,12 +175,12 @@ bool pInited = false;
     if(drawApp && glInitialized) {
         templateApp.SetCameraRotation(cPitch, cYaw, cRoll);
         if(pInited) {
-            if(pinCount>0 && pinList != NULL){
-                for(int i=0; i<pinCount; i++){
-                    LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
-                }
-                LOGI("\n\n");
-            }
+//            if(pinCount>0 && pinList != NULL){
+//                for(int i=0; i<pinCount; i++){
+//                    LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
+//                }
+//                LOGI("\n\n");
+//            }
             templateApp.Draw();
             drawAppCalled = true;
         }
@@ -417,8 +422,53 @@ bool pInited = false;
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection {
     
-    CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    //CVImageBufferRef imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     //Have to create openGL texture using this imageBuffer and pass it to the engine
+    CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    GLsizei width = (GLsizei)CVPixelBufferGetWidth(pixelBuffer);
+    GLsizei height = (GLsizei)CVPixelBufferGetHeight(pixelBuffer);
+    
+    if (!_videoTextureCache)
+    {
+        NSLog(@"No video texture cache");
+        return;
+    }
+    
+    //[self cleanUpTextures];
+    if(camTextureRef){
+        CFRelease(camTextureRef);
+    }
+    CVOpenGLESTextureCacheFlush(_videoTextureCache, 0);
+    
+    // CVOpenGLESTextureCacheCreateTextureFromImage will create GLES texture
+    // optimally from CVImageBufferRef.
+    
+    // Y-plane
+    glActiveTexture(GL_TEXTURE0);
+    CVReturn err;
+    err = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
+                                                       _videoTextureCache,
+                                                       pixelBuffer,
+                                                       NULL,
+                                                       GL_TEXTURE_2D,
+                                                       GL_RED_EXT,
+                                                       width,
+                                                       height,
+                                                       GL_RED_EXT,
+                                                       GL_UNSIGNED_BYTE,
+                                                       0,
+                                                       &camTextureRef);
+    if (err)
+    {
+        NSLog(@"Error at CVOpenGLESTextureCacheCreateTextureFromImage %d", err);
+    }
+    GLuint textureId =CVOpenGLESTextureGetName(camTextureRef);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    NSLog(@"camer text id: %d",textureId);
+    templateApp.BindCameraTexture(textureId);
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
