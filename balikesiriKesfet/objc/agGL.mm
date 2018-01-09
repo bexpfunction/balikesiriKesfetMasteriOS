@@ -163,7 +163,6 @@ int pinCount = 0;
     
     //TEMPLATE APP
     templateApp.InitCamera(65.0f,1.0f,1000.0f,0.5f,true);
-    templateApp.BindCameraTexture(0);
     templateApp.Init((int)screenWidth,(int)screenHeight);
     glInitialized = true;
 }

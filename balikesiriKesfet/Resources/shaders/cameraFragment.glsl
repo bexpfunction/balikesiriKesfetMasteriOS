@@ -1,6 +1,4 @@
-#version 100
 //#extension GL_OES_EGL_image_external : enable
-
 precision mediump float;
 varying mediump vec2 texcoord0;
 //in mediump vec2 texcoord0;

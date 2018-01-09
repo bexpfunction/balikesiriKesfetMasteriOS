@@ -1,4 +1,3 @@
-#version 100
 //Uniforms
 //uniform mediump mat4 PROJECTIONMATRIX;
 //uniform mediump mat4 VIEWMAT;
