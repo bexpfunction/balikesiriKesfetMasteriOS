@@ -12,11 +12,8 @@ import FBSDKShareKit
 class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
     
     @IBOutlet weak var titleImage: UIImageView!
-    
     @IBOutlet weak var bbImage: UIImageView!
-    
     @IBOutlet weak var text1: UILabel!
-    
     @IBOutlet weak var text2: UILabel!
     @IBOutlet weak var text3: UIButton!
     @IBOutlet weak var guestEntryButton: UIButton!
@@ -36,11 +33,11 @@ class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
         aboutButton.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         
         if((FBSDKAccessToken.current()) != nil){
-            loginButton.isHidden = false
+            loginButton.isHidden = true
             guestEntryButton.isHidden = true
         } else {
-            loginButton.isHidden = true
-            guestEntryButton.isHidden = false
+            loginButton.isHidden = false
+            guestEntryButton.isHidden = true
         }
         
         self.titleImage.alpha = 0

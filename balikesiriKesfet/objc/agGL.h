@@ -23,6 +23,7 @@ static pinData* pinList;
 }
 @property (strong, nonatomic) CMMotionManager *motionManager;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *openMenuBut;
 
 - (void)startCaptureLocation;
 - (void)stopCaptureLocation;

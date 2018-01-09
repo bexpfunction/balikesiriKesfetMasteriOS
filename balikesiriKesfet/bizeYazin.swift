@@ -11,6 +11,7 @@ import FBSDKShareKit
 
 class bizeYazin: UIViewController, UITextViewDelegate {
 
+    @IBOutlet weak var openMenuBut: UIBarButtonItem!
     @IBOutlet weak var sendButton: UIButton!
     @IBOutlet weak var messageTextField: UITextView!
     @IBOutlet weak var mailTextField: UITextField!
@@ -21,6 +22,13 @@ class bizeYazin: UIViewController, UITextViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Reveal View Controller Setup
+        openMenuBut.target = self.revealViewController()
+        openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
+        revealViewController().rearViewRevealWidth = 190
+        //Gesture recognizer for reveal view controller
+        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        
         self.messageTextField.delegate = self
         // Do any additional setup after loading the view.
     }

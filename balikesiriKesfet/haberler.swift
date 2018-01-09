@@ -19,12 +19,25 @@ struct ArticleN {
 
 class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
+    //Buttons
+    @IBOutlet weak var openMenuBut: UIBarButtonItem!
+    
+    
+    
     @IBOutlet weak var tblView: UITableView!
     
     var articleList : [ArticleN] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Reveal View Controller Setup
+        openMenuBut.target = self.revealViewController()
+        openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
+        revealViewController().rearViewRevealWidth = 190
+        //Gesture recognizer for reveal view controller
+        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        
         self.articleList.removeAll()
         fetchNews()
     }

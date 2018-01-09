@@ -17,11 +17,23 @@ struct NotificationN {
 
 class duyurular: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    //Reveal controller bar button
+    @IBOutlet weak var openMenuBut: UIBarButtonItem!
+    
+    
     @IBOutlet weak var notificationsTable: UITableView!
     var notificationList : [NotificationN] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        //Reveal View Controller Setup
+        openMenuBut.target = self.revealViewController()
+        openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
+        revealViewController().rearViewRevealWidth = 190
+        //Gesture recognizer for reveal view controller
+        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        
         notificationList.removeAll()
         fetchNotifications()
         // Do any additional setup after loading the view.

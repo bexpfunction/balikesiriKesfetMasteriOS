@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9C5E9A61ED628B7537C20374 /* libPods-balikesiriKesfet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC9409506B01946FCD17C0A3 /* libPods-balikesiriKesfet.a */; };
+		B90186012004C27200552DE3 /* backTVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90186002004C27200552DE3 /* backTVController.swift */; };
 		B90D34E21F90D0B300A1BB68 /* articleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90D34E11F90D0B300A1BB68 /* articleCell.swift */; };
 		B91D6E231F9CD95500525C76 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B91D6E221F9CD95400525C76 /* GoogleService-Info.plist */; };
 		B91DEFEF1F93AF9900F80A27 /* haberDetaylari.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91DEFEE1F93AF9900F80A27 /* haberDetaylari.swift */; };
@@ -152,6 +153,7 @@
 /* Begin PBXFileReference section */
 		29C6E82AAF171C20738224C2 /* Pods-balikesiriKesfet.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-balikesiriKesfet.debug.xcconfig"; path = "Pods/Target Support Files/Pods-balikesiriKesfet/Pods-balikesiriKesfet.debug.xcconfig"; sourceTree = "<group>"; };
 		7CB1937B018A557ED4106823 /* Pods-balikesiriKesfet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-balikesiriKesfet.release.xcconfig"; path = "Pods/Target Support Files/Pods-balikesiriKesfet/Pods-balikesiriKesfet.release.xcconfig"; sourceTree = "<group>"; };
+		B90186002004C27200552DE3 /* backTVController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = backTVController.swift; sourceTree = "<group>"; };
 		B90D34E11F90D0B300A1BB68 /* articleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = articleCell.swift; sourceTree = "<group>"; };
 		B91C189C1FF0DC5400101101 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B91D6E221F9CD95400525C76 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -713,6 +715,7 @@
 				B98B09C81F8CC82C0080D7EB /* map2d.swift */,
 				B91DEFEE1F93AF9900F80A27 /* haberDetaylari.swift */,
 				B94EDB932003A743004D4655 /* AnaSayfa.swift */,
+				B90186002004C27200552DE3 /* backTVController.swift */,
 			);
 			name = ViewControllerClasses;
 			sourceTree = "<group>";
@@ -1039,6 +1042,7 @@
 				B9F2A8311FADC995004FC439 /* vector.c in Sources */,
 				B9F2A82B1FADC995004FC439 /* makefont.c in Sources */,
 				B974489D1FAC7BD600C71F53 /* trees.c in Sources */,
+				B90186012004C27200552DE3 /* backTVController.swift in Sources */,
 				B9C3BD051F578D72007E76CE /* balikesiriKesfetIntro.swift in Sources */,
 				B974489B1FAC7BD600C71F53 /* inftrees.c in Sources */,
 				B974489C1FAC7BD600C71F53 /* ioapi.c in Sources */,

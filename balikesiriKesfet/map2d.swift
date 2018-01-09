@@ -30,6 +30,8 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     let locationManager = CLLocationManager()
     var currentLocation = CLLocation();
     
+    
+    @IBOutlet weak var openMenuBut: UIBarButtonItem!
     @IBOutlet weak var annotationPopupExitBut: UIButton!
     @IBOutlet weak var popupScrollView: UIScrollView!
     @IBOutlet weak var pinListTV: UITableView!
@@ -44,6 +46,13 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Reveal View Controller Setup
+        openMenuBut.target = self.revealViewController()
+        openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
+        revealViewController().rearViewRevealWidth = 190
+        //Gesture recognizer for reveal view controller
+        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        
         self.selectedPinId = -1
         self.addressLabel.text = ""
         self.mapFollowButton.setImage(#imageLiteral(resourceName: "locat"), for: .normal)

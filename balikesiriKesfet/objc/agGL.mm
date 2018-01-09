@@ -14,6 +14,7 @@
 #import <string>
 #import <malloc/malloc.h>
 #import <AVFoundation/AVFoundation.h>
+#import "SWRevealViewController.h"
 
 @interface agGL () <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
     Reachability *internetReachableFoo;
@@ -53,6 +54,13 @@ int pinCount = 0;
 #pragma mark - ViewController Methods And Delegates
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //Setup side menu
+    [self.openMenuBut setTarget:self.revealViewController];
+    [self.openMenuBut setAction:@selector(revealToggle:)];
+    self.revealViewController.rearViewRevealWidth = 190;
+    [self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+
+    
     glInitialized = false;
     checkFrameBuffer = false;
     drawTest = false;
