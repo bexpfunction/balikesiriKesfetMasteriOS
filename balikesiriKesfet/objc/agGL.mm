@@ -82,11 +82,9 @@ int pinCount = 0;
     
     initYaw = 0.0f;
     
-    [self startCameraPreview];
-    
     //Init engine
     [self initTemplateAppWithGL];
-    
+    [self startCameraPreview];
     
     //Start location manager to get current location
     
@@ -401,6 +399,17 @@ bool pInited = false;
 }
 
 -(void) startCameraPreview {
+    //-- Create CVOpenGLESTextureCacheRef for optimal CVImageBufferRef to GLES texture conversion.
+#if COREVIDEO_USE_EAGLCONTEXT_CLASS_IN_API
+    CVReturn err = CVOpenGLESTextureCacheCreate(kCFAllocatorDefault, NULL, _context, NULL, &_videoTextureCache);
+#else
+    CVReturn err = CVOpenGLESTextureCacheCreate(kCFAllocatorDefault, NULL, (__bridge void *)_context, NULL, &_videoTextureCache);
+#endif
+    if (err)
+    {
+        NSLog(@"1-Error at CVOpenGLESTextureCacheCreate %d", err);
+        return;
+    }
     //Video Device
     captureSession = [AVCaptureSession new];
     captureSession = [[AVCaptureSession alloc] init];
