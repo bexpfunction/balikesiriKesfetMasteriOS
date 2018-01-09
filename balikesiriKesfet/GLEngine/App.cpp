@@ -613,7 +613,7 @@ void AppDraw() {
     glClearColor(0.2f,0.4f,0.5f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //DrawCamera();
+    DrawCamera();
     if(gonnaInitPins){
         //LOGI("Gonna Init pins\n");
         initPins();
@@ -1036,7 +1036,7 @@ void DrawCamera(){
     
     glActiveTexture( GL_TEXTURE0 );
     //glBindTexture( GL_TEXTURE_EXTERNAL_OES,cameraTextureId);      //OES NOT ENABLED
-    glBindTexture(GL_TEXTURE_2D,GL_TEXTURE0);                     //USING THIS INSTEAD
+    glBindTexture(GL_TEXTURE_2D,cameraTextureId);                     //USING THIS INSTEAD
     glDrawArrays(GL_TRIANGLE_STRIP,0,4);
     
     glDisableVertexAttribArray(attribute);
