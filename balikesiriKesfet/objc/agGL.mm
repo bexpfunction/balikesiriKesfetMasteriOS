@@ -25,12 +25,12 @@
 
 @end
 
+@implementation agGL
+
 #pragma mark - AVFoundation Variables
 AVCaptureSession* captureSession;
 CVOpenGLESTextureCacheRef _videoTextureCache;
 CVOpenGLESTextureRef camTextureRef;
-
-@implementation agGL
 
 #pragma mark - GL view
 GLKView* glView;
@@ -419,7 +419,7 @@ bool pInited = false;
 - (void)captureOutput:(AVCaptureOutput *)output
 didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
        fromConnection:(AVCaptureConnection *)connection {
-    
+    NSLog(@"capture output works...");
     CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     GLsizei width = (GLsizei)CVPixelBufferGetWidth(pixelBuffer);
     GLsizei height = (GLsizei)CVPixelBufferGetHeight(pixelBuffer);
