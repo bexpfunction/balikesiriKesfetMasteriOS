@@ -604,12 +604,12 @@ void programDrawCallback(void *ptr){
 char uniform,attribute;
 vec3 targetRotVec = {0,0,0};
 void AppDraw() {
-    if(pinSize>0){
-        for(int i=0; i<pinSize; i++){
-            LOGI("c++ appDraw pin[%d] posx: %.3f textaddress: %p text: %s\n",i,App::pinDatas[i].position.x,App::pinDatas[i].text,App::pinDatas[i].text);
-        }
-        LOGI("\n\n");
-    }
+//    if(pinSize>0){
+//        for(int i=0; i<pinSize; i++){
+//            LOGI("c++ appDraw pin[%d] posx: %.3f textaddress: %p text: %s\n",i,App::pinDatas[i].position.x,App::pinDatas[i].text,App::pinDatas[i].text);
+//        }
+//        LOGI("\n\n");
+//    }
     glClearColor(0.2f,0.4f,0.5f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

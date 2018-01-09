@@ -18,8 +18,8 @@
 UILabel *infoLabel;
 static pinData* pinList;
 
-@interface agGL : GLKViewController <AVCaptureVideoDataOutputSampleBufferDelegate>{
-
+@interface agGL : GLKViewController <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
+    
 }
 @property (strong, nonatomic) CMMotionManager *motionManager;
 @property (strong, nonatomic) CLLocationManager *locationManager;

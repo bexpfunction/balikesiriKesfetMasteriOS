@@ -25,7 +25,7 @@
 
 @end
 
-@implementation agGL
+@implementation agGL {
 
 #pragma mark - AVFoundation Variables
 AVCaptureSession* captureSession;
@@ -34,7 +34,8 @@ CVOpenGLESTextureRef camTextureRef;
 
 #pragma mark - GL view
 GLKView* glView;
-
+    
+}
 #pragma mark - Custom macros
 #define radToDeg(x) (180.0f/M_PI)*x
 #define degToRad(x) (M_PI/180.0f)*x
@@ -173,12 +174,12 @@ bool pInited = false;
     if(drawApp && glInitialized) {
         templateApp.SetCameraRotation(cPitch, cYaw, cRoll);
         if(pInited) {
-            if(pinCount>0 && pinList != NULL){
-                for(int i=0; i<pinCount; i++){
-                    LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
-                }
-                LOGI("\n\n");
-            }
+//            if(pinCount>0 && pinList != NULL){
+//                for(int i=0; i<pinCount; i++){
+//                    LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
+//                }
+//                LOGI("\n\n");
+//            }
             templateApp.Draw();
             drawAppCalled = true;
         }
@@ -197,6 +198,7 @@ bool pInited = false;
 
 -(void)update {
     infoLabel.text = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@",gyroStr,accStr,acStr,apStr,arStr];
+    //NSLog(@"Capture session running: %d",captureSession.running);
 //    [infoLabel setNumberOfLines:0]
 //    [infoLabel sizeToFit];
     
@@ -400,25 +402,44 @@ bool pInited = false;
 
 -(void) startCameraPreview {
     //Video Device
+    captureSession = [AVCaptureSession new];
     captureSession = [[AVCaptureSession alloc] init];
+    [captureSession beginConfiguration];
     AVCaptureDevice* videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-    if(videoDevice == nil)
+    if(videoDevice == nil) {
         assert(0);
+        NSLog(@"video device error...");
+    }
     
     //Add device to session
     NSError* error;
     AVCaptureInput* input = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error: &error];
-    if(error)
+    if(error) {
         assert(0);
+        NSLog(@"video device session error...");
+    }
     [captureSession addInput:input];
     //preview layer
 
+    
+    //-- Create the output for the capture session.
+    AVCaptureVideoDataOutput * dataOutput = [[AVCaptureVideoDataOutput alloc] init];
+    [dataOutput setAlwaysDiscardsLateVideoFrames:YES]; // Probably want to set this to NO when recording
+    
+    //-- Set to YUV420.
+    [dataOutput setVideoSettings:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarFullRange]
+                                                             forKey:(id)kCVPixelBufferPixelFormatTypeKey]]; // Necessary for manual preview
+    
+    // Set dispatch to be on the main thread so OpenGL can do things with the data
+    [dataOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
+    
+    [captureSession addOutput:dataOutput];
+    [captureSession commitConfiguration];
+    
     [captureSession startRunning];
 }
 //AV Outputdelegate
-- (void)captureOutput:(AVCaptureOutput *)output
-didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
-       fromConnection:(AVCaptureConnection *)connection {
+- (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
     NSLog(@"capture output works...");
     CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     GLsizei width = (GLsizei)CVPixelBufferGetWidth(pixelBuffer);
@@ -465,6 +486,12 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     
     templateApp.BindCameraTexture(textureId);
 }
+
+//- (void)captureOutput:(AVCaptureOutput *)output
+//didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+//       fromConnection:(AVCaptureConnection *)connection {
+//
+//}
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
