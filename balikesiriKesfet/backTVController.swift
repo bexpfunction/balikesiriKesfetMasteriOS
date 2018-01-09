@@ -13,6 +13,20 @@ class backTVController: UITableViewController {
     //Facebook image
     @IBOutlet weak var fbProfileImage: UIImageView!
 
+    //Button actions
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if(indexPath.row == 6){
+            let url = URL(string: "http://www.balikesir.bel.tr")!
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                //If you want handle the completion block than
+                UIApplication.shared.open(url, options: [:], completionHandler: { (success) in
+                    print("Open url : \(success)")
+                })
+            }
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         

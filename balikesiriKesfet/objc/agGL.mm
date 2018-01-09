@@ -496,12 +496,6 @@ bool pInited = false;
     templateApp.BindCameraTexture(textureId);
 }
 
-//- (void)captureOutput:(AVCaptureOutput *)output
-//didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
-//       fromConnection:(AVCaptureConnection *)connection {
-//
-//}
-
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     glInitialized = false; drawApp = false;

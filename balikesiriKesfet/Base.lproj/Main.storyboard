@@ -210,6 +210,7 @@ Gerçeklik</string>
                                 </state>
                                 <connections>
                                     <action selector="uygHkClicked:" destination="ZYu-Ll-96Z" eventType="touchUpInside" id="NMY-2z-rUR"/>
+                                    <segue destination="hcO-AV-HSd" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="KPJ-pV-QIT"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="PZE-o6-otm">
@@ -631,11 +632,11 @@ Gerçeklik</string>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <color key="backgroundColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="pinListCell" rowHeight="60" id="huZ-OW-J9l" userLabel="pinListCell" customClass="pinListCell" customModule="balikesiriKesfet" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="28" width="375" height="60"/>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="pinListCell" rowHeight="75" id="huZ-OW-J9l" userLabel="pinListCell" customClass="pinListCell" customModule="balikesiriKesfet" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="28" width="375" height="75"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="huZ-OW-J9l" id="VT6-13-ZAP">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="75"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q9L-pO-N4d" userLabel="CardView">
@@ -694,7 +695,7 @@ Gerçeklik</string>
                                     <action selector="updateViewToggle:" destination="7pK-FQ-N5F" eventType="touchUpInside" id="1Rg-vL-5VR"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bhy-jt-uX7">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bhy-jt-uX7">
                                 <rect key="frame" x="16" y="342" width="343" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
@@ -901,6 +902,31 @@ Gerçeklik</string>
             </objects>
             <point key="canvasLocation" x="3226" y="1851"/>
         </scene>
+        <!--UYGULAMA HAKKINDA-->
+        <scene sceneID="jnX-hu-zke">
+            <objects>
+                <viewController id="noL-iX-fwU" userLabel="UYGULAMA HAKKINDA" customClass="uygulamaHakkinda" customModule="balikesiriKesfet" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Id6-aN-4MM"/>
+                        <viewControllerLayoutGuide type="bottom" id="m9e-Bj-Qi8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3Gf-Fw-IK1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="tintColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="calibratedRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="UYGULAMA HAKKINDA" id="v2L-oK-M4b">
+                        <barButtonItem key="leftBarButtonItem" image="48px-HamburgerIcon" style="plain" id="eK7-Fk-cyg"/>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="openMenuBut" destination="eK7-Fk-cyg" id="t4F-wL-pNa"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a8V-Q9-ycl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5264.8000000000002" y="1850.824587706147"/>
+        </scene>
         <!--ARTIRILMIŞ GERÇEKLİK-->
         <scene sceneID="8jc-ec-mXd">
             <objects>
@@ -1066,7 +1092,7 @@ Gerçeklik</string>
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="balikesir_bb_logo" translatesAutoresizingMaskIntoConstraints="NO" id="qBI-np-hO7">
+                            <imageView opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="balikesir_bb_logo_single" translatesAutoresizingMaskIntoConstraints="NO" id="qBI-np-hO7">
                                 <rect key="frame" x="146" y="523" width="83" height="89"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="qBI-np-hO7" secondAttribute="height" multiplier="83:89" id="tS7-Ys-p8h"/>
@@ -1082,6 +1108,9 @@ Gerçeklik</string>
                                 <state key="normal" title="Uygulama Hakkında">
                                     <color key="titleColor" red="1" green="1" blue="0.99987989659999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
+                                <connections>
+                                    <segue destination="hcO-AV-HSd" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="jOd-vw-6of"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="54x-AV-N9M" customClass="FBSDKLoginButton">
                                 <rect key="frame" x="102.5" y="268" width="170" height="31"/>
@@ -1285,7 +1314,7 @@ Gerçeklik</string>
                                     <segue destination="gyX-Be-Kuk" kind="show" identifier="toMain" id="7g6-Kw-3z4"/>
                                 </connections>
                             </button>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="balikesir_bb_logo" translatesAutoresizingMaskIntoConstraints="NO" id="yvq-PH-pOa">
+                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="balikesir_bb_logo_single" translatesAutoresizingMaskIntoConstraints="NO" id="yvq-PH-pOa">
                                 <rect key="frame" x="146" y="558" width="83" height="89"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="89" id="Bz8-FZ-Xpm"/>
@@ -1550,6 +1579,9 @@ Gerçeklik</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="hcO-AV-HSd" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="SdD-7C-RTF"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="DZI-2O-fYG">
                                         <rect key="frame" x="0.0" y="352" width="375" height="44"/>
@@ -1576,7 +1608,7 @@ Gerçeklik</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bS8-Xc-S2v">
-                                                    <rect key="frame" x="37" y="9" width="79" height="80"/>
+                                                    <rect key="frame" x="16" y="9" width="79" height="80"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 </imageView>
                                             </subviews>
@@ -1739,11 +1771,33 @@ Gerçeklik</string>
             </objects>
             <point key="canvasLocation" x="2519" y="1851"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="YbV-14-HhK">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="hcO-AV-HSd" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="PKz-R0-9GX">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="noL-iX-fwU" kind="relationship" relationship="rootViewController" id="eTd-3V-sgv"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0O2-rr-mIF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4508" y="1851"/>
+        </scene>
     </scenes>
     <resources>
         <image name="48px-HamburgerIcon" width="48" height="48"/>
         <image name="BalikesiriKesfetLogo" width="1290" height="233"/>
-        <image name="balikesir_bb_logo" width="482" height="520"/>
+        <image name="balikesir_bb_logo_single" width="350" height="350"/>
         <image name="locat" width="40" height="40"/>
         <image name="logo192" width="192" height="192"/>
         <image name="pic_ag" width="857" height="859"/>
@@ -1754,11 +1808,12 @@ Gerçeklik</string>
         <image name="pic_web" width="834" height="811"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ywn-tp-g9R"/>
-        <segue reference="aP3-Nu-JsA"/>
-        <segue reference="enV-pU-d1E"/>
-        <segue reference="pfl-Bo-1Qx"/>
-        <segue reference="2OD-Om-b16"/>
+        <segue reference="SdD-7C-RTF"/>
+        <segue reference="HL9-b9-by3"/>
+        <segue reference="zdO-ud-cGL"/>
+        <segue reference="AnF-en-5Fc"/>
+        <segue reference="iT8-f7-mc0"/>
+        <segue reference="FAC-vt-Byz"/>
         <segue reference="sZi-0r-fjD"/>
         <segue reference="BlR-cA-HGs"/>
     </inferredMetricsTieBreakers>

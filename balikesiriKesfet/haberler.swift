@@ -100,27 +100,22 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ArticleCell", for: indexPath) as! articleCell
-        cell.cardView.layer.cornerRadius = 3
+        cell.cardView.layer.cornerRadius = 5
+        cell.cardView.layer.borderWidth = 1
+        cell.cardView.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         cell.cardView.layer.masksToBounds = false
         cell.cardView.layer.shadowColor = UIColor.black.cgColor
         cell.cardView.layer.shadowOffset = CGSize(width: 0.2, height: 0.2)
         cell.cardView.layer.shadowRadius = 0.2
-        cell.contentView.backgroundColor = UIColor(red: 10/255, green: 109/255, blue: 165/255, alpha: 1.0)
+        cell.contentView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)
         cell.title.text = self.articleList[indexPath.item].title
         cell.abstract.text = self.articleList[indexPath.item].abstract
         cell.date.text = self.articleList[indexPath.item].date
         cell.imgView.downloadImage(from: (self.articleList[indexPath.item].picUrl!))
         cell.imgView.layer.cornerRadius = 3
         cell.imgView.layer.masksToBounds = false
-        if(indexPath.row % 2 == 0){
-            //cell.contentView.backgroundColor = UIColor(red: 10/255, green: 109/255, blue: 165/255, alpha: 1.0)
-            cell.cardView.backgroundColor = UIColor(red: 20/255, green: 119/255, blue: 175/255, alpha: 1.0)
-        }
-        else {
-           // cell.contentView.backgroundColor = UIColor(red: 140/255, green: 184/255, blue: 24/255, alpha: 1.0)
-            cell.cardView.backgroundColor = UIColor(red: 150/255, green: 194/255, blue: 34/255, alpha: 1.0)
-        }
-        
+        //cell.contentView.backgroundColor = UIColor(red: 10/255, green: 109/255, blue: 165/255, alpha: 1.0)
+        cell.cardView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)
         return cell
     }
     
