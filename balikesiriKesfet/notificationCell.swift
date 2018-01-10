@@ -13,6 +13,7 @@ class notificationCell: UITableViewCell {
     @IBOutlet weak var nTitle: UILabel!
     @IBOutlet weak var nAbstract: UILabel!
     @IBOutlet weak var nDate: UILabel!
+    @IBOutlet weak var cardView: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
         self.selectionStyle = UITableViewCellSelectionStyle.none

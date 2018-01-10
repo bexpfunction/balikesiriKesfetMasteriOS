@@ -31,6 +31,7 @@ class duyurular: UIViewController, UITableViewDelegate, UITableViewDataSource {
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
         revealViewController().rearViewRevealWidth = 190
+        revealViewController().rearViewRevealOverdraw = 200
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
@@ -81,18 +82,21 @@ class duyurular: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-            let cell = tableView.dequeueReusableCell(withIdentifier: "NotificationCell", for: indexPath) as! notificationCell
-            cell.nTitle.text = self.notificationList[indexPath.item].title
-            cell.nAbstract.text = self.notificationList[indexPath.item].abstract
-            cell.nDate.text = self.notificationList[indexPath.item].date
-            if(indexPath.row % 2 == 0){
-                cell.contentView.backgroundColor = UIColor(red: 20/255, green: 119/255, blue: 175/255, alpha: 1.0)
-            }
-            else {
-                cell.contentView.backgroundColor = UIColor(red: 150/255, green: 194/255, blue: 34/255, alpha: 1.0)
-            }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NotificationCell", for: indexPath) as! notificationCell
+        cell.cardView.layer.cornerRadius = 5
+        cell.cardView.layer.borderWidth = 1
+        cell.cardView.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        cell.cardView.layer.masksToBounds = false
+        cell.cardView.layer.shadowColor = UIColor.black.cgColor
+        cell.cardView.layer.shadowOffset = CGSize(width: 0.2, height: 0.2)
+        cell.cardView.layer.shadowRadius = 0.2
+        cell.cardView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)
+        cell.contentView.backgroundColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0)
+        cell.nTitle.text = self.notificationList[indexPath.item].title
+        cell.nAbstract.text = self.notificationList[indexPath.item].abstract
+        cell.nDate.text = self.notificationList[indexPath.item].date
             
-            return cell
+        return cell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {

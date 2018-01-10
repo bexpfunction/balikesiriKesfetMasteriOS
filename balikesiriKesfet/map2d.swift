@@ -50,6 +50,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
         revealViewController().rearViewRevealWidth = 190
+        revealViewController().rearViewRevealOverdraw = 200
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
@@ -318,7 +319,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         cell.cardView.layer.shadowColor = UIColor.black.cgColor
         cell.cardView.layer.shadowOffset = CGSize(width: 0.2, height: 0.2)
         cell.cardView.layer.shadowRadius = 0.2
-        cell.contentView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)
+        cell.contentView.backgroundColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0)
         cell.pinTitleLabel.text = self.pinList[indexPath.item].title
         var distance : Double
         var pinLocation : CLLocation

@@ -26,8 +26,13 @@ class bizeYazin: UIViewController, UITextViewDelegate {
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
         revealViewController().rearViewRevealWidth = 190
+        revealViewController().rearViewRevealOverdraw = 200
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        
+        self.sendButton.layer.cornerRadius = 5
+        self.sendButton.layer.borderWidth = 1
+        self.sendButton.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         
         self.messageTextField.delegate = self
         // Do any additional setup after loading the view.

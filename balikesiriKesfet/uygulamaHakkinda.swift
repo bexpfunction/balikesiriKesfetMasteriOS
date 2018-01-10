@@ -19,6 +19,7 @@ class uygulamaHakkinda: UIViewController {
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
         revealViewController().rearViewRevealWidth = 190
+        revealViewController().rearViewRevealOverdraw = 200
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }

@@ -25,6 +25,10 @@ class guestEntryForm: UIViewController, FBSDKLoginButtonDelegate {
         fbLoginButton.readPermissions = ["public_profile", "email", "user_friends"]
         fbLoginButton.delegate = self
         
+        guestEntryButton.layer.cornerRadius = 5
+        guestEntryButton.layer.borderWidth = 1
+        guestEntryButton.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        
         if((FBSDKAccessToken.current()) != nil){
             guestEntryButton.isHidden = true
         } else {

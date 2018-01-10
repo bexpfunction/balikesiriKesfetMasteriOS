@@ -28,6 +28,9 @@ class AnaSayfa: UIViewController {
     @IBOutlet weak var webBView: UIView!
     @IBOutlet weak var bizeYazinBView: UIView!
     
+    //ViewControllers
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //Buttons and view setup
@@ -71,21 +74,34 @@ class AnaSayfa: UIViewController {
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
         revealViewController().rearViewRevealWidth = 190
+        revealViewController().rearViewRevealOverdraw = 200
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }
 
     //Button actions
     @IBAction func haberlerClick(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "haberlerVC")
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     @IBAction func agModuClick(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "agVC")
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     @IBAction func haritaClick(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "haritaVC")
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     @IBAction func duyuruClicked(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "duyuruVC")
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     @IBAction func webButClicked(_ sender: UIButton) {
@@ -100,21 +116,19 @@ class AnaSayfa: UIViewController {
     }
     
     @IBAction func bizeYazClicked(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "bizeYazVC")
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     @IBAction func uygHkClicked(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "uygHkVC")
+        self.navigationController?.pushViewController(controller, animated: true)
     }
     
     @IBAction func quitClicked(_ sender: UIButton) {
         exit(0)
-    }
-    
-    
-    
-    //Memory warning method
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-
     }
 
 }

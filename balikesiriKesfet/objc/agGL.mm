@@ -61,6 +61,7 @@ int pinCount = 0;
     [self.openMenuBut setTarget:self.revealViewController];
     [self.openMenuBut setAction:@selector(revealToggle:)];
     self.revealViewController.rearViewRevealWidth = 190;
+    self.revealViewController.rearViewRevealOverdraw = 200;
     [self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.panGestureRecognizer];
 
     
