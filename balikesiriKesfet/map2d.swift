@@ -27,8 +27,10 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     var locatFirstUpdated = false
     var pinList = [Pin]()
     var selectedPinId : Int!
+    var deSelectedPinID : Int!
     let locationManager = CLLocationManager()
-    var currentLocation = CLLocation();
+    var currentLocation = CLLocation()
+    var sv : UIView!
     
     
     @IBOutlet weak var openMenuBut: UIBarButtonItem!
@@ -42,6 +44,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     @IBOutlet weak var pinGalleryColView: UICollectionView!
     @IBOutlet weak var mapFollowButton: UIButton!
     @IBOutlet weak var addressLabel: UILabel!
+    @IBOutlet weak var pinListView: UIView!
     
     
     override func viewDidLoad() {
@@ -55,6 +58,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
         self.selectedPinId = -1
+        self.deSelectedPinID = -1
         self.addressLabel.text = ""
         self.mapFollowButton.setImage(#imageLiteral(resourceName: "locat"), for: .normal)
 
@@ -143,7 +147,6 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                 let indPath = NSIndexPath(item: self.selectedPinId, section: 0)
                 self.pinListTV.selectRow(at: indPath as IndexPath, animated: true, scrollPosition: UITableViewScrollPosition.middle)
                 //self.pinListTV.scrollToRow(at: indPath as IndexPath, at: .middle, animated: true)
-                animateIn()
                 break
             }
         }
@@ -194,6 +197,8 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     }
     
     func getPinInfoFromWebMap() {
+        self.sv = UIViewController.displaySpinner(onView: self.pinListView)
+        
         //http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=1
         //http://app.balikesirikesfet.com/json?l=1000
         
@@ -261,7 +266,9 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                 }
                 self.pinList.sort{$0.distance! < $1.distance!}
                 DispatchQueue.main.async {
-                    self.pinListTV.reloadData()
+                    self.pinListTV.reloadData() {
+                        UIViewController.removeSpinner(spinner: self.sv)
+                    }
                 }
             } catch let error {
                 print(error)
@@ -319,20 +326,24 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         cell.cardView.layer.shadowColor = UIColor.black.cgColor
         cell.cardView.layer.shadowOffset = CGSize(width: 0.2, height: 0.2)
         cell.cardView.layer.shadowRadius = 0.2
+        cell.cardView.backgroundColor = UIColor(red: 59/255, green: 110/255, blue: 177/255, alpha: 1.0)
+        if(indexPath.row == self.selectedPinId) {
+            cell.cardView.backgroundColor = UIColor(red: 59/255, green: 110/255, blue: 197/255, alpha: 1.0)
+        }
+        if(indexPath.row == self.deSelectedPinID) {
+            cell.cardView.backgroundColor = UIColor(red: 59/255, green: 110/255, blue: 177/255, alpha: 1.0)
+        }
         cell.contentView.backgroundColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0)
         cell.pinTitleLabel.text = self.pinList[indexPath.item].title
         var distance : Double
         var pinLocation : CLLocation
-        
         pinLocation = CLLocation(latitude: Double(self.pinList[indexPath.item].lat!)!, longitude: Double(self.pinList[indexPath.item].lng!)!)
         distance = currentLocation.distance(from: pinLocation) / 1000.0
         cell.distanceLabel.text = String(format: "%.1f KM", distance)
-        cell.cardView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)
         cell.openInfoBut.tag = indexPath.row
         cell.openInfoBut.addTarget(self, action: #selector(self.openInfoButClicked(_:)), for: UIControlEvents.touchUpInside)
         return cell
     }
-    
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -347,11 +358,22 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        NSLog("selected... %d", indexPath.row)
+        self.selectedPinId = indexPath.row
+        if(updateView) {
+            updateView = false
+            mapFollowButton.setImage(#imageLiteral(resourceName: "locat"), for: .normal)
+        }
         var region : MKCoordinateRegion!
         var span : MKCoordinateSpan!
-        span = MKCoordinateSpanMake(0.00025, 0.00025)
+        span = MKCoordinateSpanMake(0.0025, 0.0025)
         region = MKCoordinateRegion(center: CLLocationCoordinate2DMake(Double(self.pinList[indexPath.item].lat!)!, Double(self.pinList[indexPath.item].lng!)!), span: span)
         self.mapKitView.setRegion(region, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        NSLog("DEselected... %d", indexPath.item)
+        self.deSelectedPinID = indexPath.row
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {

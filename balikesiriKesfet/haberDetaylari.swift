@@ -10,6 +10,7 @@ import UIKit
 
 class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
+    @IBOutlet weak var openMenuBut: UIBarButtonItem!
     @IBOutlet weak var newsTitle: UILabel!
     @IBOutlet weak var thumbsImage: UIImageView!
     @IBOutlet weak var newsAbstract: UILabel!
@@ -33,6 +34,14 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //Reveal View Controller Setup
+        openMenuBut.target = self.revealViewController()
+        openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
+        revealViewController().rearViewRevealWidth = 190
+        revealViewController().rearViewRevealOverdraw = 200
+        //Gesture recognizer for reveal view controller
+        self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         
         fetchDetails()
     }

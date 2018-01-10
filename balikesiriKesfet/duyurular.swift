@@ -20,8 +20,9 @@ class duyurular: UIViewController, UITableViewDelegate, UITableViewDataSource {
     //Reveal controller bar button
     @IBOutlet weak var openMenuBut: UIBarButtonItem!
     
-    
     @IBOutlet weak var notificationsTable: UITableView!
+    
+    var sv : UIView!
     var notificationList : [NotificationN] = []
     
     override func viewDidLoad() {
@@ -41,6 +42,7 @@ class duyurular: UIViewController, UITableViewDelegate, UITableViewDataSource {
     }
 
     func fetchNotifications(){
+        self.sv = UIViewController.displaySpinner(onView: self.view)
         let notUrlRequest = URLRequest(url: URL(string: "http://app.balikesirikesfet.com/json_notifications?l=0,3")!)
         
         let notifTask = URLSession.shared.dataTask(with: notUrlRequest){(data, response, error) in
@@ -62,7 +64,9 @@ class duyurular: UIViewController, UITableViewDelegate, UITableViewDataSource {
                     self.notificationList.append(tmpNotif)
                 }
                 DispatchQueue.main.async {
-                    self.notificationsTable.reloadData()
+                    self.notificationsTable.reloadData() {
+                        UIViewController.removeSpinner(spinner: self.sv)
+                    }
                 }
             } catch let error {
                 print(error as Any)

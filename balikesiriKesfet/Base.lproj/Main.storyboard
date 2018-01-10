@@ -55,9 +55,6 @@
 Gerçeklik</string>
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
                                         <connections>
                                             <action selector="agModuClick:" destination="ZYu-Ll-96Z" eventType="touchUpInside" id="w95-xx-Uof"/>
                                         </connections>
@@ -80,9 +77,6 @@ Gerçeklik</string>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
                                         <state key="normal" title="Haberler">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="haberlerClick:" destination="ZYu-Ll-96Z" eventType="touchUpInside" id="Ghi-se-m4d"/>
@@ -107,9 +101,6 @@ Gerçeklik</string>
                                         <state key="normal" title="Harita">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
                                         <connections>
                                             <action selector="haritaClick:" destination="ZYu-Ll-96Z" eventType="touchUpInside" id="zuu-mH-GR0"/>
                                         </connections>
@@ -132,9 +123,6 @@ Gerçeklik</string>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
                                         <state key="normal" title="Duyurular">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="duyuruClicked:" destination="ZYu-Ll-96Z" eventType="touchUpInside" id="lPG-aT-Ppc"/>
@@ -159,9 +147,6 @@ Gerçeklik</string>
                                         <state key="normal" title="WEB">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
                                         <connections>
                                             <action selector="webButClicked:" destination="ZYu-Ll-96Z" eventType="touchUpInside" id="6mL-I2-EEh"/>
                                         </connections>
@@ -184,9 +169,6 @@ Gerçeklik</string>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="21"/>
                                         <state key="normal" title="Bize Yazın">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="bizeYazClicked:" destination="ZYu-Ll-96Z" eventType="touchUpInside" id="RTX-v8-LvG"/>
@@ -265,7 +247,7 @@ Gerçeklik</string>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ArticleCell" rowHeight="146" id="fsg-Bh-pnB" customClass="articleCell" customModule="balikesiriKesfet" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ArticleCell" rowHeight="146" id="fsg-Bh-pnB" customClass="articleCell" customModule="balikesiriKesfet" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="146"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fsg-Bh-pnB" id="cUo-8T-6UK">
@@ -380,7 +362,7 @@ Gerçeklik</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qC5-eV-0Og">
+                            <scrollView clipsSubviews="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="qC5-eV-0Og">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="sdadsa" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZNL-Zx-CNU">
@@ -398,7 +380,7 @@ Gerçeklik</string>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zcg-lg-cff">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zcg-lg-cff">
                                         <rect key="frame" x="8" y="37" width="128" height="128"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="128" id="9W0-WP-gxa"/>
@@ -513,7 +495,9 @@ Gerçeklik</string>
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <navigationItem key="navigationItem" title="HABER DETAYLARI" id="3SH-Rg-mwa">
+                        <barButtonItem key="leftBarButtonItem" image="reveal-icon" id="Lk1-Q9-H3Z"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="galleryColView" destination="xCm-2n-AuE" id="GWR-1B-w1t"/>
                         <outlet property="linkListText" destination="2Kb-Fq-eHo" id="n3A-6m-Qqi"/>
@@ -521,12 +505,13 @@ Gerçeklik</string>
                         <outlet property="newsText1" destination="2IX-mi-igq" id="WeY-D7-e4n"/>
                         <outlet property="newsText2" destination="zpL-Tl-tXn" id="OaL-0L-N7c"/>
                         <outlet property="newsTitle" destination="ZNL-Zx-CNU" id="KwP-El-RTj"/>
+                        <outlet property="openMenuBut" destination="Lk1-Q9-H3Z" id="k5l-xU-2Qf"/>
                         <outlet property="thumbsImage" destination="zcg-lg-cff" id="uNd-yB-8uR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yF8-Af-vod" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3607" y="2559"/>
+            <point key="canvasLocation" x="-3607" y="2548"/>
         </scene>
         <!--agModu-->
         <scene sceneID="wcq-hV-1Or">
@@ -732,6 +717,7 @@ Gerçeklik</string>
                         <outlet property="pinGalleryColView" destination="o8l-uB-gqL" id="oKD-Wn-roS"/>
                         <outlet property="pinInfo" destination="gr5-7o-ugy" id="0GY-Te-2AF"/>
                         <outlet property="pinListTV" destination="kwR-xQ-m7F" id="fvd-Lj-rl0"/>
+                        <outlet property="pinListView" destination="BN9-dm-2hS" id="0rc-C4-2DA"/>
                         <outlet property="pinTitle" destination="kci-iL-h3N" id="PCC-em-8Eh"/>
                         <outlet property="popupScrollView" destination="ujv-sO-NSX" id="7JG-ac-1MU"/>
                     </connections>
@@ -864,7 +850,7 @@ Gerçeklik</string>
                                 <color key="textColor" red="1" green="1" blue="0.99987989659999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s1y-MS-UUW">
+                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="s1y-MS-UUW">
                                 <rect key="frame" x="58" y="216" width="258" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="textColor" red="0.078893713653087616" green="0.29019607843137252" blue="0.68715590238571167" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -985,7 +971,7 @@ Gerçeklik</string>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" red="0.10657293349999999" green="0.47882246969999998" blue="0.69482511280000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NotificationCell" rowHeight="93" id="IOc-7n-ljN" userLabel="notificationCell" customClass="notificationCell" customModule="balikesiriKesfet" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="NotificationCell" rowHeight="93" id="IOc-7n-ljN" userLabel="notificationCell" customClass="notificationCell" customModule="balikesiriKesfet" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="359" height="93"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IOc-7n-ljN" id="OJh-By-mUd">
@@ -993,10 +979,10 @@ Gerçeklik</string>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AUz-ey-aS0">
-                                                    <rect key="frame" x="14" y="11" width="386" height="71"/>
+                                                    <rect key="frame" x="14" y="11" width="331" height="71"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pbI-NV-TQO">
-                                                            <rect key="frame" x="21.5" y="0.0" width="343" height="27"/>
+                                                            <rect key="frame" x="-6" y="0.0" width="343" height="27"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" constant="27" id="8u9-sN-pJp"/>
                                                                 <constraint firstAttribute="width" constant="343" id="rAw-tL-psE"/>
@@ -1006,7 +992,7 @@ Gerçeklik</string>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cm0-SP-jaz">
-                                                            <rect key="frame" x="21.5" y="23" width="343" height="25"/>
+                                                            <rect key="frame" x="-6" y="23" width="343" height="25"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="343" id="DOw-RC-4UC"/>
                                                             </constraints>
@@ -1015,7 +1001,7 @@ Gerçeklik</string>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mez-Uf-S51">
-                                                            <rect key="frame" x="358.5" y="55" width="0.0" height="0.0"/>
+                                                            <rect key="frame" x="331" y="55" width="0.0" height="0.0"/>
                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="13"/>
                                                             <color key="textColor" red="1" green="1" blue="0.99987989659999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -1760,7 +1746,7 @@ Gerçeklik</string>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0nu-EU-a0d">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="20"/>
                             <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -1820,6 +1806,29 @@ Gerçeklik</string>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0O2-rr-mIF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4508" y="1851"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="B4H-wl-5tv">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="asK-w2-5tp" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="M0o-ff-STl">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="20"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="s6a-ev-bap" kind="relationship" relationship="rootViewController" id="1T0-2J-XMt"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BPW-cg-RSt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4255" y="2548"/>
         </scene>
     </scenes>
     <resources>

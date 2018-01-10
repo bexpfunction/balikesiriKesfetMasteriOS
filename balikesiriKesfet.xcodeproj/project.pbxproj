@@ -64,6 +64,7 @@
 		B936BC9D1FADF07A00D34EE4 /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = B936BC8C1FADF07A00D34EE4 /* pngwtran.c */; };
 		B936BC9E1FADF07A00D34EE4 /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = B936BC8D1FADF07A00D34EE4 /* pngwutil.c */; };
 		B93BD60A1FEBA0CA003342B9 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = B93BD6091FEBA0CA003342B9 /* Reachability.m */; };
+		B94365FB20063A6800EBF112 /* allExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94365FA20063A6800EBF112 /* allExtensions.swift */; };
 		B946712C1F5B223800FDA6D3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B946712B1F5B223800FDA6D3 /* QuartzCore.framework */; };
 		B946712E1F5B224000FDA6D3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B946712D1F5B224000FDA6D3 /* OpenGLES.framework */; };
 		B94671301F5B224600FDA6D3 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B946712F1F5B224600FDA6D3 /* GLKit.framework */; };
@@ -218,6 +219,7 @@
 		B93BD6061FEB9FFC003342B9 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		B93BD6081FEBA0CA003342B9 /* Reachability.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		B93BD6091FEBA0CA003342B9 /* Reachability.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
+		B94365FA20063A6800EBF112 /* allExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = allExtensions.swift; sourceTree = "<group>"; };
 		B946712B1F5B223800FDA6D3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B946712D1F5B224000FDA6D3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		B946712F1F5B224600FDA6D3 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
@@ -635,6 +637,7 @@
 				B92BE48A1FA131270039D7B8 /* notificationCell.swift */,
 				B9A123591FFF743500F8DB0F /* pinListCell.swift */,
 				B9A1235B1FFFA99200F8DB0F /* pinPicCell.swift */,
+				B94365FA20063A6800EBF112 /* allExtensions.swift */,
 			);
 			name = HelperClasses;
 			sourceTree = "<group>";
@@ -1043,6 +1046,7 @@
 				B9F2A82F1FADC995004FC439 /* texture-font.c in Sources */,
 				B9817B5A1FA1E6170073DF7F /* SCNVector3+Extensions.swift in Sources */,
 				B936BC9B1FADF07A00D34EE4 /* pngwio.c in Sources */,
+				B94365FB20063A6800EBF112 /* allExtensions.swift in Sources */,
 				B9F2A8311FADC995004FC439 /* vector.c in Sources */,
 				B9F2A82B1FADC995004FC439 /* makefont.c in Sources */,
 				B974489D1FAC7BD600C71F53 /* trees.c in Sources */,

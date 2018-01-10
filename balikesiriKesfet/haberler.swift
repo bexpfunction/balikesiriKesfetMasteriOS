@@ -22,11 +22,11 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource{
     //Buttons
     @IBOutlet weak var openMenuBut: UIBarButtonItem!
     
-    
-    
     @IBOutlet weak var tblView: UITableView!
     
     var articleList : [ArticleN] = []
+    
+    var sv : UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +46,7 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource{
     //Connect and serialize json with json object
     
     func fetchNews(){
+        self.sv = UIViewController.displaySpinner(onView: self.view)
         let urlRequest = URLRequest(url: URL(string: "http://app.balikesirikesfet.com/json_news?l=0,100")!)
 
         let task = URLSession.shared.dataTask(with: urlRequest){(data, response, error) in
@@ -69,7 +70,10 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource{
                     self.articleList.append(tmpArticle)
                 }
                 DispatchQueue.main.async {
-                    self.tblView.reloadData()
+                    self.tblView.reloadData() {
+                        UIViewController.removeSpinner(spinner: self.sv)
+                    }
+                    
                 }
             } catch let error {
                 print(error as Any)
@@ -133,26 +137,5 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource{
 
         self.navigationController?.pushViewController(haberDetayVC, animated: true)
         //self.present(haberDetayVC, animated: true, completion: nil)
-    }
-}
-
-extension UIImageView {
-    
-    func downloadImage(from url: String){
-        
-        let urlRequest = URLRequest(url: URL(string: url)!)
-        
-        let task = URLSession.shared.dataTask(with: urlRequest) { (data,response,error) in
-            
-            if error != nil {
-                print(error as Any)
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.image = UIImage(data: data!)
-            }
-        }
-        task.resume()
     }
 }
