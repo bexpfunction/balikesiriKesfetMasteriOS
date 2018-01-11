@@ -16,7 +16,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "SWRevealViewController.h"
 
-@interface agGL () <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
+@interface agGL () <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, SWRevealViewControllerDelegate> {
     Reachability *internetReachableFoo;
 }
 
@@ -62,7 +62,9 @@ int pinCount = 0;
     [self.openMenuBut setAction:@selector(revealToggle:)];
     self.revealViewController.rearViewRevealWidth = 190;
     self.revealViewController.rearViewRevealOverdraw = 200;
+    self.revealViewController.delegate = self;
     [self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    [self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
 
     
     glInitialized = false;
@@ -511,6 +513,37 @@ bool pInited = false;
     pinCount = 0;
 }
 
+//SWRevealController Delegate
+- (void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position {
+    long tagId = 4207868622;
+    if(position == FrontViewPositionLeft) {
+        UIView* lock = [self.view viewWithTag:tagId];
+        [lock setAlpha:0.333];
+        [UIView animateWithDuration:0.5 animations:^{
+            lock.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [lock removeFromSuperview];
+        }];
+    }
+    if(position == FrontViewPositionRight) {
+        UIView* lock = [[UIView alloc] initWithFrame:self.view.bounds];
+        lock.tag = tagId;
+        lock.autoresizingMask = (UIViewAutoresizingFlexibleWidth |
+                                 UIViewAutoresizingFlexibleHeight);
+        [lock setAlpha:0.333];
+        [lock setBackgroundColor:[UIColor blackColor]];
+        UITapGestureRecognizer* tapGst = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
+        [lock addGestureRecognizer:tapGst];
+        [UIView animateWithDuration:0.5 animations:^{
+            lock.alpha = 0.333;
+        }];
+    }
+}
+-(void) tapGesture: (id)sender {
+    [self.revealViewController revealToggle:sender];
+}
+         
+         
 // Checks if we have an internet connection or not
 - (void)testInternetConnection
 {

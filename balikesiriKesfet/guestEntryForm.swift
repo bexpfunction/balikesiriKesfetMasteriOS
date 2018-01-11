@@ -10,48 +10,39 @@ import UIKit
 
 class guestEntryForm: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var guestEntryButton: UIButton!
-    
     @IBOutlet weak var fbLoginButton: FBSDKLoginButton!
-    
+    @IBOutlet weak var buttonWindow: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.buttonWindow.layer.cornerRadius = 5
+        self.buttonWindow.layer.borderWidth = 1
+        self.buttonWindow.layer.borderColor = UIColor.white.cgColor
         
         //animations
 //        fbLoginButton.layer.cornerRadius = 5
 //        fbLoginButton.layer.borderWidth = 1
 //        fbLoginButton.layer.borderColor = (UIColor(red: 1, green: 1, blue: 1, alpha: 1) as! CGColor)
         
-        fbLoginButton.readPermissions = ["public_profile", "email", "user_friends"]
-        fbLoginButton.delegate = self
+        self.fbLoginButton.readPermissions = ["public_profile", "email", "user_friends"]
+        self.fbLoginButton.delegate = self
         
-        guestEntryButton.layer.cornerRadius = 5
-        guestEntryButton.layer.borderWidth = 1
-        guestEntryButton.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
-        
-        if((FBSDKAccessToken.current()) != nil){
-            guestEntryButton.isHidden = true
-        } else {
-            guestEntryButton.isHidden = false
-            
-        }
+        self.guestEntryButton.layer.cornerRadius = 5
+        self.guestEntryButton.layer.borderWidth = 1
+        self.guestEntryButton.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+
     }
     //MARK: FBSDKLoginButtonDelegate
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         if ((error) != nil) {
             // Process error
-            //print ("facebook login error")
-            guestEntryButton.isHidden = false;
         }
         else if result.isCancelled {
             // Handle cancellations
-            //print ("facebook login cancelled")
-            guestEntryButton.isHidden = false;
         }
         else {
             // Navigate to other view
-            //print ("facebook login complete")
-            guestEntryButton.isHidden = true;
             //go to main
             performSegue(withIdentifier: "toMain", sender: self)
         }
@@ -59,7 +50,6 @@ class guestEntryForm: UIViewController, FBSDKLoginButtonDelegate {
     
     func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
         //print ("logged out of facebook")
-        guestEntryButton.isHidden = false;
     }
 
 }

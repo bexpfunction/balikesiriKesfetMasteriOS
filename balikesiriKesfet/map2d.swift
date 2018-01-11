@@ -22,7 +22,7 @@ struct Pin {
     var gallery : [String] = []
 }
 
-class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource {
+class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource, SWRevealViewControllerDelegate {
     var updateView = false
     var locatFirstUpdated = false
     var pinList = [Pin]()
@@ -45,6 +45,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     @IBOutlet weak var mapFollowButton: UIButton!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var pinListView: UIView!
+    @IBOutlet weak var lockButtonBG: UIView!
     
     
     override func viewDidLoad() {
@@ -53,9 +54,11 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
         revealViewController().rearViewRevealWidth = 190
-        revealViewController().rearViewRevealOverdraw = 200
+        revealViewController().rearViewRevealOverdraw = 250
+        revealViewController().delegate = self
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
         
         self.selectedPinId = -1
         self.deSelectedPinID = -1
@@ -79,6 +82,9 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         pinGalleryColView.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         pinGalleryColView.layer.borderWidth = 1
         
+        //
+        self.pinListTV.delegate = self
+        
         //Ask authorisation
         self.locationManager.requestAlwaysAuthorization()
         //Foreground use
@@ -89,6 +95,15 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
             self.locationManager.startUpdatingLocation()
             self.locationManager.startUpdatingHeading()
         }
+        
+        //Set lock button bg
+        //self.lockButtonBG.layer.cornerRadius = 5
+        let path = UIBezierPath(roundedRect:self.lockButtonBG.bounds,
+                                byRoundingCorners:[.topLeft, .bottomLeft],
+                                cornerRadii: CGSize(width: 10, height: 10))
+        let maskLayer = CAShapeLayer()
+        maskLayer.path = path.cgPath
+        lockButtonBG.layer.mask = maskLayer
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -326,11 +341,8 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         cell.cardView.layer.shadowColor = UIColor.black.cgColor
         cell.cardView.layer.shadowOffset = CGSize(width: 0.2, height: 0.2)
         cell.cardView.layer.shadowRadius = 0.2
-        cell.cardView.backgroundColor = UIColor(red: 59/255, green: 110/255, blue: 177/255, alpha: 1.0)
+        cell.cardView.backgroundColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0)
         if(indexPath.row == self.selectedPinId) {
-            cell.cardView.backgroundColor = UIColor(red: 59/255, green: 110/255, blue: 197/255, alpha: 1.0)
-        }
-        if(indexPath.row == self.deSelectedPinID) {
             cell.cardView.backgroundColor = UIColor(red: 59/255, green: 110/255, blue: 177/255, alpha: 1.0)
         }
         cell.contentView.backgroundColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0)
@@ -367,12 +379,12 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         var region : MKCoordinateRegion!
         var span : MKCoordinateSpan!
         span = MKCoordinateSpanMake(0.0025, 0.0025)
-        region = MKCoordinateRegion(center: CLLocationCoordinate2DMake(Double(self.pinList[indexPath.item].lat!)!, Double(self.pinList[indexPath.item].lng!)!), span: span)
+        region = MKCoordinateRegion(center: CLLocationCoordinate2DMake(Double(self.pinList[indexPath.row].lat!)!, Double(self.pinList[indexPath.row].lng!)!), span: span)
         self.mapKitView.setRegion(region, animated: true)
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        NSLog("DEselected... %d", indexPath.item)
+        NSLog("DEselected... %d", indexPath.row)
         self.deSelectedPinID = indexPath.row
     }
     
@@ -383,10 +395,8 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         })
     }
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-    }
-    
+    //Collection view for popup gallery
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pinPicCell", for: indexPath) as! pinPicCell
         cell.detailPic.downloadImage(from: self.pinList[selectedPinId].gallery[indexPath.item])
@@ -401,5 +411,32 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         return 1
     }
     
-    
+    //SWReveal Delegate
+    func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
+        let tagId = 4207868622
+        if(position == FrontViewPosition.left) {
+            let lock = self.view.viewWithTag(tagId)
+            UIView.animate(withDuration: 0.25, animations: {
+                lock?.alpha = 0.0
+            }, completion: {(finished: Bool) in
+                lock?.removeFromSuperview()
+            }
+            )
+            lock?.removeFromSuperview()
+        }
+        if(position == FrontViewPosition.right) {
+            
+            let lock = UIView(frame: self.view.bounds)
+            lock.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            lock.tag = tagId
+            lock.alpha = 0
+            lock.backgroundColor = UIColor.black
+            lock.addGestureRecognizer(UITapGestureRecognizer(target: self.revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:))))
+            self.view.addSubview(lock)
+            UIView.animate(withDuration: 0.5, animations: {
+                lock.alpha = 0.333
+            }
+            )
+        }
+    }
 }

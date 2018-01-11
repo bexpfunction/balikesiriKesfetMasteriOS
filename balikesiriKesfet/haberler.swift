@@ -17,7 +17,7 @@ struct ArticleN {
 
 }
 
-class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource{
+class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource, SWRevealViewControllerDelegate{
     
     //Buttons
     @IBOutlet weak var openMenuBut: UIBarButtonItem!
@@ -35,9 +35,11 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource{
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
         revealViewController().rearViewRevealWidth = 190
-        revealViewController().rearViewRevealOverdraw = 200
+        revealViewController().rearViewRevealOverdraw = 250
+        revealViewController().delegate = self
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
         
         self.articleList.removeAll()
         fetchNews()
@@ -137,5 +139,34 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource{
 
         self.navigationController?.pushViewController(haberDetayVC, animated: true)
         //self.present(haberDetayVC, animated: true, completion: nil)
+    }
+    
+    //SWReveal Delegate
+    func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
+        let tagId = 4207868622
+        if(position == FrontViewPosition.left) {
+            let lock = self.view.viewWithTag(tagId)
+            UIView.animate(withDuration: 0.25, animations: {
+                lock?.alpha = 0.0
+            }, completion: {(finished: Bool) in
+                lock?.removeFromSuperview()
+            }
+            )
+            lock?.removeFromSuperview()
+        }
+        if(position == FrontViewPosition.right) {
+            
+            let lock = UIView(frame: self.view.bounds)
+            lock.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            lock.tag = tagId
+            lock.alpha = 0
+            lock.backgroundColor = UIColor.black
+            lock.addGestureRecognizer(UITapGestureRecognizer(target: self.revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:))))
+            self.view.addSubview(lock)
+            UIView.animate(withDuration: 0.5, animations: {
+                lock.alpha = 0.333
+            }
+            )
+        }
     }
 }

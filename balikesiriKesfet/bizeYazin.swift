@@ -9,7 +9,7 @@
 import UIKit
 import FBSDKShareKit
 
-class bizeYazin: UIViewController, UITextViewDelegate {
+class bizeYazin: UIViewController, UITextViewDelegate, SWRevealViewControllerDelegate {
 
     @IBOutlet weak var openMenuBut: UIBarButtonItem!
     @IBOutlet weak var sendButton: UIButton!
@@ -26,16 +26,22 @@ class bizeYazin: UIViewController, UITextViewDelegate {
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
         revealViewController().rearViewRevealWidth = 190
-        revealViewController().rearViewRevealOverdraw = 200
+        revealViewController().rearViewRevealOverdraw = 250
+        revealViewController().delegate = self
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
         
         self.sendButton.layer.cornerRadius = 5
         self.sendButton.layer.borderWidth = 1
         self.sendButton.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         
         self.messageTextField.delegate = self
-        // Do any additional setup after loading the view.
+        
+        //Keyboard dismiss and textview setup
+        mailTextField.layer.cornerRadius = 5
+//        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard (_:)))
+//        self.view.addGestureRecognizer(tapGesture)
     }
     
     @IBAction func sendMessage(_ sender: UIButton) {
@@ -122,5 +128,39 @@ class bizeYazin: UIViewController, UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         messageTextField.resignFirstResponder()
+    }
+    
+    func dismissKeyboard (_ sender: UITapGestureRecognizer) {
+        messageTextField.resignFirstResponder()
+    }
+    
+    //SWReveal Delegate
+    func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
+        messageTextField.resignFirstResponder()
+        let tagId = 4207868622
+        if(position == FrontViewPosition.left) {
+            let lock = self.view.viewWithTag(tagId)
+            UIView.animate(withDuration: 0.25, animations: {
+                lock?.alpha = 0.0
+            }, completion: {(finished: Bool) in
+                lock?.removeFromSuperview()
+            }
+            )
+            lock?.removeFromSuperview()
+        }
+        if(position == FrontViewPosition.right) {
+            
+            let lock = UIView(frame: self.view.bounds)
+            lock.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            lock.tag = tagId
+            lock.alpha = 0
+            lock.backgroundColor = UIColor.black
+            lock.addGestureRecognizer(UITapGestureRecognizer(target: self.revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:))))
+            self.view.addSubview(lock)
+            UIView.animate(withDuration: 0.5, animations: {
+                lock.alpha = 0.333
+            }
+            )
+        }
     }
 }

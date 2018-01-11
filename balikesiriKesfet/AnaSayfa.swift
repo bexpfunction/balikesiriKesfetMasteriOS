@@ -8,8 +8,8 @@
 
 import UIKit
 
-class AnaSayfa: UIViewController {
-
+class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
+    
     //Buttons
     @IBOutlet weak var haberlerBut: UIButton!
     @IBOutlet weak var haritaBut: UIButton!
@@ -74,9 +74,13 @@ class AnaSayfa: UIViewController {
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
         revealViewController().rearViewRevealWidth = 190
-        revealViewController().rearViewRevealOverdraw = 200
+        revealViewController().rearViewRevealOverdraw = 250
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
+        revealViewController().tapGestureRecognizer().isEnabled = true
+        revealViewController().delegate = self
+        
     }
 
     //Button actions
@@ -116,9 +120,28 @@ class AnaSayfa: UIViewController {
     }
     
     @IBAction func bizeYazClicked(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "bizeYazVC")
-        self.navigationController?.pushViewController(controller, animated: true)
+        if(FBSDKAccessToken.current() == nil) {
+            let alert = UIAlertController(title: "UYARI", message: "Mesaj gönderebilmek için mevcut Facebook hesabınız ile giriş yapmanız gerekmektedir.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Tamam", style: UIAlertActionStyle.default, handler: {
+                action in
+                switch action.style{
+                case .default:
+                    let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                    let controller = storyboard.instantiateViewController(withIdentifier: "introVC")
+                    self.present(controller, animated:true, completion:nil)
+                    break
+                case.cancel:
+                    break
+                case.destructive:
+                    break
+                }
+            }))
+            self.present(alert, animated: true, completion: nil)
+        } else {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let controller = storyboard.instantiateViewController(withIdentifier: "bizeYazNavC")
+            self.revealViewController().pushFrontViewController(controller, animated: true)
+        }
     }
     
     @IBAction func uygHkClicked(_ sender: UIButton) {
@@ -131,4 +154,34 @@ class AnaSayfa: UIViewController {
         exit(0)
     }
 
+    
+    //Delegate functions
+    //SWReveal Delegate
+    func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
+        let tagId = 4207868622
+        if(position == FrontViewPosition.left) {
+            let lock = self.view.viewWithTag(tagId)
+            lock?.alpha = 0.333
+            UIView.animate(withDuration: 0.5, animations: {
+                lock?.alpha = 0
+            }, completion: {(finished: Bool) in
+                lock?.removeFromSuperview()
+            }
+            )
+            lock?.removeFromSuperview()
+        }
+        if(position == FrontViewPosition.right) {
+            let lock = UIView(frame: self.view.bounds)
+            lock.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            lock.tag = tagId
+            lock.alpha = 0
+            lock.backgroundColor = UIColor.black
+            lock.addGestureRecognizer(UITapGestureRecognizer(target: self.revealViewController(), action: #selector(SWRevealViewController.revealToggle(_:))))
+            self.view.addSubview(lock)
+            UIView.animate(withDuration: 0.5, animations: {
+                lock.alpha = 0.333
+            }
+            )
+        }
+    }
 }
