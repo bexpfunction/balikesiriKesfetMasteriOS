@@ -28,7 +28,7 @@ class uygulamaHakkinda: UIViewController, SWRevealViewControllerDelegate {
     
     //SWReveal Delegate
     func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
-        let tagId = 4207868622
+        let tagId = 42078
         if(position == FrontViewPosition.left) {
             let lock = self.view.viewWithTag(tagId)
             lock?.alpha = 0.333

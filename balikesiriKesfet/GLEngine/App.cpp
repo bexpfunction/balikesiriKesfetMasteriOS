@@ -189,7 +189,7 @@ void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset){
 }
 
 void AppBindCameraTexture(int texId){
-    LOGI("AppBindCameraTexture called%d\n",texId);
+    //LOGI("AppBindCameraTexture called%d\n",texId);
     cameraTextureId = texId;
 }
 

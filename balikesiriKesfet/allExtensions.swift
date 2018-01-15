@@ -8,6 +8,14 @@
 
 import Foundation
 
+func degreesToRadians(_ degrees: Float) -> Float {
+    return degrees * .pi / 180
+}
+
+func radiansToDegrees(_ radians: Float) -> Float {
+    return 180 / .pi * radians
+}
+
 extension UIViewController {
     class func displaySpinner(onView : UIView) -> UIView {
         let spinnerView = UIView.init(frame: onView.bounds)

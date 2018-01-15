@@ -28,8 +28,6 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
     @IBOutlet weak var webBView: UIView!
     @IBOutlet weak var bizeYazinBView: UIView!
     
-    //ViewControllers
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,9 +78,9 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
         self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
         revealViewController().tapGestureRecognizer().isEnabled = true
         revealViewController().delegate = self
-        
-    }
 
+    }
+    
     //Button actions
     @IBAction func haberlerClick(_ sender: UIButton) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -158,7 +156,7 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
     //Delegate functions
     //SWReveal Delegate
     func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
-        let tagId = 4207868622
+        let tagId = 42078
         if(position == FrontViewPosition.left) {
             let lock = self.view.viewWithTag(tagId)
             lock?.alpha = 0.333

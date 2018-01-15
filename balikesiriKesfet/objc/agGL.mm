@@ -76,6 +76,7 @@ int pinCount = 0;
 
     rateSumX = degToRad(90.0f);  rateSumY = 0.0f; rateSumZ = 0.0f;
     
+    
     [self testInternetConnection];
 }
 
@@ -90,7 +91,6 @@ int pinCount = 0;
     [self startCameraPreview];
     
     //Start location manager to get current location
-    
     [self startCaptureLocation];
     
     //Start motion manager for camera orientation
@@ -172,6 +172,7 @@ int pinCount = 0;
 bool pInited = false;
 -(void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     drawAppCalled = false;
+    
     if(drawApp && glInitialized) {
         templateApp.SetCameraRotation(cPitch, cYaw, cRoll);
         if(pInited) {
@@ -324,6 +325,7 @@ bool pInited = false;
 //    if(roll<0.0f) roll = degToRad(360.0f) + roll;
 //    if(yaw<0.0f) yaw = degToRad(360.0f) + yaw;
 
+    
     apStr = [NSString stringWithFormat:@"Attitude pitch: %.2f yaw: %.2f roll: %.2f",motion.attitude.pitch, motion.attitude.yaw, motion.attitude.roll];
     arStr = [NSString stringWithFormat:@"Attitude rot rate x: %.2f y: %.2f z: %.2f",motion.rotationRate.x, motion.rotationRate.y, motion.rotationRate.z];
     acStr = [NSString stringWithFormat:@"Attitude acceleration x: %.2f y: %.2f z: %.2f",motion.userAcceleration.x, motion.userAcceleration.y, motion.userAcceleration.z];
@@ -331,9 +333,11 @@ bool pInited = false;
     
 }
 
+
 -(void) updatePins {
     pInited = false;
     NSString *generatedURL = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=1",curLat,curLng];
+    NSLog(@"generated: %@",generatedURL);
     NSURLRequest *request = [NSURLRequest requestWithURL:
                              [NSURL URLWithString:generatedURL]];
     NSURLSession *session = [NSURLSession sharedSession];
@@ -342,6 +346,11 @@ bool pInited = false;
                                       {
                                           NSString* newStr = [[NSString alloc] initWithData:data
                                                                                    encoding:NSUTF8StringEncoding];
+                                          
+                                          NSArray * components = [newStr componentsSeparatedByString:@"<br />"];
+                                          newStr = (NSString *)[components objectAtIndex:0];
+                                          NSLog(@"json part: %@",newStr);
+                                          
                                           // do something with the data
                                           NSData *jsonData = [newStr dataUsingEncoding:NSUTF8StringEncoding];
                                           NSError *jsError;
@@ -387,11 +396,11 @@ bool pInited = false;
                                                       pinCount = 0;
                                                   }
                                               }
-//                                              else {
-//                                                  //NSLog(@"it is a dictionary");
-//                                                  NSDictionary *jsonDictionary = (NSDictionary *)jsonObj;
-//                                                  //NSLog(@"jsonDictionary - %@",jsonDictionary);
-//                                              }
+                                              else {
+                                                  NSLog(@"it is a dictionary");
+                                                  NSDictionary *jsonDictionary = (NSDictionary *)jsonObj;
+                                                  NSLog(@"jsonDictionary - %@",jsonDictionary);
+                                              }
                                           }
                                       }];
     [dataTask resume];
@@ -452,7 +461,7 @@ bool pInited = false;
 }
 //AV Outputdelegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-    NSLog(@"capture output works...");
+    //NSLog(@"capture output works...");
     CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     GLsizei width = (GLsizei)CVPixelBufferGetWidth(pixelBuffer);
     GLsizei height = (GLsizei)CVPixelBufferGetHeight(pixelBuffer);

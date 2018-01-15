@@ -799,21 +799,30 @@ Gerçeklik</string>
                                 <color key="textColor" red="0.11764705882352941" green="0.28235294117647058" blue="0.41176470588235292" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x55-Uq-tao">
-                                <rect key="frame" x="320" y="126" width="55" height="55"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x55-Uq-tao">
+                                <rect key="frame" x="320" y="204" width="55" height="55"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FkM-QL-KAY">
+                                        <rect key="frame" x="7" y="7" width="40" height="40"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" image="locat"/>
+                                        <connections>
+                                            <action selector="updateViewToggle:" destination="7pK-FQ-N5F" eventType="touchUpInside" id="1Rg-vL-5VR"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="55" id="806-1j-gdE"/>
+                                    <constraint firstAttribute="height" constant="55" id="t5f-Ds-nha"/>
+                                </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FkM-QL-KAY">
-                                <rect key="frame" x="329" y="134" width="40" height="40"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" image="locat"/>
-                                <connections>
-                                    <action selector="updateViewToggle:" destination="7pK-FQ-N5F" eventType="touchUpInside" id="1Rg-vL-5VR"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="x55-Uq-tao" secondAttribute="trailing" id="QdF-jt-2Lv"/>
+                            <constraint firstItem="x55-Uq-tao" firstAttribute="top" secondItem="KiN-CH-aCH" secondAttribute="bottom" constant="140" id="vog-2B-PHZ"/>
+                        </constraints>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="HARİTA" id="SHb-Fg-Qi3">
@@ -1351,7 +1360,7 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
                                         <rect key="frame" x="60" y="77" width="143" height="30"/>
                                         <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="143" id="DA7-XH-pYp"/>
+                                            <constraint firstAttribute="width" constant="143" id="DA7-XH-pYp"/>
                                             <constraint firstAttribute="height" constant="30" id="pg2-nE-OGk"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
@@ -1362,12 +1371,11 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
                                             <segue destination="gyX-Be-Kuk" kind="show" identifier="toMain" id="7g6-Kw-3z4"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LX8-iq-jbE" customClass="FBSDKLoginButton">
-                                        <rect key="frame" x="36" y="30" width="193" height="31"/>
+                                    <button opaque="NO" contentMode="scaleAspectFit" verticalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LX8-iq-jbE" customClass="FBSDKLoginButton">
+                                        <rect key="frame" x="33" y="30" width="198" height="33"/>
                                         <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="31" id="3v8-Op-101"/>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="193" id="lrq-zn-fio"/>
+                                            <constraint firstAttribute="width" constant="198" id="lrq-zn-fio"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Facebook İle Devam Et"/>
@@ -1879,6 +1887,6 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="sZi-0r-fjD"/>
-        <segue reference="7g6-Kw-3z4"/>
+        <segue reference="BlR-cA-HGs"/>
     </inferredMetricsTieBreakers>
 </document>

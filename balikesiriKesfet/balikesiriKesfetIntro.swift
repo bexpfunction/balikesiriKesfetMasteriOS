@@ -7,7 +7,9 @@
 //
 
 import UIKit
+import CoreMotion
 import FBSDKShareKit
+import FBSDKLoginKit
 
 class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
     
@@ -19,6 +21,7 @@ class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var aboutButton: UIButton!
     @IBOutlet weak var buttonWindow: UIView!
     @IBOutlet weak var loginButton: FBSDKLoginButton!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +57,9 @@ class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
         self.loginButton.readPermissions = ["public_profile", "email", "user_friends"]
         self.loginButton.delegate = self
         self.navigationItem.hidesBackButton = true
+
     }
+    
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

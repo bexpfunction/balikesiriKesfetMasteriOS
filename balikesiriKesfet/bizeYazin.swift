@@ -137,7 +137,7 @@ class bizeYazin: UIViewController, UITextViewDelegate, SWRevealViewControllerDel
     //SWReveal Delegate
     func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
         messageTextField.resignFirstResponder()
-        let tagId = 4207868622
+        let tagId = 42078
         if(position == FrontViewPosition.left) {
             let lock = self.view.viewWithTag(tagId)
             UIView.animate(withDuration: 0.25, animations: {

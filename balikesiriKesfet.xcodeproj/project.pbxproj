@@ -72,6 +72,7 @@
 		B94EDB942003A743004D4655 /* AnaSayfa.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94EDB932003A743004D4655 /* AnaSayfa.swift */; };
 		B94EDB982003B391004D4655 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B94EDB962003B391004D4655 /* SWRevealViewController.m */; };
 		B952C4911FA867F70075CB8B /* App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B952C4901FA867F70075CB8B /* App.cpp */; };
+		B96061CF200CC48D001B8306 /* debugLocation.gpx in Resources */ = {isa = PBXBuildFile; fileRef = B96061CE200CC48D001B8306 /* debugLocation.gpx */; };
 		B97448921FAC7BD600C71F53 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B97448731FAC7BD600C71F53 /* memory.cpp */; };
 		B97448931FAC7BD600C71F53 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = B97448771FAC7BD600C71F53 /* adler32.c */; };
 		B97448941FAC7BD600C71F53 /* compress.c in Sources */ = {isa = PBXBuildFile; fileRef = B97448781FAC7BD600C71F53 /* compress.c */; };
@@ -230,6 +231,7 @@
 		B952C48F1FA867F70075CB8B /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		B952C4901FA867F70075CB8B /* App.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = App.cpp; sourceTree = "<group>"; };
 		B952C4CA1FA9BCB50075CB8B /* Logger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
+		B96061CE200CC48D001B8306 /* debugLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = debugLocation.gpx; sourceTree = "<group>"; };
 		B97448731FAC7BD600C71F53 /* memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memory.cpp; sourceTree = "<group>"; };
 		B97448741FAC7BD600C71F53 /* memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memory.h; sourceTree = "<group>"; };
 		B97448751FAC7BD600C71F53 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
@@ -478,13 +480,21 @@
 		B952C48E1FA867DB0075CB8B /* GLEngine */ = {
 			isa = PBXGroup;
 			children = (
-				B9F2A5C11FADC990004FC439 /* freetype-gl */,
-				B97448721FAC7BD600C71F53 /* Engine */,
 				B952C4901FA867F70075CB8B /* App.cpp */,
 				B952C48F1FA867F70075CB8B /* App.h */,
+				B97448721FAC7BD600C71F53 /* Engine */,
+				B9F2A5C11FADC990004FC439 /* freetype-gl */,
 				B952C4CA1FA9BCB50075CB8B /* Logger.h */,
 			);
 			path = GLEngine;
+			sourceTree = "<group>";
+		};
+		B96061CD200CC470001B8306 /* debugHelpers */ = {
+			isa = PBXGroup;
+			children = (
+				B96061CE200CC48D001B8306 /* debugLocation.gpx */,
+			);
+			name = debugHelpers;
 			sourceTree = "<group>";
 		};
 		B97448721FAC7BD600C71F53 /* Engine */ = {
@@ -632,12 +642,12 @@
 		B9B21E101F582684003F0317 /* HelperClasses */ = {
 			isa = PBXGroup;
 			children = (
-				B92D6B491F979E3E0095007B /* newsPicCell.swift */,
+				B94365FA20063A6800EBF112 /* allExtensions.swift */,
 				B90D34E11F90D0B300A1BB68 /* articleCell.swift */,
+				B92D6B491F979E3E0095007B /* newsPicCell.swift */,
 				B92BE48A1FA131270039D7B8 /* notificationCell.swift */,
 				B9A123591FFF743500F8DB0F /* pinListCell.swift */,
 				B9A1235B1FFFA99200F8DB0F /* pinPicCell.swift */,
-				B94365FA20063A6800EBF112 /* allExtensions.swift */,
 			);
 			name = HelperClasses;
 			sourceTree = "<group>";
@@ -647,9 +657,9 @@
 			children = (
 				B92D6B4C1F9A21710095007B /* Assets.xcassets */,
 				B9C31D5D1F57507F0055E2CA /* balikesiriKesfet */,
-				B9C31D5C1F57507F0055E2CA /* Products */,
 				B9C31D701F5761D60055E2CA /* Frameworks */,
 				5C3A0AC669BFA3C0DA578A99 /* Pods */,
+				B9C31D5C1F57507F0055E2CA /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -664,6 +674,7 @@
 		B9C31D5D1F57507F0055E2CA /* balikesiriKesfet */ = {
 			isa = PBXGroup;
 			children = (
+				B96061CD200CC470001B8306 /* debugHelpers */,
 				B9A1D19C1FAC8DC7005929EE /* Resources */,
 				B952C48E1FA867DB0075CB8B /* GLEngine */,
 				B9817B5E1FA231B70073DF7F /* objc */,
@@ -709,19 +720,19 @@
 		B9C3BD071F578E16007E76CE /* ViewControllerClasses */ = {
 			isa = PBXGroup;
 			children = (
-				B92BE48C1FA13BB10039D7B8 /* duyurular.swift */,
-				B92BE4731F9E0AAD0039D7B8 /* bizeYazin.swift */,
-				B92D6B4E1F9B89E50095007B /* galeri.swift */,
-				B9C31D601F57507F0055E2CA /* ViewController.swift */,
-				B9C3BD021F5789A8007E76CE /* guestEntryForm.swift */,
-				B9C3BD041F578D72007E76CE /* balikesiriKesfetIntro.swift */,
-				B9B21E131F584FB0003F0317 /* haberler.swift */,
 				B946713A1F5B51A200FDA6D3 /* agModu.swift */,
-				B98B09C81F8CC82C0080D7EB /* map2d.swift */,
-				B91DEFEE1F93AF9900F80A27 /* haberDetaylari.swift */,
 				B94EDB932003A743004D4655 /* AnaSayfa.swift */,
 				B90186002004C27200552DE3 /* backTVController.swift */,
+				B9C3BD041F578D72007E76CE /* balikesiriKesfetIntro.swift */,
+				B92BE4731F9E0AAD0039D7B8 /* bizeYazin.swift */,
+				B92BE48C1FA13BB10039D7B8 /* duyurular.swift */,
+				B92D6B4E1F9B89E50095007B /* galeri.swift */,
+				B9C3BD021F5789A8007E76CE /* guestEntryForm.swift */,
+				B91DEFEE1F93AF9900F80A27 /* haberDetaylari.swift */,
+				B9B21E131F584FB0003F0317 /* haberler.swift */,
+				B98B09C81F8CC82C0080D7EB /* map2d.swift */,
 				B90186042005109900552DE3 /* uygulamaHakkinda.swift */,
+				B9C31D601F57507F0055E2CA /* ViewController.swift */,
 			);
 			name = ViewControllerClasses;
 			sourceTree = "<group>";
@@ -729,13 +740,13 @@
 		B9D1B9271F7BEDD800950C87 /* CppTest */ = {
 			isa = PBXGroup;
 			children = (
-				B9D1B92F1F7BF94A00950C87 /* templateApp_Prefix.pch */,
-				B92BE4761F9F189F0039D7B8 /* junk.h */,
-				B92BE4771F9F18C80039D7B8 /* junk.cpp */,
 				B9817B621FA233F30073DF7F /* hello.cpp */,
 				B9817B631FA233F30073DF7F /* hello.hpp */,
+				B92BE4771F9F18C80039D7B8 /* junk.cpp */,
+				B92BE4761F9F189F0039D7B8 /* junk.h */,
 				B99B8D601FA5DA8A00C41020 /* openGlIncludeTest.cpp */,
 				B99B8D611FA5DA8A00C41020 /* openGlIncludeTest.hpp */,
+				B9D1B92F1F7BF94A00950C87 /* templateApp_Prefix.pch */,
 			);
 			name = CppTest;
 			sourceTree = "<group>";
@@ -896,6 +907,7 @@
 				B920278D1FE930FB00B25F4D /* grass.png in Resources */,
 				B92027671FE92CC200B25F4D /* colorFragment.glsl in Resources */,
 				B92027861FE930FB00B25F4D /* plane.mtl in Resources */,
+				B96061CF200CC48D001B8306 /* debugLocation.gpx in Resources */,
 				B92D6B4D1F9A21710095007B /* Assets.xcassets in Resources */,
 				B92027831FE930FB00B25F4D /* cube.mtl in Resources */,
 				B920278F1FE930FB00B25F4D /* arial.ttf in Resources */,
