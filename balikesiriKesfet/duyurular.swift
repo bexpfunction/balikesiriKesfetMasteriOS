@@ -46,6 +46,10 @@ class duyurular: UIViewController, UITableViewDelegate, UITableViewDataSource, S
         self.sv = UIViewController.displaySpinner(onView: self.view)
         let notUrlRequest = URLRequest(url: URL(string: "http://app.balikesirikesfet.com/json_notifications?l=0,3")!)
         
+        //Temp url task
+        let myURLString = "https://en.wiktionary.org/wiki/see"
+        
+        
         let notifTask = URLSession.shared.dataTask(with: notUrlRequest){(data, response, error) in
             if error != nil {
                 print(error as Any)

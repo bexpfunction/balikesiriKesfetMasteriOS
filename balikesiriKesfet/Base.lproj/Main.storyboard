@@ -515,9 +515,6 @@ Gerçeklik</string>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TYG-Mn-6LK">
                                                             <rect key="frame" x="7" y="0.0" width="341" height="166"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" secondItem="TYG-Mn-6LK" secondAttribute="height" multiplier="341:166" id="fQk-S0-kXa"/>
-                                                            </constraints>
                                                         </imageView>
                                                     </subviews>
                                                 </view>

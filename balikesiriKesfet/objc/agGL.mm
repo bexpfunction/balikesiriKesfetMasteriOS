@@ -347,6 +347,7 @@ bool pInited = false;
                                           NSString* newStr = [[NSString alloc] initWithData:data
                                                                                    encoding:NSUTF8StringEncoding];
                                           
+                                          //delete html parts if exists
                                           NSArray * components = [newStr componentsSeparatedByString:@"<br />"];
                                           newStr = (NSString *)[components objectAtIndex:0];
                                           NSLog(@"json part: %@",newStr);

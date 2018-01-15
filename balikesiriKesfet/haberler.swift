@@ -50,13 +50,15 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource, SW
     func fetchNews(){
         self.sv = UIViewController.displaySpinner(onView: self.view)
         let urlRequest = URLRequest(url: URL(string: "http://app.balikesirikesfet.com/json_news?l=0,100")!)
-
+        
         let task = URLSession.shared.dataTask(with: urlRequest){(data, response, error) in
             if error != nil {
                 print(error as Any)
                 return
             }
             
+            NSLog("request data: %@", String(data: data!, encoding: .ascii)!)
+
             do {
                 let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [[String:AnyObject]]
                 var tmpArticle = ArticleN()

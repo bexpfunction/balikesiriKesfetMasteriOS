@@ -220,6 +220,17 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         let urlString = "http://app.balikesirikesfet.com/json_distance?lat=\(self.currentLocation.coordinate.latitude)&lng=\(self.currentLocation.coordinate.longitude)&dis=2"
         let urlRequest = URLRequest(url: URL(string: urlString)!)
         
+        //temp request test
+        if let myURL = NSURL(string: urlString) {
+            do {
+                let myHTMLString = try NSString(contentsOf: myURL as URL, encoding: String.Encoding.utf8.rawValue)
+                NSLog("url content: \(myHTMLString)")
+            } catch {
+                print(error)
+            }
+        }
+
+        
         let task = URLSession.shared.dataTask(with: urlRequest){(data, response, error) in
             if error != nil {
                 print(error as Any)
@@ -228,7 +239,8 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
             
             self.pinList = []
             
-            do{
+            do {
+                
                 let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [[String:AnyObject]]
                 var tmpPin = Pin()
                 var count : Int
