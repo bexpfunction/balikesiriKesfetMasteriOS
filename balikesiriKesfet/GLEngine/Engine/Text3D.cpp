@@ -109,6 +109,7 @@ TEXT3D *TEXT3D_init(char *text, FONT *font,vec3 pos,float size) {
         }
         text++;
     }
+    text -= l;
     
     //Vertex Buffer Object
     glGenBuffers(1,&text3d->vbo);

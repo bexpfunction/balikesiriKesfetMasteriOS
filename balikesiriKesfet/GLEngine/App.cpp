@@ -97,7 +97,8 @@ const GLfloat glRectVertices[] = {
     -3.0f, 2.70f,0
 };
 
-int cameraTextureId;
+int cameraTextureIdY;
+int cameraTextureIdUV;
 
 void AppToucheBegan( float x, float y, unsigned int tap_count )
 {
@@ -188,9 +189,10 @@ void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset){
     
 }
 
-void AppBindCameraTexture(int texId){
-    LOGI("AppBindCameraTexture called%d\n",texId);
-    cameraTextureId = texId;
+void AppBindCameraTexture(int texIdY,int texIdUV){
+    //LOGI("AppBindCameraTexture called%d\n",texId);
+    cameraTextureIdY = texIdY;
+    cameraTextureIdUV = texIdUV;
 }
 
 static void checkGlError(const char* op) {
@@ -1030,13 +1032,18 @@ void DrawCamera(){
     glEnableVertexAttribArray(attribute);
     glVertexAttribPointer(attribute,2,GL_FLOAT,GL_FALSE,0,gCamUvs);
     
-    glUniform1i( PROGRAM_get_uniform_location(cameraProgram, ( char * )"Diffuse" ), 0 );
+    glUniform1i( PROGRAM_get_uniform_location(cameraProgram, ( char * )"DiffuseY" ), 0 );
+    glUniform1i( PROGRAM_get_uniform_location(cameraProgram, ( char * )"DiffuseUV" ), 1 );
     
     //if( color ) glUniform4fv( PROGRAM_get_uniform_location( font->program, ( char * )"COLOR" ), 1, ( float * )color );
     
     glActiveTexture( GL_TEXTURE0 );
     //glBindTexture( GL_TEXTURE_EXTERNAL_OES,cameraTextureId);      //OES NOT ENABLED
-    glBindTexture(GL_TEXTURE_2D,cameraTextureId);                     //USING THIS INSTEAD
+    glBindTexture(GL_TEXTURE_2D,cameraTextureIdY);
+    
+    glActiveTexture( GL_TEXTURE1 );
+    //glBindTexture( GL_TEXTURE_EXTERNAL_OES,cameraTextureId);      //OES NOT ENABLED
+    glBindTexture(GL_TEXTURE_2D,cameraTextureIdUV);                     //USING THIS INSTEAD
     glDrawArrays(GL_TRIANGLE_STRIP,0,4);
     
     glDisableVertexAttribArray(attribute);

@@ -28,7 +28,8 @@
 #pragma mark - AVFoundation Variables
 AVCaptureSession* captureSession;
 CVOpenGLESTextureCacheRef _videoTextureCache;
-CVOpenGLESTextureRef camTextureRef;
+CVOpenGLESTextureRef camTextureRefY;
+CVOpenGLESTextureRef camTextureRefUV;
 
 @implementation agGL
 
@@ -431,8 +432,11 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
     }
     
     //[self cleanUpTextures];
-    if(camTextureRef){
-        CFRelease(camTextureRef);
+    if(camTextureRefY){
+        CFRelease(camTextureRefY);
+    }
+    if(camTextureRefUV){
+        CFRelease(camTextureRefUV);
     }
     CVOpenGLESTextureCacheFlush(_videoTextureCache, 0);
     
@@ -453,17 +457,41 @@ didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
                                                        GL_RED_EXT,
                                                        GL_UNSIGNED_BYTE,
                                                        0,
-                                                       &camTextureRef);
+                                                       &camTextureRefY);
     if (err)
     {
         NSLog(@"Error at CVOpenGLESTextureCacheCreateTextureFromImage %d", err);
     }
-    GLuint textureId =CVOpenGLESTextureGetName(camTextureRef);
+    GLuint textureId =CVOpenGLESTextureGetName(camTextureRefY);
     glBindTexture(GL_TEXTURE_2D, textureId);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
-    templateApp.BindCameraTexture(textureId);
+    // UV-plane
+    glActiveTexture(GL_TEXTURE1);
+    err = 0;
+    err = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
+                                                       _videoTextureCache,
+                                                       pixelBuffer,
+                                                       NULL,
+                                                       GL_TEXTURE_2D,
+                                                       GL_RG_EXT,
+                                                       width/2,
+                                                       height/2,
+                                                       GL_RG_EXT,
+                                                       GL_UNSIGNED_BYTE,
+                                                       1,
+                                                       &camTextureRefUV);
+    if (err)
+    {
+        NSLog(@"Error at CVOpenGLESTextureCacheCreateTextureFromImage %d", err);
+    }
+    GLuint textureIdUV =CVOpenGLESTextureGetName(camTextureRefUV);
+    glBindTexture(GL_TEXTURE_2D, textureId);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    templateApp.BindCameraTexture(textureId,textureIdUV);
 }
 
 -(void)viewWillDisappear:(BOOL)animated {
