@@ -37,7 +37,7 @@ typedef struct
     void ( *SetCameraRotation        )( float x, float y, float z);
     void ( *SetCameraRotationQuat    )( const quat deviceQuat );
     void ( *SetPinDatas        )( pinData *pins,int size,float pinTextMaxOffset);
-    void ( *BindCameraTexture        )( int textureId);
+    void ( *BindCameraTexture        )( int texIdY,int texIdUV);
     void ( *InitCamera        )(float fieldOfView, float nearClip, float farClip, float smoothStep, bool enableSmooth);
     void ( *SetCameraPosition        )( float x, float y, float z);
     void ( *SetWorldScale   )( float scale);
@@ -58,7 +58,7 @@ void AppSetCameraRotation( float x, float y, float z );
 void AppSetCameraRotationQuat (const quat deviceQuat);
 void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset);
 void AppInitCamera(float fieldOfView, float nearClip, float farClip, float smoothStep, bool enableSmooth);
-void AppBindCameraTexture(int cameraTextureId);
+void AppBindCameraTexture(int texIdY,int texIdUV);
 void AppSetCameraPosition(float x,float y,float z);
 void AppSetWorldScale(float scale);
 pinData *AppGetSelectedPin();
