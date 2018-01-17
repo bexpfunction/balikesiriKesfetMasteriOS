@@ -26,15 +26,15 @@
 @end
 
 @implementation agGL {
-
+    
 #pragma mark - AVFoundation Variables
-AVCaptureSession* captureSession;
-CVOpenGLESTextureCacheRef _videoTextureCache;
-CVOpenGLESTextureRef camTextureRefY;
-CVOpenGLESTextureRef camTextureRefUV;
-
+    AVCaptureSession* captureSession;
+    CVOpenGLESTextureCacheRef _videoTextureCache;
+    CVOpenGLESTextureRef camTextureRefY;
+    CVOpenGLESTextureRef camTextureRefUV;
+    
 #pragma mark - GL view
-GLKView* glView;
+    GLKView* glView;
     
 }
 #pragma mark - Custom macros
@@ -66,7 +66,7 @@ int pinCount = 0;
     self.revealViewController.delegate = self;
     [self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
-
+    
     
     glInitialized = false;
     checkFrameBuffer = false;
@@ -74,7 +74,7 @@ int pinCount = 0;
     drawApp = true;
     iAvailable = false;
     locationInited = false;
-
+    
     rateSumX = degToRad(90.0f);  rateSumY = 0.0f; rateSumZ = 0.0f;
     
     
@@ -112,7 +112,7 @@ int pinCount = 0;
     [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData* acceleration, NSError *error) {
         [self outputAccelerationData:acceleration];
     }];
-
+    
     //Tap handler for the pinclick
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHandler:)];
     tap.numberOfTapsRequired = 1;
@@ -154,9 +154,9 @@ int pinCount = 0;
     // Do any additional setup after loading the view.
     if(checkFrameBuffer) {
         if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            LOGI("\nNo framebuffer!!!\n");
+        LOGI("\nNo framebuffer!!!\n");
         else
-            LOGI("\nThere IS framebuffer!!!\n");
+        LOGI("\nThere IS framebuffer!!!\n");
     }
     
     //Get resolution
@@ -177,12 +177,12 @@ bool pInited = false;
     if(drawApp && glInitialized) {
         templateApp.SetCameraRotation(cPitch, cYaw, cRoll);
         if(pInited) {
-//            if(pinCount>0 && pinList != NULL){
-//                for(int i=0; i<pinCount; i++){
-//                    LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
-//                }
-//                LOGI("\n\n");
-//            }
+            //            if(pinCount>0 && pinList != NULL){
+            //                for(int i=0; i<pinCount; i++){
+            //                    LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
+            //                }
+            //                LOGI("\n\n");
+            //            }
             templateApp.Draw();
             drawAppCalled = true;
         }
@@ -193,17 +193,17 @@ bool pInited = false;
     //Framebuffer check
     if(checkFrameBuffer) {
         if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-            LOGI("\nNo framebuffer!!!\n");
+        LOGI("\nNo framebuffer!!!\n");
         else
-            LOGI("\nThere IS framebuffer!!!\n");
+        LOGI("\nThere IS framebuffer!!!\n");
     }
 }
 
 -(void)update {
     infoLabel.text = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@",gyroStr,accStr,acStr,apStr,arStr];
     //NSLog(@"Capture session running: %d",captureSession.running);
-//    [infoLabel setNumberOfLines:0]
-//    [infoLabel sizeToFit];
+    //    [infoLabel setNumberOfLines:0]
+    //    [infoLabel sizeToFit];
     
 }
 
@@ -263,7 +263,7 @@ bool pInited = false;
     if(glInitialized && pinCount > 0) {
         templateApp.ToucheBegan(x,y,1);
         templateApp.ToucheEnded(x,y,1);
-
+        
         if(templateApp.GetSelectedPin() != NULL) {
             LOGI("\n\ntmp text: %s\n\n",templateApp.GetSelectedPin()->text);
             for(int i=0; i<pinCount; i++) {
@@ -275,7 +275,7 @@ bool pInited = false;
                 }
                 LOGI("pin[%d] reset, text: %s colB: %f\n",i, pinList[i].text, pinList[i].borderColor.y);
             }
-           //templateApp.SetPinDatas(pinList, pinCount, 1.0f);
+            //templateApp.SetPinDatas(pinList, pinCount, 1.0f);
         }
         //free(templateApp.GetSelectedPin());
     }
@@ -307,25 +307,25 @@ bool pInited = false;
 
 -(void)outputAccelerationData:(CMAccelerometerData*) acceleration {
     accStr = [NSString stringWithFormat:@"Raw Acceleration x: %.2f y: %.2f z: %.2f",acceleration.acceleration.x, acceleration.acceleration.y, acceleration.acceleration.z];
-
+    
 }
 
 -(void)outputMotionData:(CMDeviceMotion*) motion {
-//    CMQuaternion quat = motion.attitude.quaternion;
-
-//    CGFloat roll  = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
-//    CGFloat pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z);
-//    CGFloat yaw   =  asin(2*(quat.x*quat.y + quat.w*quat.z));
+    //    CMQuaternion quat = motion.attitude.quaternion;
     
-//    CGFloat pitch = atan2(2*(quat.y*quat.z + quat.w*quat.x), quat.w*quat.w - quat.x*quat.x - quat.y*quat.y + quat.z*quat.z);
-//    CGFloat yaw = asin(-2*(quat.x*quat.z - quat.w*quat.y));
-//    CGFloat roll = atan2(2*(quat.x*quat.y + quat.w*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
-//
-//
-//    if(pitch<0.0f) pitch = degToRad(360.0f) + pitch;
-//    if(roll<0.0f) roll = degToRad(360.0f) + roll;
-//    if(yaw<0.0f) yaw = degToRad(360.0f) + yaw;
-
+    //    CGFloat roll  = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
+    //    CGFloat pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z);
+    //    CGFloat yaw   =  asin(2*(quat.x*quat.y + quat.w*quat.z));
+    
+    //    CGFloat pitch = atan2(2*(quat.y*quat.z + quat.w*quat.x), quat.w*quat.w - quat.x*quat.x - quat.y*quat.y + quat.z*quat.z);
+    //    CGFloat yaw = asin(-2*(quat.x*quat.z - quat.w*quat.y));
+    //    CGFloat roll = atan2(2*(quat.x*quat.y + quat.w*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
+    //
+    //
+    //    if(pitch<0.0f) pitch = degToRad(360.0f) + pitch;
+    //    if(roll<0.0f) roll = degToRad(360.0f) + roll;
+    //    if(yaw<0.0f) yaw = degToRad(360.0f) + yaw;
+    
     
     apStr = [NSString stringWithFormat:@"Attitude pitch: %.2f yaw: %.2f roll: %.2f",motion.attitude.pitch, motion.attitude.yaw, motion.attitude.roll];
     arStr = [NSString stringWithFormat:@"Attitude rot rate x: %.2f y: %.2f z: %.2f",motion.rotationRate.x, motion.rotationRate.y, motion.rotationRate.z];
@@ -377,10 +377,10 @@ bool pInited = false;
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
                                                           float pLng = [(jsonArray[cnt][@"lng"]) floatValue];
                                                           CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
-
+                                                          
                                                           pLat = (tmpPinLoc.coordinate.latitude - currentLocation.coordinate.latitude)*10000;
                                                           pLng = (tmpPinLoc.coordinate.longitude - currentLocation.coordinate.longitude)*10000;
-
+                                                          
                                                           pinList[cnt].id = cnt;
                                                           pinList[cnt].position = {-pLat, 0.0f, pLng};
                                                           pinList[cnt].text = (char*)[jsonArray[cnt][@"title"] cStringUsingEncoding:NSUTF8StringEncoding];
@@ -388,7 +388,7 @@ bool pInited = false;
                                                           pinList[cnt].fontSize = 0.65f;
                                                           pinList[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
                                                           pinList[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
-
+                                                          
                                                           LOGI("obj-c pin init [%d] text: %s address: %p\n", cnt, pinList[cnt].text, pinList[cnt].text);
                                                       }
                                                       LOGI("\n\n");
@@ -443,7 +443,7 @@ bool pInited = false;
     }
     [captureSession addInput:input];
     //preview layer
-
+    
     
     //-- Create the output for the capture session.
     AVCaptureVideoDataOutput * dataOutput = [[AVCaptureVideoDataOutput alloc] init];
@@ -580,8 +580,8 @@ bool pInited = false;
 -(void) tapGesture: (id)sender {
     [self.revealViewController revealToggle:sender];
 }
-         
-         
+
+
 // Checks if we have an internet connection or not
 - (void)testInternetConnection
 {
@@ -612,3 +612,4 @@ bool pInited = false;
 }
 
 @end
+
