@@ -11,8 +11,8 @@ void main() {
     mediump vec3 yuv;
     lowp vec3 rgb;
     
-    yuv.x = texture2D(SamplerY, texCoordVarying).r;
-    yuv.yz = texture2D(SamplerUV, texCoordVarying).rg - vec2(0.5, 0.5);
+    yuv.x = texture2D(DiffuseY, texcoord0).r;
+    yuv.yz = texture2D(DiffuseUV, texcoord0).rg - vec2(0.5, 0.5);
     
     // BT.601, which is the standard for SDTV is provided as a reference
     
