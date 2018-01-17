@@ -52,6 +52,7 @@ NSString *curLat, *curLng, *gyroStr, *accStr, *acStr, *apStr, *arStr;
 #pragma mark - Global Location
 CLLocation *currentLocation;
 //static pinData *pinList=NULL;
+static pinData* pinList = NULL;
 #pragma mark - Global Integers
 int pinCount = 0;
 

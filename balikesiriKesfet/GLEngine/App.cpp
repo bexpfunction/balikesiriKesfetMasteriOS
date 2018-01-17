@@ -169,7 +169,7 @@ pinData *tempPinData;
 int tempPinSize;
 float tempPinMaxOffset;
 void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset){
-    deletePins();
+    //deletePins();
     //pinSize = size;
     //pinTextOffset = pinTextMaxOffset;
     //App::pinDatas = pins;
@@ -189,16 +189,10 @@ void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset){
     
 }
 
-//<<<<<<< HEAD
-//void AppBindCameraTexture(int texId){
-//    //LOGI("AppBindCameraTexture called%d\n",texId);
-//    cameraTextureId = texId;
-//=======
 void AppBindCameraTexture(int texIdY,int texIdUV){
     //LOGI("AppBindCameraTexture called%d\n",texId);
     cameraTextureIdY = texIdY;
     cameraTextureIdUV = texIdUV;
-//>>>>>>> 3b8fd9c1a1dd1c4f90ad763065853ad9dc53dc39
 }
 
 static void checkGlError(const char* op) {
@@ -563,7 +557,7 @@ void initFont(){
 #pragma mark-Init Pins
 void initPins() {
     //LOGI("\ninitPins called\n");
-    deletePins();
+    //deletePins();
     pinSize = tempPinSize;
     pinTextOffset = tempPinMaxOffset;
     App::pinDatas = tempPinData;
@@ -579,9 +573,10 @@ void initPins() {
         //vec3 p = {App::pinDatas[i].position.x,App::pinDatas[i].position.y+3.0f,App::pinDatas[i].position.z};
         vec3 p = {0,3.0f,0};
 
-        //App::pinDatas[i].text3D = TEXT3D_init(App::pinDatas[i].text,font,p,App::pinDatas[i].fontSize/100.0f);
+        App::pinDatas[i].text3D = TEXT3D_init(App::pinDatas[i].text,font,p,App::pinDatas[i].fontSize/100.0f);
 
     }
+    LOGI("\n\nc++ pinsInited\n");
     isPinInited = true;
 }
 

@@ -113,6 +113,7 @@ TEXT3D *TEXT3D_init(char *text, FONT *font,vec3 pos,float size) {
     
     //Vertex Buffer Object
     glGenBuffers(1,&text3d->vbo);
+    LOGI("\n\n\nbuffer: %d\n\n\n\n",text3d->vbo);
     glBindBuffer(GL_ARRAY_BUFFER,text3d->vbo);
     glBufferData(GL_ARRAY_BUFFER,length,vertex_start,GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER,0);

@@ -16,7 +16,7 @@
 #import "Logger.h"
 
 UILabel *infoLabel;
-static pinData* pinList;
+
 
 @interface agGL : GLKViewController <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
     
