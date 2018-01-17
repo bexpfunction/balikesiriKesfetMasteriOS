@@ -530,7 +530,7 @@ bool pInited = false;
         NSLog(@"Error at CVOpenGLESTextureCacheCreateTextureFromImage %d", err);
     }
     GLuint textureIdUV =CVOpenGLESTextureGetName(camTextureRefUV);
-    glBindTexture(GL_TEXTURE_2D, textureId);
+    glBindTexture(GL_TEXTURE_2D, textureIdUV);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
