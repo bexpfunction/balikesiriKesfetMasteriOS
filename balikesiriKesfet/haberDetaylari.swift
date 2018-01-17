@@ -18,7 +18,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet weak var newsText2: UILabel!
     @IBOutlet weak var linkListText: UITextView!
     @IBOutlet weak var galleryColView: UICollectionView!
-    @IBOutlet weak var pageController: UIPageControl!
+    @IBOutlet weak var scrollableContentView: UIView!
     
     var idFromSelection : String?
     
@@ -45,9 +45,15 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
-        self.pageController.numberOfPages = 0
+        
+        //Gallery Collection View Setup
+        self.galleryColView.layer.cornerRadius = 5
+        self.galleryColView.layer.borderWidth = 1
+        self.galleryColView.layer.borderColor = UIColor.white.cgColor
         
         fetchDetails()
+        
+        NSLog("colview size: \(self.galleryColView.bounds.size.width)")
     }
     
     func fetchDetails() {
@@ -98,6 +104,10 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
                     self.newsAbstract.text = self.ozet
                     let imgRootLink = "http://app.balikesirikesfet.com/file/"
                     self.thumbsImage.downloadImage(from: imgRootLink+self.pic!)
+                    self.newsAbstract.sizeToFit()
+                    self.newsText1.sizeToFit()
+                    self.newsText2.sizeToFit()
+                    self.newsTitle.sizeToFit()
                     for eLink in self.linkList {
                         self.linkListText.text?.append(eLink!)
                     }
@@ -111,6 +121,17 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         task.resume()
         
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        
+        let totalCellWidth = 354 * collectionView.numberOfItems(inSection: 0)
+        let totalSpacingWidth = 15 * (collectionView.numberOfItems(inSection: 0) - 1)
+        
+        let leftInset = (collectionView.bounds.size.width - CGFloat(totalCellWidth + totalSpacingWidth)) / 2
+        let rightInset = leftInset
+        
+        return UIEdgeInsetsMake(0, leftInset, 0, rightInset)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -129,9 +150,9 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         return cell
     }
     
+    
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        self.pageController.numberOfPages = self.galeri.count
-        self.pageController.currentPage = 0
         return self.galeri.count
     }
     
