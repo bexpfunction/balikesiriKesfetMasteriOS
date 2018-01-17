@@ -8,28 +8,58 @@
 #include "types.h"
 
 TEXT3D *TEXT3D_init(char *text, FONT *font,vec3 pos,float size) {
-    LOGI("Text 3d init with text: %s\n\n", text);
-    TEXT3D *text3d = (TEXT3D *)calloc(1,sizeof(TEXT3D));
+    //LOGI("Text 3d init with text: %s\n\n", text);
+    TEXT3D *text3d = (TEXT3D *)malloc(sizeof(TEXT3D));
     text3d->font = font;
     text3d->text = text;
+    text3d->size = size;
+    text3d->position = pos;
     text3d->program = font->program;
     //TEXT3D_setPosition(text3d,pos);
     
+    TEXT3D_createTextVertices(text3d);
+    
+    return text3d;
+}
+
+void TEXT3D_createTextVertices(TEXT3D* text3d){
+    int l = static_cast<int>(strlen(text3d->text));
+    char *text =text3d->text;
+    /*text = (char *)malloc(sizeof(char*)*l);
+    memcpy(text,text3d->text,sizeof(char*)*l);*/
+    float size = text3d->size;
+    vec3 pos = text3d->position;
+    
     float x = 0;
-    
-    int l = static_cast<int>(strlen(text));
     int row = 0;
-    text3d->length = l;
     
-    int length = sizeof(vec2)*8*l;
+    
+    int l2 =0;
+    //while(*text){
+    for(int t=0;t<l;t++){
+        char c = text[t];
+        //LOGI("char %c\n",c);
+        //LOGI("charCode %d\n",c);
+        ftgl::texture_glyph_t *glyph2 = ftgl::texture_font_get_glyph(text3d->font->ftFont,&c);
+        //LOGI("codepoint %d\n",glyph2->codepoint);
+        if(((int)glyph2->codepoint)>-1){
+            x+= glyph2->advance_x*size;
+            l2++;
+        }
+        //text++;
+    }
+    //LOGI("Length %d\n",l2);
+    text3d->length = l2;
+    
+    int length = sizeof(vec2)*8*l2;
     
     unsigned char * vertex_array = NULL,* vertex_start = NULL;
-    vertex_array = (unsigned char *)malloc(length);
+    vertex_array = (unsigned char *)malloc(length*sizeof(unsigned char *));
     vertex_start = vertex_array;
     
     unsigned  char * ind_array = NULL, * ind_start = NULL;
     //ind_array = (unsigned char *)malloc(sizeof(unsigned short)*6*l);
-    ind_array = (unsigned char *)malloc(sizeof(unsigned char)*6*l);
+    ind_array = (unsigned char *)malloc(sizeof(unsigned short)*6*l2);
     ind_start = ind_array;
     
     //text3d->textVertices = (GLfloat *)malloc(sizeof(GLfloat)*l*8);
@@ -40,23 +70,22 @@ TEXT3D *TEXT3D_init(char *text, FONT *font,vec3 pos,float size) {
      text3d->textUVs[l*8];*/
     //LOGI("Text length:%d",l);
     
-    while(*text){
-        ftgl::texture_glyph_t *glyph2 = ftgl::texture_font_get_glyph(font->ftFont,text);
-        x+= glyph2->advance_x*size;
-        text++;
-    }
-    text -= l;
+    //LOGI("length2 %d\n",l2);
+    //text -= l;
     x = x*-0.5f;
     //LOGI("le%f",x);
     while(*text){
-        //char c = 148;
-        //LOGI("cjar:%c",text);
-        ftgl::texture_glyph_t *glyph = ftgl::texture_font_get_glyph(font->ftFont,text);
+    //for(int t=0;t<l;t++){
+        //char c = text[t];
+        //LOGI("char %c\n",c);
+        //LOGI("charCode %d\n",c);
+        ftgl::texture_glyph_t *glyph = ftgl::texture_font_get_glyph(text3d->font->ftFont,text);
         
-        //LOGI("ch%d",glyph->codepoint);
-        if(glyph) {
-            //LOGI("s0:%f s1:%f t0:%f t1:%f",glyph->s0,glyph->s1,glyph->t0,glyph->t1);
-            //LOGI("offsetX:%d offsetY:%d advanceX:%f advanceY:%f width:%f height:%f",glyph->offset_x,glyph->offset_y,glyph->advance_x,glyph->advance_y,(float)glyph->width,(float)glyph->height);
+        //LOGI("ch%d\n",glyph->codepoint);
+        //if(glyph) {
+        if((int)glyph->codepoint>-1){
+            //LOGI("s0:%f s1:%f t0:%f t1:%f\n",glyph->s0,glyph->s1,glyph->t0,glyph->t1);
+            //LOGI("offsetX:%d offsetY:%d advanceX:%f advanceY:%f width:%f height:%f\n",glyph->offset_x,glyph->offset_y,glyph->advance_x,glyph->advance_y,(float)glyph->width,(float)glyph->height);
             
             float offsetY = -(float)((int)glyph->height-glyph->offset_y)*size;
             
@@ -105,26 +134,24 @@ TEXT3D *TEXT3D_init(char *text, FONT *font,vec3 pos,float size) {
             ind_array+=sizeof(unsigned short)*6;
             row++;
         }else{
-            LOGI("glyph is null");
+            LOGI("Unsupported or reduntant char");
         }
         text++;
+        
     }
-    text -= l;
-    
+    text3d->text =NULL;
     //Vertex Buffer Object
     glGenBuffers(1,&text3d->vbo);
     glBindBuffer(GL_ARRAY_BUFFER,text3d->vbo);
     glBufferData(GL_ARRAY_BUFFER,length,vertex_start,GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER,0);
     free(vertex_start);
-    
     //Indices Buffer Object
     glGenBuffers(1,&text3d->triVbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,text3d->triVbo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short)*6*l,ind_start,GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short)*6*l2,ind_start,GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
     free(ind_start);
-    return text3d;
 }
 
 void TEXT3D_print(TEXT3D *text,PROGRAM *program, Camera *cam,mat4 *modelMat,float maxOffset) {
