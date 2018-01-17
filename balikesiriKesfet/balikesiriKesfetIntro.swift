@@ -14,7 +14,6 @@ import FBSDKLoginKit
 class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
     
     @IBOutlet weak var titleImage: UIImageView!
-    @IBOutlet weak var bbImage: UIImageView!
     @IBOutlet weak var text1: UILabel!
     @IBOutlet weak var text3: UIButton!
     @IBOutlet weak var guestEntryButton: UIButton!
@@ -47,7 +46,6 @@ class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
         }
         
         self.titleImage.alpha = 0
-        self.bbImage.alpha = 0
         self.text1.alpha = 0
         //self.guestEntryButton.alpha = 0
         //self.loginButton.alpha = 0
@@ -68,15 +66,10 @@ class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
         UIView.animate(withDuration: 0.5, animations: {
             self.titleImage.alpha = 1
             }, completion: { (true) in
-                self.showBB()
+                self.showTextsAndButtons()
                 })
     }
     
-    func showBB(){
-        UIView.animate(withDuration: 0.5, animations: {
-            self.bbImage.alpha = 1
-        }, completion: {(true) in self.showTextsAndButtons()})
-    }
     
     func showTextsAndButtons(){
         UIView.animate(withDuration: 0.5, animations: {

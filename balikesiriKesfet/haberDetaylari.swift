@@ -18,6 +18,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet weak var newsText2: UILabel!
     @IBOutlet weak var linkListText: UITextView!
     @IBOutlet weak var galleryColView: UICollectionView!
+    @IBOutlet weak var pageController: UIPageControl!
     
     var idFromSelection : String?
     
@@ -44,6 +45,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
+        self.pageController.numberOfPages = 0
         
         fetchDetails()
     }
@@ -128,6 +130,8 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        self.pageController.numberOfPages = self.galeri.count
+        self.pageController.currentPage = 0
         return self.galeri.count
     }
     

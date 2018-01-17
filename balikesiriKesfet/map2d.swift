@@ -70,7 +70,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         annotationPopup.layer.borderWidth = 1
         
         mapKitView.showsUserLocation = true
-        mapKitView.layer.cornerRadius = 5
+        //mapKitView.layer.cornerRadius = 5
         
         popupScrollView.layer.cornerRadius = 5
         popupScrollView.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
@@ -84,6 +84,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         
         //
         self.pinListTV.delegate = self
+        
         
         //Ask authorisation
         self.locationManager.requestAlwaysAuthorization()
