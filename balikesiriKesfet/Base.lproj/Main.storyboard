@@ -485,7 +485,7 @@ Gerçeklik</string>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TYG-Mn-6LK">
-                                                                    <rect key="frame" x="0.0" y="0.5" width="354" height="166"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="354" height="167"/>
                                                                 </imageView>
                                                             </subviews>
                                                         </view>

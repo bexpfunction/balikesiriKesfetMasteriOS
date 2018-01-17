@@ -494,10 +494,10 @@ bool pInited = false;
                                                        pixelBuffer,
                                                        NULL,
                                                        GL_TEXTURE_2D,
-                                                       GL_RED_EXT,
+                                                       GL_LUMINANCE,
                                                        width,
                                                        height,
-                                                       GL_RED_EXT,
+                                                       GL_LUMINANCE,
                                                        GL_UNSIGNED_BYTE,
                                                        0,
                                                        &camTextureRefY);
