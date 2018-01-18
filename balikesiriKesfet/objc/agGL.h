@@ -15,10 +15,18 @@
 #import "EngineBase.h"
 #import "Logger.h"
 
+
 UILabel *infoLabel;
 
-
 @interface agGL : GLKViewController <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
+    struct objCPinData{
+    public:
+        int id;
+        vec3 position;
+        char *text;
+        vec4 color;
+        vec4 borderColor;
+    };
     
 }
 @property (strong, nonatomic) CMMotionManager *motionManager;

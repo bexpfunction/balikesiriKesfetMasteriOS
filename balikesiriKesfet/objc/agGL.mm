@@ -25,18 +25,7 @@
 
 @end
 
-@implementation agGL {
-    
-#pragma mark - AVFoundation Variables
-    AVCaptureSession* captureSession;
-    CVOpenGLESTextureCacheRef _videoTextureCache;
-    CVOpenGLESTextureRef camTextureRefY;
-    CVOpenGLESTextureRef camTextureRefUV;
-    
-#pragma mark - GL view
-    GLKView* glView;
-    
-}
+//AllGlobals
 #pragma mark - Custom macros
 #define radToDeg(x) (180.0f/M_PI)*x
 #define degToRad(x) (M_PI/180.0f)*x
@@ -53,8 +42,23 @@ NSString *curLat, *curLng, *gyroStr, *accStr, *acStr, *apStr, *arStr;
 CLLocation *currentLocation;
 //static pinData *pinList=NULL;
 static pinData* pinList = NULL;
+static objCPinData* objCPinlist = NULL;
 #pragma mark - Global Integers
 int pinCount = 0;
+char* tmpString=NULL;
+NSString* tmp;
+@implementation agGL {
+    
+#pragma mark - AVFoundation Variables
+    AVCaptureSession* captureSession;
+    CVOpenGLESTextureCacheRef _videoTextureCache;
+    CVOpenGLESTextureRef camTextureRefY;
+    CVOpenGLESTextureRef camTextureRefUV;
+    
+#pragma mark - GL view
+    GLKView* glView;
+    
+}
 
 #pragma mark - ViewController Methods And Delegates
 - (void)viewDidLoad {
@@ -75,7 +79,7 @@ int pinCount = 0;
     drawApp = true;
     iAvailable = false;
     locationInited = false;
-    
+    tmp = [[NSString alloc] init];
     rateSumX = degToRad(90.0f);  rateSumY = 0.0f; rateSumZ = 0.0f;
     
     
@@ -336,7 +340,7 @@ bool pInited = false;
     
 }
 
-
+#pragma mark UpdatePins
 -(void) updatePins {
     pInited = false;
     NSString *generatedURL = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=1",curLat,curLng];
@@ -353,7 +357,7 @@ bool pInited = false;
                                           //delete html parts if exists
                                           NSArray * components = [newStr componentsSeparatedByString:@"<br />"];
                                           newStr = (NSString *)[components objectAtIndex:0];
-                                          NSLog(@"json part: %@",newStr);
+                                          //NSLog(@"json part: %@",newStr);
                                           
                                           // do something with the data
                                           NSData *jsonData = [newStr dataUsingEncoding:NSUTF8StringEncoding];
@@ -370,7 +374,6 @@ bool pInited = false;
                                                   //NSLog(@"it is an array!");
                                                   NSArray *jsonArray = (NSArray *)jsonObj;
                                                   if(jsonArray.count>0 && glInitialized) {
-                                                      
                                                       pinCount = (int)jsonArray.count;
                                                       free(pinList);
                                                       pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
@@ -382,10 +385,15 @@ bool pInited = false;
                                                           
                                                           pLat = (tmpPinLoc.coordinate.latitude - currentLocation.coordinate.latitude)*10000;
                                                           pLng = (tmpPinLoc.coordinate.longitude - currentLocation.coordinate.longitude)*10000;
+                                                          //NSString* tmp = [(jsonArray[cnt][@"title"]) stringValue];
+                                                          
+                                                          tmp = jsonArray[cnt][@"title"];
+                                                          tmpString = (char*)malloc(sizeof(char*) * [tmp length]);
+                                                          tmpString = (char*)[tmp cStringUsingEncoding:NSUTF8StringEncoding];
                                                           
                                                           pinList[cnt].id = cnt;
                                                           pinList[cnt].position = {-pLat, 0.0f, pLng};
-                                                          pinList[cnt].text = (char*)[jsonArray[cnt][@"title"] cStringUsingEncoding:NSUTF8StringEncoding];
+                                                          pinList[cnt].text = tmpString;
                                                           pinList[cnt].size = 4.0f;
                                                           pinList[cnt].fontSize = 0.65f;
                                                           pinList[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
@@ -394,7 +402,7 @@ bool pInited = false;
                                                           LOGI("obj-c pin init [%d] text: %s address: %p\n", cnt, pinList[cnt].text, pinList[cnt].text);
                                                       }
                                                       LOGI("\n\n");
-                                                      templateApp.SetPinDatas(pinList,(int)jsonArray.count,1.0f);
+                                                      templateApp.SetPinDatas(pinList,pinCount,1.0f);
                                                       pInited = true;
                                                   } else {
                                                       pinCount = 0;

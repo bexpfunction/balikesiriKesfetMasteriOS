@@ -173,6 +173,10 @@ void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset){
     //pinSize = size;
     //pinTextOffset = pinTextMaxOffset;
     //App::pinDatas = pins;
+    for(int i = 0; i < size; i++) {
+        LOGI("c++ setPindatas pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pins[i].position.x,pins[i].text,pins[i].text);
+    }
+    LOGI("\n");
     tempPinSize = size;
     tempPinMaxOffset = pinTextMaxOffset;
     tempPinData = pins;
