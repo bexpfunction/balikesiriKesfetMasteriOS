@@ -607,12 +607,12 @@ void programDrawCallback(void *ptr){
 char uniform,attribute;
 vec3 targetRotVec = {0,0,0};
 void AppDraw() {
-//    if(pinSize>0){
-//        for(int i=0; i<pinSize; i++){
-//            LOGI("c++ appDraw pin[%d] posx: %.3f textaddress: %p text: %s\n",i,App::pinDatas[i].position.x,App::pinDatas[i].text,App::pinDatas[i].text);
-//        }
-//        LOGI("\n\n");
-//    }
+    if(pinSize>0){
+        for(int i=0; i<pinSize; i++){
+            LOGI("c++ appDraw pin[%d] posx: %.3f textaddress: %p text: %s\n",i,App::pinDatas[i].position.x,App::pinDatas[i].text,App::pinDatas[i].text);
+        }
+        LOGI("\n\n");
+    }
     glClearColor(0.2f,0.4f,0.5f,1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -752,20 +752,20 @@ void AppDraw() {
     
     //DRAW TEXTS
 #pragma mark-Draw Texts
-//    if(isPinInited){
-//        for(int i=0;i<pinSize;i++) {
-//            //Position
-//            modelMat.m[3].x = App::pinDatas[i].position.x * worldScale;
-//            modelMat.m[3].y = App::pinDatas[i].position.y;
-//            modelMat.m[3].z = App::pinDatas[i].position.z * worldScale;
-//            //Size
-//            modelMat.m[0].x = App::pinDatas[i].size;
-//            modelMat.m[1].y = App::pinDatas[i].size;
-//            modelMat.m[2].z = App::pinDatas[i].size;
-//
-//            TEXT3D_print(App::pinDatas[i].text3D,font->program,cam,&modelMat,pinTextOffset);
-//        }
-//    }
+    if(isPinInited){
+        for(int i=0;i<pinSize;i++) {
+            //Position
+            modelMat.m[3].x = App::pinDatas[i].position.x * worldScale;
+            modelMat.m[3].y = App::pinDatas[i].position.y;
+            modelMat.m[3].z = App::pinDatas[i].position.z * worldScale;
+            //Size
+            modelMat.m[0].x = App::pinDatas[i].size;
+            modelMat.m[1].y = App::pinDatas[i].size;
+            modelMat.m[2].z = App::pinDatas[i].size;
+
+            TEXT3D_print(App::pinDatas[i].text3D,font->program,cam,&modelMat,pinTextOffset);
+        }
+    }
     
     
 //    if(false && pinColliderProgram->pid){

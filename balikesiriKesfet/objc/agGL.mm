@@ -178,12 +178,12 @@ bool pInited = false;
     if(drawApp && glInitialized) {
         templateApp.SetCameraRotation(cPitch, cYaw, cRoll);
         if(pInited) {
-            //            if(pinCount>0 && pinList != NULL){
-            //                for(int i=0; i<pinCount; i++){
-            //                    LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
-            //                }
-            //                LOGI("\n\n");
-            //            }
+            if(pinCount>0 && pinList != NULL){
+                for(int i=0; i<pinCount; i++){
+                    LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
+                }
+                LOGI("\n\n");
+            }
             templateApp.Draw();
             drawAppCalled = true;
         }
@@ -302,7 +302,8 @@ bool pInited = false;
         if(radToDeg(rateSumZ) > 360.0f) rateSumZ = degToRad(0.0f);
         if(radToDeg(rateSumZ) < 0.0f) rateSumZ = degToRad(360.0f);
     }
-    cPitch = rateSumX; //cRoll = rateSumZ;
+    //cPitch = rateSumX; //cRoll = rateSumZ;
+    cPitch = degToRad(360.0f-45.0f);
     //NSLog(@"pitch: %f roll: %f",radToDeg(cPitch),radToDeg(cRoll));
 }
 
