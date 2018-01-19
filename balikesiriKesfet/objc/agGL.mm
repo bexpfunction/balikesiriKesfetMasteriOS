@@ -42,11 +42,11 @@ NSString *curLat, *curLng, *gyroStr, *accStr, *acStr, *apStr, *arStr;
 CLLocation *currentLocation;
 //static pinData *pinList=NULL;
 static pinData* pinList = NULL;
-#pragma mark - Global Integers
+#pragma mark - Globals
 int pinCount = 0;
 char* tmpString=NULL;
-NSString* tmp;
 NSMutableArray *constTextList;
+
 @implementation agGL {
     
 #pragma mark - AVFoundation Variables
@@ -79,7 +79,6 @@ NSMutableArray *constTextList;
     drawApp = true;
     iAvailable = false;
     locationInited = false;
-    tmp = [[NSString alloc] init];
     rateSumX = degToRad(90.0f);  rateSumY = 0.0f; rateSumZ = 0.0f;
     
     
@@ -109,6 +108,7 @@ NSMutableArray *constTextList;
                                             withHandler:^(CMDeviceMotion* motion, NSError *error) {
                                                 [self outputMotionData:motion];
                                             }];
+    
     [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue]
                                     withHandler:^(CMGyroData* gyro, NSError *error) {
                                         [self outputGyroData:gyro];
@@ -166,8 +166,9 @@ NSMutableArray *constTextList;
     
     //Get resolution
     CGRect screenRect = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenWidth = screenRect.size.width ;
     CGFloat screenHeight = screenRect.size.height;
+    
     
     //TEMPLATE APP
     templateApp.InitCamera(65.0f,1.0f,1000.0f,0.5f,true);
@@ -198,9 +199,9 @@ bool pInited = false;
     //Framebuffer check
     if(checkFrameBuffer) {
         if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        LOGI("\nNo framebuffer!!!\n");
+            LOGI("\nNo framebuffer!!!\n");
         else
-        LOGI("\nThere IS framebuffer!!!\n");
+            LOGI("\nThere IS framebuffer!!!\n");
     }
 }
 
@@ -307,7 +308,7 @@ bool pInited = false;
         if(radToDeg(rateSumZ) < 0.0f) rateSumZ = degToRad(360.0f);
     }
     //cPitch = rateSumX; //cRoll = rateSumZ;
-    cPitch = degToRad(360.0f-45.0f);
+    //cPitch = degToRad(360.0f-45.0f);
     //NSLog(@"pitch: %f roll: %f",radToDeg(cPitch),radToDeg(cRoll));
 }
 
@@ -375,7 +376,7 @@ bool pInited = false;
                                                   NSArray *jsonArray = (NSArray *)jsonObj;
                                                   if(jsonArray.count>0 && glInitialized) {
                                                       pinCount = (int)jsonArray.count;
-                                                      free(pinList);
+                                                      pinList = NULL;
                                                       pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
                                                       constTextList = [[NSMutableArray alloc]init];
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
@@ -384,17 +385,13 @@ bool pInited = false;
                                                           float pLng = [(jsonArray[cnt][@"lng"]) floatValue];
                                                           CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
                                                           
-                                                          pLat = (tmpPinLoc.coordinate.latitude - currentLocation.coordinate.latitude)*10000;
-                                                          pLng = (tmpPinLoc.coordinate.longitude - currentLocation.coordinate.longitude)*10000;
-                                                          //NSString* tmp = [(jsonArray[cnt][@"title"]) stringValue];
-                                                          
-                                                          tmp = jsonArray[cnt][@"title"];
-                                                          tmpString = (char*)malloc(sizeof(char*) * [tmp length]);
-                                                          tmpString = (char*)[tmp cStringUsingEncoding:NSUTF8StringEncoding];
+                                                          pLat = (tmpPinLoc.coordinate.latitude - currentLocation.coordinate.latitude)*100000;
+                                                          pLng = (tmpPinLoc.coordinate.longitude - currentLocation.coordinate.longitude)*100000;
+      
                                                           [constTextList addObject:jsonArray[cnt][@"title"]];
                                                           pinList[cnt].id = cnt;
                                                           pinList[cnt].position = {-pLat, 0.0f, pLng};
-                                                          pinList[cnt].text = tmpString;
+                                                          pinList[cnt].text = (char*)[constTextList[cnt] cStringUsingEncoding:NSUTF8StringEncoding];
                                                           pinList[cnt].size = 4.0f;
                                                           pinList[cnt].fontSize = 0.65f;
                                                           pinList[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
