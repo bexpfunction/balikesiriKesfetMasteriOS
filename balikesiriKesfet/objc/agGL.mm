@@ -42,11 +42,11 @@ NSString *curLat, *curLng, *gyroStr, *accStr, *acStr, *apStr, *arStr;
 CLLocation *currentLocation;
 //static pinData *pinList=NULL;
 static pinData* pinList = NULL;
-static objCPinData* objCPinlist = NULL;
 #pragma mark - Global Integers
 int pinCount = 0;
 char* tmpString=NULL;
 NSString* tmp;
+NSMutableArray *constTextList;
 @implementation agGL {
     
 #pragma mark - AVFoundation Variables
@@ -184,9 +184,9 @@ bool pInited = false;
         if(pInited) {
             if(pinCount>0 && pinList != NULL){
                 for(int i=0; i<pinCount; i++){
-                    LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
+                    pinList[i].text = (char*)[constTextList[i] cStringUsingEncoding:NSUTF8StringEncoding];
+                    //LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
                 }
-                LOGI("\n\n");
             }
             templateApp.Draw();
             drawAppCalled = true;
@@ -377,6 +377,7 @@ bool pInited = false;
                                                       pinCount = (int)jsonArray.count;
                                                       free(pinList);
                                                       pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
+                                                      constTextList = [[NSMutableArray alloc]init];
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
                                                           
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
@@ -390,7 +391,7 @@ bool pInited = false;
                                                           tmp = jsonArray[cnt][@"title"];
                                                           tmpString = (char*)malloc(sizeof(char*) * [tmp length]);
                                                           tmpString = (char*)[tmp cStringUsingEncoding:NSUTF8StringEncoding];
-                                                          
+                                                          [constTextList addObject:jsonArray[cnt][@"title"]];
                                                           pinList[cnt].id = cnt;
                                                           pinList[cnt].position = {-pLat, 0.0f, pLng};
                                                           pinList[cnt].text = tmpString;
