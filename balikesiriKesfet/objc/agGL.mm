@@ -45,6 +45,7 @@ static pinData* pinList = NULL;
 #pragma mark - Globals
 int pinCount = 0;
 char* tmpString=NULL;
+float motionLastYaw=0.0f;
 NSMutableArray *constTextList;
 
 @implementation agGL {
@@ -104,10 +105,15 @@ NSMutableArray *constTextList;
     self.motionManager.accelerometerUpdateInterval = 1.0f/30.0f;
     self.motionManager.gyroUpdateInterval = 1.0f/30.0f;
     
-    [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue]
-                                            withHandler:^(CMDeviceMotion* motion, NSError *error) {
-                                                [self outputMotionData:motion];
-                                            }];
+    //    [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue]
+    //                                            withHandler:^(CMDeviceMotion* motion, NSError *error) {
+    //                                                [self outputMotionData:motion];
+    //                                            }];
+    
+    
+    [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical
+                                                            toQueue:[NSOperationQueue currentQueue]
+                                                        withHandler:^(CMDeviceMotion* motion, NSError* error){[self outputMotionData:motion];}];
     
     [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue]
                                     withHandler:^(CMGyroData* gyro, NSError *error) {
@@ -159,9 +165,9 @@ NSMutableArray *constTextList;
     // Do any additional setup after loading the view.
     if(checkFrameBuffer) {
         if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-        LOGI("\nNo framebuffer!!!\n");
+            LOGI("\nNo framebuffer!!!\n");
         else
-        LOGI("\nThere IS framebuffer!!!\n");
+            LOGI("\nThere IS framebuffer!!!\n");
     }
     
     //Get resolution
@@ -290,26 +296,51 @@ bool pInited = false;
 - (void) locationManager:(CLLocationManager *)manager
         didUpdateHeading:(CLHeading *)newHeading {
     heading = newHeading.magneticHeading; //in degrees
-    cYaw = degToRad(heading);
+    //cYaw = degToRad(heading);
 }
 
+//Angles from gyro update
+struct holder{
+    float x = 0.0f;
+    float y = 0.0f;
+    float z = 0.0f;
+};
+holder lastUpdate;
+holder lastDg;
 -(void)outputGyroData:(CMGyroData*) gyro {
-    gyroStr = [NSString stringWithFormat:@"Raw Rot rate x: %.2f y: %.2f z: %.2f",gyro.rotationRate.x, gyro.rotationRate.y, gyro.rotationRate.z];
-    if(gyro.rotationRate.x > 0.005f || gyro.rotationRate.x < -0.005f) {
-        rateSumX -= gyro.rotationRate.x*1.0f/30.0f;
-        
-        if(radToDeg(rateSumX) > 360.0f) rateSumX = degToRad(0.0f);
-        if(radToDeg(rateSumX) < 0.0f) rateSumX = degToRad(360.0f);
+    double dgChange, newDg, x, y, z, motionInterval;
+    motionInterval = 1.0f/60.0f;
+    
+    x = gyro.rotationRate.x;
+    dgChange = radToDeg((0.5f * (x+lastUpdate.x))*motionInterval);
+    lastUpdate.x = x;
+    newDg = lastDg.x + dgChange;
+    if(fabs(newDg) > 360.0f) {
+        if(newDg < 0.0f) lastDg.x = newDg+360.0f; else lastDg.x = newDg - 360.0f;
+    } else {
+        lastDg.x = newDg;
     }
-    if(gyro.rotationRate.z > 0.005f || gyro.rotationRate.z < -0.005f) {
-        rateSumZ += gyro.rotationRate.z*1.0f/30.0f;
-        
-        if(radToDeg(rateSumZ) > 360.0f) rateSumZ = degToRad(0.0f);
-        if(radToDeg(rateSumZ) < 0.0f) rateSumZ = degToRad(360.0f);
+    
+    y = gyro.rotationRate.y;
+    dgChange = radToDeg((0.5f * (y+lastUpdate.y))*motionInterval);
+    lastUpdate.y = y;
+    newDg = lastDg.y + dgChange;
+    if(fabs(newDg) > 360.0f) {
+        if(newDg < 0.0f) lastDg.y = newDg+360.0f; else lastDg.y = newDg - 360.0f;
+    } else {
+        lastDg.y = newDg;
     }
-    //cPitch = rateSumX; //cRoll = rateSumZ;
-    //cPitch = degToRad(360.0f-45.0f);
-    //NSLog(@"pitch: %f roll: %f",radToDeg(cPitch),radToDeg(cRoll));
+    
+    z = gyro.rotationRate.z;
+    dgChange = radToDeg((0.5f * (z+lastUpdate.z))*motionInterval);
+    lastUpdate.z = z;
+    newDg = lastDg.z + dgChange;
+    if(fabs(newDg) > 360.0f) {
+        if(newDg < 0.0f) lastDg.z = newDg+360.0f; else lastDg.z = newDg - 360.0f;
+    } else {
+        lastDg.z = newDg;
+    }
+    NSLog(@"gXang: %.2f gYang: %.2f gZang: %.2f",lastDg.x, lastDg.y, lastDg.z);
 }
 
 -(void)outputAccelerationData:(CMAccelerometerData*) acceleration {
@@ -318,23 +349,24 @@ bool pInited = false;
 }
 
 -(void)outputMotionData:(CMDeviceMotion*) motion {
-    //    CMQuaternion quat = motion.attitude.quaternion;
+    CMQuaternion quat = motion.attitude.quaternion;
+    //      CGFloat roll  = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
+    //      CGFloat pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z);
+    //      CGFloat yaw   =  asin(2*(quat.x*quat.y + quat.w*quat.z));
     
-    //    CGFloat roll  = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
-    //    CGFloat pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z);
-    //    CGFloat yaw   =  asin(2*(quat.x*quat.y + quat.w*quat.z));
-    
-    //    CGFloat pitch = atan2(2*(quat.y*quat.z + quat.w*quat.x), quat.w*quat.w - quat.x*quat.x - quat.y*quat.y + quat.z*quat.z);
-    //    CGFloat yaw = asin(-2*(quat.x*quat.z - quat.w*quat.y));
-    //    CGFloat roll = atan2(2*(quat.x*quat.y + quat.w*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
-    //
-    //
-    //    if(pitch<0.0f) pitch = degToRad(360.0f) + pitch;
-    //    if(roll<0.0f) roll = degToRad(360.0f) + roll;
-    //    if(yaw<0.0f) yaw = degToRad(360.0f) + yaw;
+    CGFloat pitch = atan2(2*(quat.y*quat.z + quat.w*quat.x), quat.w*quat.w - quat.x*quat.x - quat.y*quat.y + quat.z*quat.z);
+    CGFloat yaw = asin(-2*(quat.x*quat.z - quat.w*quat.y));
+    CGFloat roll = atan2(2*(quat.x*quat.y + quat.w*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
     
     
-    apStr = [NSString stringWithFormat:@"Attitude pitch: %.2f yaw: %.2f roll: %.2f",motion.attitude.pitch, motion.attitude.yaw, motion.attitude.roll];
+    if(pitch<0.0f) pitch = degToRad(360.0f) + pitch;
+    if(roll<0.0f) roll = degToRad(360.0f) + roll;
+    if(yaw<0.0f) yaw = degToRad(360.0f) + yaw;
+    
+    
+    //cYaw = -roll;
+    
+    apStr = [NSString stringWithFormat:@"Attitude pitch: %.2f yaw: %.2f roll: %.2f",radToDeg(motion.attitude.pitch), radToDeg(motion.attitude.yaw), radToDeg(motion.attitude.roll)];
     arStr = [NSString stringWithFormat:@"Attitude rot rate x: %.2f y: %.2f z: %.2f",motion.rotationRate.x, motion.rotationRate.y, motion.rotationRate.z];
     acStr = [NSString stringWithFormat:@"Attitude acceleration x: %.2f y: %.2f z: %.2f",motion.userAcceleration.x, motion.userAcceleration.y, motion.userAcceleration.z];
     
@@ -387,7 +419,7 @@ bool pInited = false;
                                                           
                                                           pLat = (tmpPinLoc.coordinate.latitude - currentLocation.coordinate.latitude)*100000;
                                                           pLng = (tmpPinLoc.coordinate.longitude - currentLocation.coordinate.longitude)*100000;
-      
+                                                          
                                                           [constTextList addObject:jsonArray[cnt][@"title"]];
                                                           pinList[cnt].id = cnt;
                                                           pinList[cnt].position = {-pLat, 0.0f, pLng};
