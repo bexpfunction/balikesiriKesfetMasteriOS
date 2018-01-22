@@ -41,6 +41,7 @@ typedef struct
     void ( *InitCamera        )(float fieldOfView, float nearClip, float farClip, float smoothStep, bool enableSmooth);
     void ( *SetCameraPosition        )( float x, float y, float z);
     void ( *SetWorldScale   )( float scale);
+	void ( *SetCameraSize	    )( float width, float height);
     void ( *Exit            )();
     pinData *( *GetSelectedPin )();
     //void ( *Accelerometer   )( float x, float y, float z );
