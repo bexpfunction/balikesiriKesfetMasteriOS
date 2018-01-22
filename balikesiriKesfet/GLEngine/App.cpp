@@ -51,6 +51,7 @@ TEMPLATEAPP templateApp = {
         AppInitCamera,
         AppSetCameraPosition,
         AppSetWorldScale,
+        AppSetCameraSize,
         AppExit,
         *AppGetSelectedPin
 };
@@ -199,6 +200,12 @@ void AppBindCameraTexture(int texIdY,int texIdUV){
     cameraTextureIdUV = texIdUV;
 }
 
+vec2 videoCamSize;
+void AppSetCameraSize(float width,float height){
+    videoCamSize.x = width;
+    videoCamSize.y = height;
+}
+
 static void checkGlError(const char* op) {
     for (GLint error = glGetError(); error; error = glGetError()) {
         LOGI("after %s() glError (0x%x)\n", op, error);
@@ -310,16 +317,20 @@ void logSpecifications(){
 }
 
 void initVideoCam(){
-    cameraProgram = PROGRAM_create((char *)"videoCamProgram",(char *)"cameraVertex.glsl",(char *)"cameraFragment.glsl",1,DEBUG_SHADER,NULL,NULL);
-    
-    float camYRatio = 1677.0f/1920.0f;
+    cameraProgram = PROGRAM_create((char *)"default",(char *)"shaders/cameraVertex.glsl",(char *)"shaders/cameraFragment.glsl",1,DEBUG_SHADER,NULL,NULL);
+
+    float camRatio = videoCamSize.y/videoCamSize.x;
+    float screenRatio = screenSize.y/screenSize.x;
+
+    //float camYRatio = screenSize.y/videoCamSize.y;
+    float camYRatio = screenRatio/camRatio;
     float camOffSet = (1.0f - camYRatio)*0.5f;
-    
+
     GLfloat camUvs[] = {
-        camOffSet,1,    camOffSet,0,
-        camYRatio+camOffSet,1,    camYRatio+camOffSet,0
+            camOffSet,1,    camOffSet,0,
+            camYRatio+camOffSet,1,    camYRatio+camOffSet,0
     };
-    
+
     gCamUvs = (GLfloat *)malloc(sizeof(GLfloat)*8);
     memcpy(gCamUvs,camUvs,sizeof(GLfloat)*8);
 }

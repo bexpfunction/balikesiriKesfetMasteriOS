@@ -269,6 +269,15 @@ unsigned char FONT_loadFreeType( FONT			*font,
         cache = (const char *)"İı ";
 
         ftgl::texture_font_load_glyphs( font->ftFont, cache );
+        
+        cache = (const char *)"âê ";
+        ftgl::texture_font_load_glyphs( font->ftFont, cache );
+        
+        cache = (const char *)"ûô ";
+        ftgl::texture_font_load_glyphs( font->ftFont, cache );
+        
+        cache = (const char *)"î ";
+        ftgl::texture_font_load_glyphs( font->ftFont, cache );
 
         //char ch = 148;
 
