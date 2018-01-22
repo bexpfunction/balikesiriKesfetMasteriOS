@@ -47,7 +47,6 @@ int pinCount = 0;
 char* tmpString=NULL;
 float motionLastYaw=0.0f;
 NSMutableArray *constTextList;
-
 @implementation agGL {
     
 #pragma mark - AVFoundation Variables
@@ -72,7 +71,6 @@ NSMutableArray *constTextList;
     self.revealViewController.delegate = self;
     [self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
-    
     
     glInitialized = false;
     checkFrameBuffer = false;
@@ -105,11 +103,6 @@ NSMutableArray *constTextList;
     self.motionManager.accelerometerUpdateInterval = 1.0f/30.0f;
     self.motionManager.gyroUpdateInterval = 1.0f/30.0f;
     
-    //    [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue]
-    //                                            withHandler:^(CMDeviceMotion* motion, NSError *error) {
-    //                                                [self outputMotionData:motion];
-    //                                            }];
-    
     
     [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical
                                                             toQueue:[NSOperationQueue currentQueue]
@@ -119,6 +112,7 @@ NSMutableArray *constTextList;
                                     withHandler:^(CMGyroData* gyro, NSError *error) {
                                         [self outputGyroData:gyro];
                                     }];
+    
     
     [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData* acceleration, NSError *error) {
         [self outputAccelerationData:acceleration];
@@ -226,6 +220,7 @@ bool pInited = false;
     self.locationManager.delegate = self;
     self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     
+    self.locationManager.headingFilter = kCLHeadingFilterNone;
     [self.locationManager startUpdatingLocation];
     [self.locationManager startUpdatingHeading];
     NSLog(@"Update location started...",nil);
@@ -309,7 +304,8 @@ holder lastUpdate;
 holder lastDg;
 -(void)outputGyroData:(CMGyroData*) gyro {
     double dgChange, newDg, x, y, z, motionInterval;
-    motionInterval = 1.0f/60.0f;
+    motionInterval = 1.0f/30.0f;
+    
     
     x = gyro.rotationRate.x;
     dgChange = radToDeg((0.5f * (x+lastUpdate.x))*motionInterval);
@@ -340,16 +336,26 @@ holder lastDg;
     } else {
         lastDg.z = newDg;
     }
-    NSLog(@"gXang: %.2f gYang: %.2f gZang: %.2f",lastDg.x, lastDg.y, lastDg.z);
+    //NSLog(@"gXang: %.2f gYang: %.2f gZang: %.2f",lastDg.x, lastDg.y, lastDg.z);
+    gyroStr = [NSString stringWithFormat:@"Gyro gXang: %.2f gYang: %.2f gZang: %.2f",lastDg.x, lastDg.y, lastDg.z];
+    cYaw = degToRad(-lastDg.y); cPitch = degToRad(-lastDg.x); cRoll = degToRad(lastDg.z);
 }
 
 -(void)outputAccelerationData:(CMAccelerometerData*) acceleration {
     accStr = [NSString stringWithFormat:@"Raw Acceleration x: %.2f y: %.2f z: %.2f",acceleration.acceleration.x, acceleration.acceleration.y, acceleration.acceleration.z];
     
+    
 }
 
+struct dOrientation {
+    float x = 0.0f;
+    float y = 0.0f;
+    float z = 0.0f;
+};
+dOrientation angles;
 -(void)outputMotionData:(CMDeviceMotion*) motion {
     CMQuaternion quat = motion.attitude.quaternion;
+    
     //      CGFloat roll  = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
     //      CGFloat pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z);
     //      CGFloat yaw   =  asin(2*(quat.x*quat.y + quat.w*quat.z));
@@ -369,8 +375,7 @@ holder lastDg;
     apStr = [NSString stringWithFormat:@"Attitude pitch: %.2f yaw: %.2f roll: %.2f",radToDeg(motion.attitude.pitch), radToDeg(motion.attitude.yaw), radToDeg(motion.attitude.roll)];
     arStr = [NSString stringWithFormat:@"Attitude rot rate x: %.2f y: %.2f z: %.2f",motion.rotationRate.x, motion.rotationRate.y, motion.rotationRate.z];
     acStr = [NSString stringWithFormat:@"Attitude acceleration x: %.2f y: %.2f z: %.2f",motion.userAcceleration.x, motion.userAcceleration.y, motion.userAcceleration.z];
-    
-    
+
 }
 
 #pragma mark UpdatePins
@@ -446,10 +451,6 @@ holder lastDg;
                                           }
                                       }];
     [dataTask resume];
-}
-
--(void) fetchPins {
-    
 }
 
 -(void) startCameraPreview {
