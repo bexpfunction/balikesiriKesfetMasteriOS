@@ -25,29 +25,29 @@
 
 @end
 
-//AllGlobals
+//AllGlobals and definitions
 #pragma mark - Custom macros
 #define radToDeg(x) (180.0f/M_PI)*x
 #define degToRad(x) (M_PI/180.0f)*x
 #define kFilteringFactor 0.1
+#define sensorUpdateRate (1.0f/30.0f)
 
 #pragma mark - Global Bools
-bool checkFrameBuffer, drawTest, drawApp, glInitialized, iAvailable, locationInited, drawAppCalled;
+bool checkFrameBuffer, drawTest, drawApp, glInitialized, iAvailable, locationInited, drawAppCalled, pinInfoViewOpened = false;
 #pragma mark - Global floats
-float cPitch, cYaw, cRoll, initYaw, heading;
-float rateSumX, rateSumY, rateSumZ;
+float cPitch, cYaw, cRoll, initYaw, heading, motionLastYaw=0.0f;
 #pragma mark - Global Strings
-NSString *curLat, *curLng, *gyroStr, *accStr, *acStr, *apStr, *arStr;
+NSString *curLat, *curLng;
 #pragma mark - Global Location
 CLLocation *currentLocation;
-//static pinData *pinList=NULL;
+#pragma mark - Global pinList
 static pinData* pinList = NULL;
-#pragma mark - Globals
+#pragma mark - Globals ints
 int pinCount = 0;
-char* tmpString=NULL;
-float motionLastYaw=0.0f;
-bool pinInfoViewOpened = false;
+
 NSMutableArray *constTextList;
+NSMutableArray *constDescrpList;
+NSMutableArray *constDistanceList;
 
 @implementation agGL {
     
@@ -73,6 +73,7 @@ NSMutableArray *constTextList;
     self.revealViewController.delegate = self;
     //[self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     //[self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
+
     
     glInitialized = false;
     checkFrameBuffer = false;
@@ -80,7 +81,6 @@ NSMutableArray *constTextList;
     drawApp = true;
     iAvailable = false;
     locationInited = false;
-    rateSumX = degToRad(90.0f);  rateSumY = 0.0f; rateSumZ = 0.0f;
     
     //Setup pininfoview
     self.pinInfoBg.layer.cornerRadius = 5;
@@ -106,9 +106,9 @@ NSMutableArray *constTextList;
     
     //Start motion manager for camera orientation
     self.motionManager = [[CMMotionManager alloc] init];
-    self.motionManager.deviceMotionUpdateInterval = 1.0f/30.0f;
-    self.motionManager.accelerometerUpdateInterval = 1.0f/30.0f;
-    self.motionManager.gyroUpdateInterval = 1.0f/30.0f;
+    self.motionManager.deviceMotionUpdateInterval = sensorUpdateRate;
+    self.motionManager.accelerometerUpdateInterval = sensorUpdateRate;
+    self.motionManager.gyroUpdateInterval = sensorUpdateRate;
     
     
     [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical
@@ -124,20 +124,6 @@ NSMutableArray *constTextList;
     [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData* acceleration, NSError *error) {
         [self outputAccelerationData:acceleration];
     }];
-    
-    //Tap handler for the pinclick
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHandler:)];
-    tap.numberOfTapsRequired = 1;
-    [self.view addGestureRecognizer:tap];
-    
-    //Debug rect
-    infoLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 500, 370, 100)];
-    infoLabel.text = @"";
-    [infoLabel setBackgroundColor:[UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:1.0f]];
-    [infoLabel setFont:[UIFont boldSystemFontOfSize:14]];
-    [infoLabel setTextColor:[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:1.0f]];
-    [infoLabel setNumberOfLines:5];
-    [self.view addSubview:infoLabel];
     
 }
 
@@ -199,10 +185,12 @@ bool pInited = false;
                 templateApp.ToucheBegan(screenWidth/2.0f,screenHeight/2.0f,1);
                 templateApp.ToucheEnded(screenWidth/2.0f,screenHeight/2.0f,1);
                 
+                int selectedPinId = -1;
                 if(templateApp.GetSelectedPin() != NULL) {
                     for(int i=0; i<pinCount; i++) {
                         if(&pinList[i] == templateApp.GetSelectedPin()) {
                             pinList[i].borderColor = {1.0f, 0.0f, 0.0f};
+                            selectedPinId = pinList[i].id;
                         }
                         else {
                             pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
@@ -210,9 +198,14 @@ bool pInited = false;
                     }
                     
                     //Bring pininfo view
+                    if(selectedPinId >= 0) {
+                        self.pinInfoTitle.text = constDescrpList[selectedPinId];
+                        self.pinInfoDistance.text = constDistanceList[selectedPinId];
+                    }
                     if(pinInfoViewOpened == false)
                         [self pinInfoViewIn];
                 } else {
+                    selectedPinId = -1;
                     for(int i=0; i<pinCount; i++) {
                         pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
                     }
@@ -244,11 +237,7 @@ bool pInited = false;
 }
 
 -(void)update {
-    infoLabel.text = [NSString stringWithFormat:@"%@\n%@\n%@\n%@\n%@",gyroStr,accStr,acStr,apStr,arStr];
-    //NSLog(@"Capture session running: %d",captureSession.running);
-    //    [infoLabel setNumberOfLines:0]
-    //    [infoLabel sizeToFit];
-    
+
 }
 
 //Location Manager delegates
@@ -298,10 +287,10 @@ bool pInited = false;
     }
 }
 
-- (void) tapHandler:(id)sender
-{
-    
-}
+//- (void) tapHandler:(id)sender
+//{
+//
+//}
 
 - (void) locationManager:(CLLocationManager *)manager
         didUpdateHeading:(CLHeading *)newHeading {
@@ -319,7 +308,7 @@ holder lastUpdate;
 holder lastDg;
 -(void)outputGyroData:(CMGyroData*) gyro {
     double dgChange, newDg, x, y, z, motionInterval;
-    motionInterval = 1.0f/30.0f;
+    motionInterval = sensorUpdateRate;
     
     
     x = gyro.rotationRate.x;
@@ -352,12 +341,10 @@ holder lastDg;
         lastDg.z = newDg;
     }
     //NSLog(@"gXang: %.2f gYang: %.2f gZang: %.2f",lastDg.x, lastDg.y, lastDg.z);
-    gyroStr = [NSString stringWithFormat:@"Gyro gXang: %.2f gYang: %.2f gZang: %.2f",lastDg.x, lastDg.y, lastDg.z];
     cYaw = degToRad(-lastDg.y); cPitch = degToRad(-lastDg.x); cRoll = degToRad(lastDg.z);
 }
 
 -(void)outputAccelerationData:(CMAccelerometerData*) acceleration {
-    accStr = [NSString stringWithFormat:@"Raw Acceleration x: %.2f y: %.2f z: %.2f",acceleration.acceleration.x, acceleration.acceleration.y, acceleration.acceleration.z];
     
     
 }
@@ -386,10 +373,6 @@ dOrientation angles;
     
     
     //cYaw = -roll;
-    
-    apStr = [NSString stringWithFormat:@"Attitude pitch: %.2f yaw: %.2f roll: %.2f",radToDeg(motion.attitude.pitch), radToDeg(motion.attitude.yaw), radToDeg(motion.attitude.roll)];
-    arStr = [NSString stringWithFormat:@"Attitude rot rate x: %.2f y: %.2f z: %.2f",motion.rotationRate.x, motion.rotationRate.y, motion.rotationRate.z];
-    acStr = [NSString stringWithFormat:@"Attitude acceleration x: %.2f y: %.2f z: %.2f",motion.userAcceleration.x, motion.userAcceleration.y, motion.userAcceleration.z];
 
 }
 
@@ -430,17 +413,31 @@ dOrientation angles;
                                                       pinCount = (int)jsonArray.count;
                                                       pinList = NULL;
                                                       pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
-                                                      constTextList = [[NSMutableArray alloc]init];
+                                                      
+                                                      //Fill const arrays
+                                                      constTextList     = [[NSMutableArray alloc]init];
+                                                      constDistanceList = [[NSMutableArray alloc]init];
+                                                      constDescrpList   = [[NSMutableArray alloc]init];
+                                                      
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
-                                                          
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
                                                           float pLng = [(jsonArray[cnt][@"lng"]) floatValue];
+
                                                           CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
                                                           
                                                           pLat = (tmpPinLoc.coordinate.latitude - currentLocation.coordinate.latitude)*100000;
                                                           pLng = (tmpPinLoc.coordinate.longitude - currentLocation.coordinate.longitude)*100000;
                                                           
                                                           [constTextList addObject:jsonArray[cnt][@"title"]];
+                                                          NSString* tmpDesc = jsonArray[cnt][@"description"];
+                                                          NSLog(@"tmpdesc %@",tmpDesc);
+                                                          if(tmpDesc == [NSNull null]) {
+                                                              tmpDesc = @" ";
+                                                          }
+                                                          [constDescrpList addObject:tmpDesc];
+                                                          float dist = [currentLocation distanceFromLocation:tmpPinLoc];
+                                                          [constDistanceList addObject:[NSString stringWithFormat:@"%.2f KM",dist/1000.0f]];
+                                                          
                                                           pinList[cnt].id = cnt;
                                                           pinList[cnt].position = {-pLat, 0.0f, pLng};
                                                           pinList[cnt].text = (char*)[constTextList[cnt] cStringUsingEncoding:NSUTF8StringEncoding];
@@ -605,11 +602,13 @@ dOrientation angles;
     [self stopCaptureLocation];
     templateApp.Exit();
     //Dealloc
+    drawApp = false;
+    pinList = NULL;
     free(pinList);
     pinCount = 0;
 }
 
-//SWRevealController Delegate
+#pragma mark SWRevealControllerDelegate
 - (void)revealController:(SWRevealViewController *)revealController didMoveToPosition:(FrontViewPosition)position {
     long tagId = 4207868622;
     if(position == FrontViewPositionLeft) {
@@ -628,22 +627,17 @@ dOrientation angles;
                                  UIViewAutoresizingFlexibleHeight);
         [lock setAlpha:0.333];
         [lock setBackgroundColor:[UIColor blackColor]];
-        UITapGestureRecognizer* tapGst = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
-        [lock addGestureRecognizer:tapGst];
         [UIView animateWithDuration:0.5 animations:^{
             lock.alpha = 0.333;
         }];
     }
-}
--(void) tapGesture: (id)sender {
-    [self.revealViewController revealToggle:sender];
 }
 
 #pragma mark POPUPS
 -(void) pinInfoViewIn{
     pinInfoViewOpened = true;
     [self.view addSubview:self.pinInfoView];
-    self.pinInfoView.center = self.view.center;
+    [self.pinInfoView setCenter:CGPointMake(self.view.center.x, self.view.bounds.size.height-self.pinInfoView.bounds.size.height)];
     self.pinInfoView.alpha = 0.0f;
     
     [UIView animateWithDuration:0.4f animations:^{
@@ -659,6 +653,10 @@ dOrientation angles;
         pinInfoViewOpened = false;
     }];
 }
+
+
+#pragma mark CollectionView for gallery
+
 
 // Checks if we have an internet connection or not
 - (void)testInternetConnection

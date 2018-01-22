@@ -15,9 +15,6 @@
 #import "EngineBase.h"
 #import "Logger.h"
 
-
-UILabel *infoLabel;
-
 @interface agGL : GLKViewController <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate> {
     
 }
