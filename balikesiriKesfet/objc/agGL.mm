@@ -69,8 +69,8 @@ NSMutableArray *constTextList;
     self.revealViewController.rearViewRevealWidth = 190;
     self.revealViewController.rearViewRevealOverdraw = 200;
     self.revealViewController.delegate = self;
-    [self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-    [self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
+    //[self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    //[self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
     
     glInitialized = false;
     checkFrameBuffer = false;
@@ -184,6 +184,35 @@ bool pInited = false;
         templateApp.SetCameraRotation(cPitch, cYaw, cRoll);
         if(pInited) {
             if(pinCount>0 && pinList != NULL){
+                
+                //Check for pin on crosshair
+                CGRect screenRect = [[UIScreen mainScreen] bounds];
+                CGFloat screenWidth = screenRect.size.width ;
+                CGFloat screenHeight = screenRect.size.height;
+                templateApp.ToucheBegan(screenWidth/2.0f,screenHeight/2.0f,1);
+                templateApp.ToucheEnded(screenWidth/2.0f,screenHeight/2.0f,1);
+                
+                if(templateApp.GetSelectedPin() != NULL) {
+                    for(int i=0; i<pinCount; i++) {
+                        if(&pinList[i] == templateApp.GetSelectedPin()) {
+                            pinList[i].borderColor = {1.0f, 0.0f, 0.0f};
+                        }
+                        else {
+                            pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
+                        }
+                    }
+                    
+                    [self.view addSubview:self.annotationPopup];
+                    self.annotationPopup.center = self.view.center;
+                    
+                } else {
+                    for(int i=0; i<pinCount; i++) {
+                        pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
+                    }
+                    [self.annotationPopup removeFromSuperview];
+                }
+                
+                //Update text pointers
                 for(int i=0; i<pinCount; i++){
                     pinList[i].text = (char*)[constTextList[i] cStringUsingEncoding:NSUTF8StringEncoding];
                     //LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
@@ -262,30 +291,7 @@ bool pInited = false;
 
 - (void) tapHandler:(id)sender
 {
-    CGPoint location = [sender locationInView:self.view];
-    CGFloat x = location.x;
-    CGFloat y = location.y;
     
-    
-    if(glInitialized && pinCount > 0) {
-        templateApp.ToucheBegan(x,y,1);
-        templateApp.ToucheEnded(x,y,1);
-        
-        if(templateApp.GetSelectedPin() != NULL) {
-            LOGI("\n\ntmp text: %s\n\n",templateApp.GetSelectedPin()->text);
-            for(int i=0; i<pinCount; i++) {
-                if(&pinList[i] == templateApp.GetSelectedPin()) {
-                    pinList[i].borderColor = {1.0f, 0.0f, 0.0f};
-                }
-                else {
-                    pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
-                }
-                LOGI("pin[%d] reset, text: %s colB: %f\n",i, pinList[i].text, pinList[i].borderColor.y);
-            }
-            //templateApp.SetPinDatas(pinList, pinCount, 1.0f);
-        }
-        //free(templateApp.GetSelectedPin());
-    }
 }
 
 - (void) locationManager:(CLLocationManager *)manager
@@ -452,6 +458,8 @@ dOrientation angles;
                                       }];
     [dataTask resume];
 }
+
+
 
 -(void) startCameraPreview {
     //-- Create CVOpenGLESTextureCacheRef for optimal CVImageBufferRef to GLES texture conversion.

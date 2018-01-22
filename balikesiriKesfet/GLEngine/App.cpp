@@ -103,7 +103,7 @@ int cameraTextureIdUV;
 void AppToucheBegan( float x, float y, unsigned int tap_count )
 {
     App::selectedPin = NULL;
-    LOGI("templateAppToucheBegan,touche: %f,%ftap: %d\n", x, y, tap_count );
+    //LOGI("templateAppToucheBegan,touche: %f,%ftap: %d\n", x, y, tap_count );
     touchBegan = true;
     touchPos.x = x;
     touchPos.y = y;
@@ -121,7 +121,7 @@ void AppToucheBegan( float x, float y, unsigned int tap_count )
             break;
         }
     }
-    LOGI("\nAll pin casts have been checked!\n");
+    //LOGI("\nAll pin casts have been checked!\n");
 }
 
 pinData* AppGetSelectedPin(){
@@ -136,8 +136,8 @@ void AppToucheMoved( float x, float y, unsigned int tap_count )
 
 void AppToucheEnded( float x, float y, unsigned int tap_count )
 {
-    LOGI("\nPin hit true!!!\npinText: %s\n",App::pinDatas[0].text);
-    LOGI("templateAppToucheEnded,touche: %f,%ftap: %d\n", x, y, tap_count );
+    //LOGI("\nPin hit true!!!\npinText: %s\n",App::pinDatas[0].text);
+    //LOGI("templateAppToucheEnded,touche: %f,%ftap: %d\n", x, y, tap_count );
     touchBegan = false;
 }
 

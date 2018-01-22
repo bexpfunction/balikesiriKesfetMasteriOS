@@ -485,7 +485,7 @@ Gerçeklik</string>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TYG-Mn-6LK">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="354" height="167"/>
+                                                                    <rect key="frame" x="0.0" y="0.5" width="354" height="166"/>
                                                                 </imageView>
                                                             </subviews>
                                                         </view>
@@ -1077,12 +1077,123 @@ Title</string>
                         <barButtonItem key="leftBarButtonItem" image="reveal-icon" style="plain" id="sze-g0-o2v"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="annotationExitBut" destination="hGV-bc-EoM" id="RGa-VS-cpY"/>
+                        <outlet property="annotationPopup" destination="oID-RF-w95" id="2bh-xl-Pw7"/>
+                        <outlet property="galleryColView" destination="Z35-aD-mUo" id="LSa-b0-ogN"/>
                         <outlet property="openMenuBut" destination="sze-g0-o2v" id="O1m-pk-2uI"/>
+                        <outlet property="pinInfo" destination="mEX-hL-bZD" id="qKn-3O-cHH"/>
+                        <outlet property="pinTitle" destination="hO9-tq-0uq" id="2wO-JA-oEI"/>
                     </connections>
                 </glkViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1l7-DJ-sK7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="oID-RF-w95" userLabel="annotationPopup">
+                    <rect key="frame" x="0.0" y="0.0" width="340" height="518"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="s6U-iX-IRK" userLabel="pinDetailsSV">
+                            <rect key="frame" x="5" y="9" width="330" height="462"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hO9-tq-0uq">
+                                    <rect key="frame" x="9" y="8" width="312" height="25"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="25" id="ecD-zY-fmM"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <collectionView opaque="NO" clipsSubviews="YES" contentMode="center" directionalLockEnabled="YES" pagingEnabled="YES" showsVerticalScrollIndicator="NO" indicatorStyle="white" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Z35-aD-mUo" userLabel="Gallery Col View">
+                                    <rect key="frame" x="8" y="46" width="313" height="181"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="181" id="rwh-Ux-nBT"/>
+                                    </constraints>
+                                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="kJR-Fy-vPC">
+                                        <size key="itemSize" width="315" height="171"/>
+                                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    </collectionViewFlowLayout>
+                                    <cells>
+                                        <collectionViewCell opaque="NO" clipsSubviews="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="pinPicCell" id="KMO-UU-Nie" customClass="pinPicCell" customModule="balikesiriKesfet" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="5" width="315" height="171"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                                <rect key="frame" x="0.0" y="0.0" width="315" height="171"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <subviews>
+                                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="3R6-ad-QtC" userLabel="DetailPic">
+                                                        <rect key="frame" x="0.0" y="0.0" width="315" height="171"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="3R6-ad-QtC" secondAttribute="height" multiplier="35:19" id="C9W-ZR-JKo"/>
+                                                        </constraints>
+                                                    </imageView>
+                                                </subviews>
+                                            </view>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="3R6-ad-QtC" secondAttribute="trailing" id="FEt-5K-hzu"/>
+                                                <constraint firstAttribute="bottom" secondItem="3R6-ad-QtC" secondAttribute="bottom" id="Tdp-NR-bif"/>
+                                                <constraint firstItem="3R6-ad-QtC" firstAttribute="centerX" secondItem="KMO-UU-Nie" secondAttribute="centerX" id="ZM4-dc-G0f"/>
+                                                <constraint firstItem="3R6-ad-QtC" firstAttribute="top" secondItem="KMO-UU-Nie" secondAttribute="top" id="oMh-SB-qP1"/>
+                                                <constraint firstItem="3R6-ad-QtC" firstAttribute="centerY" secondItem="KMO-UU-Nie" secondAttribute="centerY" id="oYG-DR-leM"/>
+                                                <constraint firstItem="3R6-ad-QtC" firstAttribute="leading" secondItem="KMO-UU-Nie" secondAttribute="leading" id="ypX-rW-TF8"/>
+                                            </constraints>
+                                            <connections>
+                                                <outlet property="detailPic" destination="3R6-ad-QtC" id="g7o-bg-tp5"/>
+                                            </connections>
+                                        </collectionViewCell>
+                                    </cells>
+                                </collectionView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mEX-hL-bZD" userLabel="pinInfo">
+                                    <rect key="frame" x="9" y="38" width="312" height="0.0"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="312" id="mvy-tR-SO6"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="highlightedColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="mEX-hL-bZD" firstAttribute="centerX" secondItem="Z35-aD-mUo" secondAttribute="centerX" id="5z6-lr-kh0"/>
+                                <constraint firstItem="Z35-aD-mUo" firstAttribute="top" secondItem="mEX-hL-bZD" secondAttribute="bottom" constant="8" symbolic="YES" id="7pH-gv-FeG"/>
+                                <constraint firstItem="hO9-tq-0uq" firstAttribute="leading" relation="lessThanOrEqual" secondItem="mEX-hL-bZD" secondAttribute="leading" id="8Qv-tw-LTJ"/>
+                                <constraint firstItem="Z35-aD-mUo" firstAttribute="leading" secondItem="s6U-iX-IRK" secondAttribute="leadingMargin" id="8Tq-MQ-CMD"/>
+                                <constraint firstItem="hO9-tq-0uq" firstAttribute="trailing" secondItem="mEX-hL-bZD" secondAttribute="trailing" id="NIe-Dn-drw"/>
+                                <constraint firstItem="hO9-tq-0uq" firstAttribute="trailing" secondItem="s6U-iX-IRK" secondAttribute="trailingMargin" id="UYP-wL-rf6"/>
+                                <constraint firstAttribute="bottom" secondItem="Z35-aD-mUo" secondAttribute="bottom" constant="8" id="arS-4J-ufV"/>
+                                <constraint firstItem="hO9-tq-0uq" firstAttribute="top" secondItem="s6U-iX-IRK" secondAttribute="top" constant="8" id="dkF-CO-tAs"/>
+                                <constraint firstItem="hO9-tq-0uq" firstAttribute="centerX" secondItem="s6U-iX-IRK" secondAttribute="centerX" id="gjG-zz-0d1"/>
+                                <constraint firstItem="mEX-hL-bZD" firstAttribute="top" secondItem="hO9-tq-0uq" secondAttribute="bottom" constant="5" id="iJq-VS-dcx"/>
+                                <constraint firstItem="mEX-hL-bZD" firstAttribute="trailing" secondItem="Z35-aD-mUo" secondAttribute="trailing" id="oOM-E9-bCE"/>
+                            </constraints>
+                        </scrollView>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hGV-bc-EoM">
+                            <rect key="frame" x="147.5" y="479" width="45" height="30"/>
+                            <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="45" id="rBP-Yp-ykU"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                            <state key="normal" title="Çıkış">
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="dismissAnnPopup:" destination="7pK-FQ-N5F" eventType="touchUpInside" id="ZWZ-Fj-cWw"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstItem="s6U-iX-IRK" firstAttribute="leading" secondItem="oID-RF-w95" secondAttribute="leading" constant="5" id="A67-Xu-oEZ"/>
+                        <constraint firstItem="s6U-iX-IRK" firstAttribute="top" secondItem="oID-RF-w95" secondAttribute="top" constant="9" id="EMs-Lw-Qik"/>
+                        <constraint firstItem="s6U-iX-IRK" firstAttribute="centerX" secondItem="hGV-bc-EoM" secondAttribute="centerX" id="I1i-dI-z5Q"/>
+                        <constraint firstItem="hGV-bc-EoM" firstAttribute="top" secondItem="s6U-iX-IRK" secondAttribute="bottom" constant="8" symbolic="YES" id="LJm-FC-Ryk"/>
+                        <constraint firstAttribute="bottom" secondItem="hGV-bc-EoM" secondAttribute="bottom" constant="9" id="RrZ-oh-vqy"/>
+                        <constraint firstItem="s6U-iX-IRK" firstAttribute="centerX" secondItem="oID-RF-w95" secondAttribute="centerX" id="VFW-Nm-apB"/>
+                    </constraints>
+                </view>
             </objects>
-            <point key="canvasLocation" x="-2004" y="1851"/>
+            <point key="canvasLocation" x="-2030" y="2548"/>
         </scene>
         <!--Duyurular-->
         <scene sceneID="kFP-dP-0cV">
@@ -1756,7 +1867,7 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1gs-tG-RyR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2690" y="1851"/>
+            <point key="canvasLocation" x="-2716" y="2548"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="FMp-Hg-Rn8">

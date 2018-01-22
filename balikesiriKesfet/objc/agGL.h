@@ -24,6 +24,11 @@ UILabel *infoLabel;
 @property (strong, nonatomic) CMMotionManager *motionManager;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *openMenuBut;
+@property (weak, nonatomic) IBOutlet UILabel *pinTitle;
+@property (weak, nonatomic) IBOutlet UICollectionView *galleryColView;
+@property (weak, nonatomic) IBOutlet UILabel *pinInfo;
+@property (strong, nonatomic) IBOutlet UIView *annotationPopup;
+@property (weak, nonatomic) IBOutlet UIButton *annotationExitBut;
 
 - (void)startCaptureLocation;
 - (void)stopCaptureLocation;
