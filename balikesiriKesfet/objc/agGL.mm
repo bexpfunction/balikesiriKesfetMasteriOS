@@ -46,7 +46,9 @@ static pinData* pinList = NULL;
 int pinCount = 0;
 char* tmpString=NULL;
 float motionLastYaw=0.0f;
+bool pinInfoViewOpened = false;
 NSMutableArray *constTextList;
+
 @implementation agGL {
     
 #pragma mark - AVFoundation Variables
@@ -79,6 +81,11 @@ NSMutableArray *constTextList;
     iAvailable = false;
     locationInited = false;
     rateSumX = degToRad(90.0f);  rateSumY = 0.0f; rateSumZ = 0.0f;
+    
+    //Setup pininfoview
+    self.pinInfoBg.layer.cornerRadius = 5;
+    self.pinInfoBg.layer.borderColor = UIColor.whiteColor.CGColor;
+    self.pinInfoBg.layer.borderWidth = 1;
     
     
     [self testInternetConnection];
@@ -202,14 +209,16 @@ bool pInited = false;
                         }
                     }
                     
-                    [self.view addSubview:self.annotationPopup];
-                    self.annotationPopup.center = self.view.center;
-                    
+                    //Bring pininfo view
+                    if(pinInfoViewOpened == false)
+                        [self pinInfoViewIn];
                 } else {
                     for(int i=0; i<pinCount; i++) {
                         pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
                     }
-                    [self.annotationPopup removeFromSuperview];
+                    //Remove pininfo view
+                    if(pinInfoViewOpened == true)
+                        [self pinInfoViewOut];
                 }
                 
                 //Update text pointers
@@ -630,6 +639,26 @@ dOrientation angles;
     [self.revealViewController revealToggle:sender];
 }
 
+#pragma mark POPUPS
+-(void) pinInfoViewIn{
+    pinInfoViewOpened = true;
+    [self.view addSubview:self.pinInfoView];
+    self.pinInfoView.center = self.view.center;
+    self.pinInfoView.alpha = 0.0f;
+    
+    [UIView animateWithDuration:0.4f animations:^{
+        self.pinInfoView.alpha = 1.0f;
+    }];
+}
+-(void) pinInfoViewOut{
+    self.pinInfoView.alpha = 1.0f;
+    [UIView animateWithDuration:0.3f animations:^{
+        self.pinInfoView.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        [self.pinInfoView removeFromSuperview];
+        pinInfoViewOpened = false;
+    }];
+}
 
 // Checks if we have an internet connection or not
 - (void)testInternetConnection

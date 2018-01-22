@@ -29,6 +29,11 @@ UILabel *infoLabel;
 @property (weak, nonatomic) IBOutlet UILabel *pinInfo;
 @property (strong, nonatomic) IBOutlet UIView *annotationPopup;
 @property (weak, nonatomic) IBOutlet UIButton *annotationExitBut;
+@property (strong, nonatomic) IBOutlet UIView *pinInfoView;
+@property (weak, nonatomic) IBOutlet UIView *pinInfoBg;
+@property (weak, nonatomic) IBOutlet UIButton *pinInfoDetailBut;
+@property (weak, nonatomic) IBOutlet UILabel *pinInfoDistance;
+@property (weak, nonatomic) IBOutlet UILabel *pinInfoTitle;
 
 - (void)startCaptureLocation;
 - (void)stopCaptureLocation;
