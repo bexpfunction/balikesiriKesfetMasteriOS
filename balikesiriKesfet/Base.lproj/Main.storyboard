@@ -1069,6 +1069,19 @@ Title</string>
                     <glkView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" enableSetNeedsDisplay="NO" id="XGs-l1-1Zf">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="crosshair2" translatesAutoresizingMaskIntoConstraints="NO" id="H4t-dR-NVt">
+                                <rect key="frame" x="171" y="317" width="32" height="32"/>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="H4t-dR-NVt" firstAttribute="centerY" secondItem="XGs-l1-1Zf" secondAttribute="centerY" id="Dhs-mN-MDc"/>
+                            <constraint firstItem="H4t-dR-NVt" firstAttribute="centerX" secondItem="XGs-l1-1Zf" secondAttribute="centerX" id="Hxf-16-xRQ"/>
+                            <constraint firstItem="H4t-dR-NVt" firstAttribute="top" secondItem="chc-2o-Isg" secondAttribute="bottom" constant="253" id="IYu-cB-ghG"/>
+                            <constraint firstItem="8hR-0w-L9u" firstAttribute="top" secondItem="H4t-dR-NVt" secondAttribute="bottom" constant="318" id="aNI-mb-fXB"/>
+                            <constraint firstAttribute="trailing" secondItem="H4t-dR-NVt" secondAttribute="trailing" constant="172" id="t1v-kK-orP"/>
+                            <constraint firstItem="H4t-dR-NVt" firstAttribute="leading" secondItem="XGs-l1-1Zf" secondAttribute="leading" constant="171" id="veD-gR-ALu"/>
+                        </constraints>
                         <connections>
                             <outlet property="delegate" destination="PD7-vy-1HA" id="aT9-bR-a3E"/>
                         </connections>
@@ -1079,6 +1092,7 @@ Title</string>
                     <connections>
                         <outlet property="annotationExitBut" destination="hGV-bc-EoM" id="RGa-VS-cpY"/>
                         <outlet property="annotationPopup" destination="oID-RF-w95" id="2bh-xl-Pw7"/>
+                        <outlet property="crosshairImag" destination="H4t-dR-NVt" id="R5Q-X2-cVn"/>
                         <outlet property="galleryColView" destination="Z35-aD-mUo" id="LSa-b0-ogN"/>
                         <outlet property="openMenuBut" destination="sze-g0-o2v" id="O1m-pk-2uI"/>
                         <outlet property="pinInfo" destination="mEX-hL-bZD" id="qKn-3O-cHH"/>
@@ -1234,7 +1248,7 @@ Title</string>
                     </constraints>
                 </view>
             </objects>
-            <point key="canvasLocation" x="-2030" y="2548"/>
+            <point key="canvasLocation" x="-2031.2" y="2547.9760119940033"/>
         </scene>
         <!--Duyurular-->
         <scene sceneID="kFP-dP-0cV">
@@ -2028,6 +2042,7 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
     </scenes>
     <resources>
         <image name="balikesir_bb_logo_single" width="350" height="350"/>
+        <image name="crosshair2" width="512" height="512"/>
         <image name="locat" width="40" height="40"/>
         <image name="logo192" width="192" height="192"/>
         <image name="pic_ag" width="857" height="859"/>

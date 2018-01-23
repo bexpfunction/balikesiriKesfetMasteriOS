@@ -31,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *pinInfoDetailBut;
 @property (weak, nonatomic) IBOutlet UILabel *pinInfoDistance;
 @property (weak, nonatomic) IBOutlet UILabel *pinInfoTitle;
+@property (weak, nonatomic) IBOutlet UIImageView *crosshairImag;
 
 - (void)startCaptureLocation;
 - (void)stopCaptureLocation;

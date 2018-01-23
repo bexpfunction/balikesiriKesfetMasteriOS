@@ -81,6 +81,7 @@ NSMutableArray *constDistanceList;
     drawApp = true;
     iAvailable = false;
     locationInited = false;
+    self.crosshairImag.alpha = 0.0f;
     
     //Setup pininfoview
     self.pinInfoBg.layer.cornerRadius = 5;
@@ -124,7 +125,7 @@ NSMutableArray *constDistanceList;
     [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData* acceleration, NSError *error) {
         [self outputAccelerationData:acceleration];
     }];
-    
+    self.crosshairImag.alpha = 1.0f;
 }
 
 
@@ -163,9 +164,9 @@ NSMutableArray *constDistanceList;
     CGFloat screenHeight = screenRect.size.height;
 
     //TEMPLATE APP
-    templateApp.SetCameraSize(screenWidth * UIScreen.mainScreen.scale,screenHeight * UIScreen.mainScreen.scale);
+    templateApp.SetCameraSize(1080.0f,1920.0f);
     templateApp.InitCamera(65.0f,1.0f,1000.0f,0.5f,true);
-    templateApp.Init((int)screenWidth,(int)screenHeight);
+    templateApp.Init((int)screenWidth * (int)UIScreen.mainScreen.scale,(int)screenHeight * (int)UIScreen.mainScreen.scale);
     glInitialized = true;
 }
 
@@ -182,8 +183,8 @@ bool pInited = false;
                 CGRect screenRect = [[UIScreen mainScreen] bounds];
                 CGFloat screenWidth = screenRect.size.width ;
                 CGFloat screenHeight = screenRect.size.height;
-                templateApp.ToucheBegan(screenWidth/2.0f,screenHeight/2.0f,1);
-                templateApp.ToucheEnded(screenWidth/2.0f,screenHeight/2.0f,1);
+                templateApp.ToucheBegan(screenWidth * UIScreen.mainScreen.scale / 2.0f,screenHeight * UIScreen.mainScreen.scale / 2.0f,1);
+                templateApp.ToucheEnded(screenWidth * UIScreen.mainScreen.scale / 2.0f,screenHeight * UIScreen.mainScreen.scale / 2.0f,1);
                 
                 int selectedPinId = -1;
                 if(templateApp.GetSelectedPin() != NULL) {
@@ -369,10 +370,9 @@ dOrientation angles;
     if(pitch<0.0f) pitch = degToRad(360.0f) + pitch;
     if(roll<0.0f) roll = degToRad(360.0f) + roll;
     if(yaw<0.0f) yaw = degToRad(360.0f) + yaw;
-    
-    
-    //cYaw = -roll;
 
+    //cYaw = -roll;
+    
 }
 
 #pragma mark UpdatePins
