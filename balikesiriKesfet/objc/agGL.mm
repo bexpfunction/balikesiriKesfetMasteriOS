@@ -161,9 +161,9 @@ NSMutableArray *constDistanceList;
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width ;
     CGFloat screenHeight = screenRect.size.height;
-    
-    
+
     //TEMPLATE APP
+    templateApp.SetCameraSize(screenWidth * UIScreen.mainScreen.scale,screenHeight * UIScreen.mainScreen.scale);
     templateApp.InitCamera(65.0f,1.0f,1000.0f,0.5f,true);
     templateApp.Init((int)screenWidth,(int)screenHeight);
     glInitialized = true;
@@ -309,7 +309,6 @@ holder lastDg;
 -(void)outputGyroData:(CMGyroData*) gyro {
     double dgChange, newDg, x, y, z, motionInterval;
     motionInterval = sensorUpdateRate;
-    
     
     x = gyro.rotationRate.x;
     dgChange = radToDeg((0.5f * (x+lastUpdate.x))*motionInterval);
@@ -489,6 +488,7 @@ dOrientation angles;
         NSLog(@"video device error...");
     }
     
+    
     //Add device to session
     NSError* error;
     AVCaptureInput* input = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error: &error];
@@ -498,16 +498,15 @@ dOrientation angles;
     }
     [captureSession addInput:input];
     //preview layer
-    
-    
+
     //-- Create the output for the capture session.
     AVCaptureVideoDataOutput * dataOutput = [[AVCaptureVideoDataOutput alloc] init];
     [dataOutput setAlwaysDiscardsLateVideoFrames:YES]; // Probably want to set this to NO when recording
-    
+
     //-- Set to YUV420.
     [dataOutput setVideoSettings:[NSDictionary dictionaryWithObject:[NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarFullRange]
                                                              forKey:(id)kCVPixelBufferPixelFormatTypeKey]]; // Necessary for manual preview
-    
+
     // Set dispatch to be on the main thread so OpenGL can do things with the data
     [dataOutput setSampleBufferDelegate:self queue:dispatch_get_main_queue()];
     
@@ -515,13 +514,15 @@ dOrientation angles;
     [captureSession commitConfiguration];
     
     [captureSession startRunning];
+
 }
+bool camSizeSet = false;
 //AV Outputdelegate
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-    //NSLog(@"capture output works...");
     CVImageBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
     GLsizei width = (GLsizei)CVPixelBufferGetWidth(pixelBuffer);
     GLsizei height = (GLsizei)CVPixelBufferGetHeight(pixelBuffer);
+
     
     if (!_videoTextureCache)
     {

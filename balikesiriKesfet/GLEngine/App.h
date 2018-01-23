@@ -61,6 +61,7 @@ void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset);
 void AppInitCamera(float fieldOfView, float nearClip, float farClip, float smoothStep, bool enableSmooth);
 void AppBindCameraTexture(int texIdY,int texIdUV);
 void AppSetCameraPosition(float x,float y,float z);
+void AppSetCameraSize(float width, float height);
 void AppSetWorldScale(float scale);
 pinData *AppGetSelectedPin();
 //

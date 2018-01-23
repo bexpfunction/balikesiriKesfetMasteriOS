@@ -317,7 +317,7 @@ void logSpecifications(){
 }
 
 void initVideoCam(){
-    cameraProgram = PROGRAM_create((char *)"default",(char *)"shaders/cameraVertex.glsl",(char *)"shaders/cameraFragment.glsl",1,DEBUG_SHADER,NULL,NULL);
+    cameraProgram = PROGRAM_create((char *)"default",(char *)"cameraVertex.glsl",(char *)"cameraFragment.glsl",1,DEBUG_SHADER,NULL,NULL);
 
     float camRatio = videoCamSize.y/videoCamSize.x;
     float screenRatio = screenSize.y/screenSize.x;
