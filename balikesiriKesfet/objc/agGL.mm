@@ -38,7 +38,7 @@
 #pragma mark - Global Bools
 bool checkFrameBuffer, drawTest, drawApp, glInitialized, iAvailable, locationInited, drawAppCalled, pinInfoViewOpened = false;
 #pragma mark - Global floats
-float cPitch, cYaw, cRoll, initYaw, heading, motionLastYaw=0.0f, startingHeading;
+float cPitch, cYaw, cRoll, initYaw, heading, motionLastYaw=0.0f, startingHeading, updatingHeading;
 #pragma mark - Global Strings
 NSString *curLat, *curLng;
 #pragma mark - Global Location
@@ -51,6 +51,8 @@ quat deviceQuat;
 NSMutableArray *constTextList;
 NSMutableArray *constDescrpList;
 NSMutableArray *constDistanceList;
+NSMutableArray *constPinLatList;
+NSMutableArray *constPinLngList;
 
 @implementation agGL {
     
@@ -89,7 +91,7 @@ NSMutableArray *constDistanceList;
     self.pinInfoBg.layer.cornerRadius = 5;
     self.pinInfoBg.layer.borderColor = UIColor.whiteColor.CGColor;
     self.pinInfoBg.layer.borderWidth = 1;
-
+    
     [self testInternetConnection];
 }
 
@@ -99,12 +101,12 @@ NSMutableArray *constDistanceList;
     
     initYaw = 0.0f;
     
+    //Start location manager to get current location
+    [self startCaptureLocation];
+    
     //Init engine
     [self initTemplateAppWithGL];
     [self startCameraPreview];
-    
-    //Start location manager to get current location
-    [self startCaptureLocation];
     
     //Start motion manager for camera orientation
     self.motionManager = [[CMMotionManager alloc] init];
@@ -282,19 +284,17 @@ bool pInited = false;
         [self updatePins];
         initYaw = degToRad(heading);
     }
-    if(locationInited && lDistance > 100.0f){
+    if(locationInited && lDistance > 5.0f) {
+        updateHeadingStored = false;
         curLat = [NSString stringWithFormat:@"%.8f",newLocation.coordinate.latitude];
         curLng = [NSString stringWithFormat:@"%.8f",newLocation.coordinate.longitude];
-        //[self updatePins];
         initYaw = degToRad(heading);
+        //[self updatePinPositions];
     }
 }
 
-//- (void) tapHandler:(id)sender
-//{
-//
-//}
-bool startHeadingStored=false;
+
+bool startHeadingStored=false, updateHeadingStored = false;
 - (void) locationManager:(CLLocationManager *)manager
         didUpdateHeading:(CLHeading *)newHeading {
     heading = newHeading.trueHeading; //in degrees
@@ -302,7 +302,10 @@ bool startHeadingStored=false;
         startingHeading = newHeading.trueHeading;
         startHeadingStored = true;
     }
-    NSLog(@"current heading: %f",heading);
+    if(!updateHeadingStored) {
+        updatingHeading = newHeading.trueHeading;
+    }
+    //NSLog(@"current heading: %f",heading);
 }
 
 
@@ -379,11 +382,16 @@ bool startHeadingStored=false;
                                                       constTextList     = [[NSMutableArray alloc]init];
                                                       constDistanceList = [[NSMutableArray alloc]init];
                                                       constDescrpList   = [[NSMutableArray alloc]init];
+                                                      constPinLatList   = [[NSMutableArray alloc]init];
+                                                      constPinLngList   = [[NSMutableArray alloc]init];
                                                       
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
                                                           float pLng = [(jsonArray[cnt][@"lng"]) floatValue];
-
+                                                          
+                                                          [constPinLatList addObject:jsonArray[cnt][@"lat"]];
+                                                          [constPinLngList addObject:jsonArray[cnt][@"lng"]];
+                                                          
                                                           CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
                                                           
                                                           double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
@@ -437,6 +445,32 @@ bool startHeadingStored=false;
                                           }
                                       }];
     [dataTask resume];
+}
+
+-(void) updatePinPositions {
+    if(pInited && pinCount>0) {
+        for(int i=0;i<pinCount;i++) {
+            float pLat = [constPinLatList[i] floatValue]; float pLng = [constPinLngList[i] floatValue];
+            CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
+            double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
+            float dist = [currentLocation distanceFromLocation:tmpPinLoc];
+            
+            double bearingOffset = (heading-bearing) + 90.0f;
+            if(bearingOffset<0.0f){
+                bearingOffset = 360.0f + bearingOffset;
+            }
+            if(bearingOffset>360.0f){
+                bearingOffset = bearingOffset-360.0f;
+            }
+            pLat = cos(degToRad(bearingOffset)) * dist;
+            pLng = sin(degToRad(bearingOffset)) * dist;
+            
+            pinList[i].position = {pLat, 0.0f, pLng};
+        }
+        templateApp.SetPinDatas(pinList, pinCount, 1.0f);
+        NSLog(@"pin pos updated");
+        updateHeadingStored = true;
+    }
 }
 
 -(double) getBearing:(double) lt1:(double) lg1:(double) lt2:(double) lg2 {
