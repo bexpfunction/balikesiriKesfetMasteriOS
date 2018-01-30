@@ -122,6 +122,7 @@
 		B9A1D19F1FAC97A4005929EE /* vertex.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B9A1D19E1FAC97A4005929EE /* vertex.glsl */; };
 		B9A1D1A11FAC97AC005929EE /* fragment.glsl in Resources */ = {isa = PBXBuildFile; fileRef = B9A1D1A01FAC97AC005929EE /* fragment.glsl */; };
 		B9A563501FF52C8E0048F1D1 /* CaptureSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B9A5634F1FF52C8E0048F1D1 /* CaptureSessionManager.m */; };
+		B9A599F22019CFE7007EA04E /* sensorHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = B9A599F12019CFE7007EA04E /* sensorHelper.m */; };
 		B9B21E141F584FB0003F0317 /* haberler.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B21E131F584FB0003F0317 /* haberler.swift */; };
 		B9C31D5F1F57507F0055E2CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C31D5E1F57507F0055E2CA /* AppDelegate.swift */; };
 		B9C31D611F57507F0055E2CA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9C31D601F57507F0055E2CA /* ViewController.swift */; };
@@ -315,6 +316,8 @@
 		B9A1D1A01FAC97AC005929EE /* fragment.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fragment.glsl; sourceTree = "<group>"; };
 		B9A5634E1FF52C8E0048F1D1 /* CaptureSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureSessionManager.h; sourceTree = "<group>"; };
 		B9A5634F1FF52C8E0048F1D1 /* CaptureSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureSessionManager.m; sourceTree = "<group>"; };
+		B9A599F02019CFE7007EA04E /* sensorHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sensorHelper.h; sourceTree = "<group>"; };
+		B9A599F12019CFE7007EA04E /* sensorHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = sensorHelper.m; sourceTree = "<group>"; };
 		B9B21E131F584FB0003F0317 /* haberler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = haberler.swift; sourceTree = "<group>"; };
 		B9C31D5B1F57507F0055E2CA /* balikesiriKesfet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = balikesiriKesfet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9C31D5E1F57507F0055E2CA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -473,6 +476,8 @@
 			children = (
 				B94EDB972003B391004D4655 /* SWRevealViewController.h */,
 				B94EDB962003B391004D4655 /* SWRevealViewController.m */,
+				B9A599F02019CFE7007EA04E /* sensorHelper.h */,
+				B9A599F12019CFE7007EA04E /* sensorHelper.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -1016,6 +1021,7 @@
 				B9817B541FA1E6170073DF7F /* CGPoint+Extensions.swift in Sources */,
 				B99088591FAE4E2A005B0B2E /* program.cpp in Sources */,
 				B97448961FAC7BD600C71F53 /* deflate.c in Sources */,
+				B9A599F22019CFE7007EA04E /* sensorHelper.m in Sources */,
 				B974489A1FAC7BD600C71F53 /* inflate.c in Sources */,
 				B9817B581FA1E6170073DF7F /* LocationManager.swift in Sources */,
 				B98B09C91F8CC82C0080D7EB /* map2d.swift in Sources */,

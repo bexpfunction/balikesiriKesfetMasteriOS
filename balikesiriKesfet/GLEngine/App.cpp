@@ -45,7 +45,7 @@ TEMPLATEAPP templateApp = {
         AppToucheEnded,
         AppSetCameraRotation,
         AppSetCameraRotationQuat,
-    
+        AppSetCameraRotationMatrix,
         AppSetPinDatas,
         AppBindCameraTexture,
         AppInitCamera,
@@ -142,10 +142,12 @@ void AppToucheEnded( float x, float y, unsigned int tap_count )
     touchBegan = false;
 }
 
+mat4 deviceRotMat;
 vec3 deviceRot;
 quat deviceRotQuat;
 quat targetRot;
 void AppSetCameraRotation(float x, float y,float z){
+
     //LOGI("AppSetCameraRotation called %f %f %f\n",x,y,z);
     /*deviceRot.x = x*RAD_TO_DEG;
      deviceRot.y = y*RAD_TO_DEG;
@@ -162,8 +164,12 @@ void AppSetCameraRotationQuat(const quat rotQ){
     /*deviceRot.x = x*RAD_TO_DEG;
      deviceRot.y = y*RAD_TO_DEG;
      deviceRot.z = z*RAD_TO_DEG;*/
-    
+    deviceRotQuat = rotQ;
     targetRot = rotQ;
+}
+mat4 rotMat;
+void AppSetCameraRotationMatrix(mat4 rotationMatrix) {
+    rotMat = rotationMatrix;
 }
 
 pinData *tempPinData;
@@ -640,9 +646,10 @@ void AppDraw() {
     //LOGI("\n\nstaticF : %f\n\n",*statTest::staticF);
     handleInput();
     if(cam->smoothEnabled){
-        cam->rotateToTargetRad(deviceRot);
+        //cam->setRotationMatrix(rotMat);
+        //cam->rotateToTargetRad(deviceRot);
         //cam->rotateToTarget(targetRotVec);
-        
+        cam->rotateToTargetQuat(targetRot);
         //cam->setRotation(deviceRot);
     }
     

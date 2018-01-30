@@ -189,7 +189,7 @@ vec3 operator*(quat q, vec3 v) {
 mat4 quaternion_quatToMat4(quat q) {
     mat4 mat;
     mat4_identity(&mat);
-
+    
     mat.m[0].x = 1 - 2*q.y*q.y - 2 * q.z * q.z;
     mat.m[0].y = 2*q.x*q.y + 2 * q.z * q.w;
     mat.m[0].z = 2*q.x*q.z - 2*q.y *q.w;

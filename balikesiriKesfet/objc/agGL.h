@@ -8,6 +8,7 @@
 
 #import <GLKit/GLKit.h>
 #import <OpenGLES/EAGL.h>
+#import <OpenGLES/ES2/gl.h>
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
 #import "CaptureSessionManager.h"

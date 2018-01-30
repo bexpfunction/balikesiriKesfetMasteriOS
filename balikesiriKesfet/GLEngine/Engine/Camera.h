@@ -40,6 +40,7 @@ public:
 
     void setRotation(vec3 &rotation);
     void setRotation(quat rotation);
+    void setRotationMatrix(mat4 rotationMatrix);
     void rotateToTarget(const vec3 rot);
     void rotateToTargetRad(const vec3 rot);
     void rotateToTargetQuat(const quat rotQuat);
@@ -53,6 +54,7 @@ public:
     mat4* getProjectionMatrix();
 
     mat4* getViewMatrix();
+    mat4* getRotationMatrix();
     vec3 forwardVec();
 };
 

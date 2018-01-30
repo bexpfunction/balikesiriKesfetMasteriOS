@@ -108,6 +108,12 @@ void Camera::setRotation(vec3 &rotation) {
     createViewMatrix();
 }
 
+void Camera::setRotationMatrix(mat4 rotationMatrix) {
+    rotationMat = rotationMatrix;
+    LOGI("\ncamrotmat: %f\n",rotationMat.m[1].w);
+    createViewMatrix();
+}
+
 void Camera::setRotation(quat rotation) {
     Camera::rotationQuat = rotation;
     quaternion_quatToViewMat(&rotationMat,Camera::rotationQuat);
@@ -232,6 +238,6 @@ mat4 *Camera::getViewMatrix() {
     return &view_matrix;
 }
 
-
-
-
+mat4 *Camera::getRotationMatrix() {
+    return &rotationMat;
+}

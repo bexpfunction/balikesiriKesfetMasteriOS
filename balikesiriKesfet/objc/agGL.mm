@@ -15,6 +15,8 @@
 #import <malloc/malloc.h>
 #import <AVFoundation/AVFoundation.h>
 #import "SWRevealViewController.h"
+#import <SceneKit/SceneKit.h>
+#import "quaternion.h"
 
 @interface agGL () <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, SWRevealViewControllerDelegate> {
     Reachability *internetReachableFoo;
@@ -31,6 +33,7 @@
 #define degToRad(x) (M_PI/180.0f)*x
 #define kFilteringFactor 0.1
 #define sensorUpdateRate (1.0f/30.0f)
+#define SENSOR_ORIENTATION [[UIApplication sharedApplication] statusBarOrientation] //enum  1(NORTH)  2(SOUTH)  3(EAST)  4(WEST)
 
 #pragma mark - Global Bools
 bool checkFrameBuffer, drawTest, drawApp, glInitialized, iAvailable, locationInited, drawAppCalled, pinInfoViewOpened = false;
@@ -44,7 +47,7 @@ CLLocation *currentLocation;
 static pinData* pinList = NULL;
 #pragma mark - Globals ints
 int pinCount = 0;
-
+quat deviceQuat;
 NSMutableArray *constTextList;
 NSMutableArray *constDescrpList;
 NSMutableArray *constDistanceList;
@@ -74,7 +77,6 @@ NSMutableArray *constDistanceList;
     //[self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     //[self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
 
-    
     glInitialized = false;
     checkFrameBuffer = false;
     drawTest = false;
@@ -87,8 +89,7 @@ NSMutableArray *constDistanceList;
     self.pinInfoBg.layer.cornerRadius = 5;
     self.pinInfoBg.layer.borderColor = UIColor.whiteColor.CGColor;
     self.pinInfoBg.layer.borderWidth = 1;
-    
-    
+
     [self testInternetConnection];
 }
 
@@ -110,11 +111,10 @@ NSMutableArray *constDistanceList;
     self.motionManager.deviceMotionUpdateInterval = sensorUpdateRate;
     self.motionManager.accelerometerUpdateInterval = sensorUpdateRate;
     self.motionManager.gyroUpdateInterval = sensorUpdateRate;
-    
-    
-    [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryCorrectedZVertical
-                                                            toQueue:[NSOperationQueue currentQueue]
-                                                        withHandler:^(CMDeviceMotion* motion, NSError* error){[self outputMotionData:motion];}];
+  
+    [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
+        [self outputMotionData:motion];
+    }];
     
     [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue]
                                     withHandler:^(CMGyroData* gyro, NSError *error) {
@@ -125,6 +125,7 @@ NSMutableArray *constDistanceList;
     [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData* acceleration, NSError *error) {
         [self outputAccelerationData:acceleration];
     }];
+    
     self.crosshairImag.alpha = 1.0f;
 }
 
@@ -175,7 +176,8 @@ bool pInited = false;
     drawAppCalled = false;
     
     if(drawApp && glInitialized) {
-        templateApp.SetCameraRotation(cPitch, cYaw, cRoll);
+
+        templateApp.SetCameraRotationQuat(deviceQuat);
         if(pInited) {
             if(pinCount>0 && pinList != NULL){
                 
@@ -238,7 +240,8 @@ bool pInited = false;
 }
 
 -(void)update {
-
+    
+    
 }
 
 //Location Manager delegates
@@ -296,83 +299,42 @@ bool pInited = false;
 - (void) locationManager:(CLLocationManager *)manager
         didUpdateHeading:(CLHeading *)newHeading {
     heading = newHeading.magneticHeading; //in degrees
-    //cYaw = degToRad(heading);
 }
 
-//Angles from gyro update
-struct holder{
-    float x = 0.0f;
-    float y = 0.0f;
-    float z = 0.0f;
-};
-holder lastUpdate;
-holder lastDg;
+
 -(void)outputGyroData:(CMGyroData*) gyro {
-    double dgChange, newDg, x, y, z, motionInterval;
-    motionInterval = sensorUpdateRate;
-    
-    x = gyro.rotationRate.x;
-    dgChange = radToDeg((0.5f * (x+lastUpdate.x))*motionInterval);
-    lastUpdate.x = x;
-    newDg = lastDg.x + dgChange;
-    if(fabs(newDg) > 360.0f) {
-        if(newDg < 0.0f) lastDg.x = newDg+360.0f; else lastDg.x = newDg - 360.0f;
-    } else {
-        lastDg.x = newDg;
-    }
-    
-    y = gyro.rotationRate.y;
-    dgChange = radToDeg((0.5f * (y+lastUpdate.y))*motionInterval);
-    lastUpdate.y = y;
-    newDg = lastDg.y + dgChange;
-    if(fabs(newDg) > 360.0f) {
-        if(newDg < 0.0f) lastDg.y = newDg+360.0f; else lastDg.y = newDg - 360.0f;
-    } else {
-        lastDg.y = newDg;
-    }
-    
-    z = gyro.rotationRate.z;
-    dgChange = radToDeg((0.5f * (z+lastUpdate.z))*motionInterval);
-    lastUpdate.z = z;
-    newDg = lastDg.z + dgChange;
-    if(fabs(newDg) > 360.0f) {
-        if(newDg < 0.0f) lastDg.z = newDg+360.0f; else lastDg.z = newDg - 360.0f;
-    } else {
-        lastDg.z = newDg;
-    }
-    //NSLog(@"gXang: %.2f gYang: %.2f gZang: %.2f",lastDg.x, lastDg.y, lastDg.z);
-    cYaw = degToRad(-lastDg.y); cPitch = degToRad(-lastDg.x); cRoll = degToRad(lastDg.z);
+
 }
 
 -(void)outputAccelerationData:(CMAccelerometerData*) acceleration {
-    
-    
+    printf(
+           std::abs( acceleration.acceleration.y ) < std::abs( acceleration.acceleration.x )
+            ?   acceleration.acceleration.x > 0 ? "\nRight\n"  :   "\nLeft\n"
+            :   acceleration.acceleration.y > 0 ? "\nDown\n"   :   "\nUp\n"
+            );
 }
 
-struct dOrientation {
-    float x = 0.0f;
-    float y = 0.0f;
-    float z = 0.0f;
-};
-dOrientation angles;
 -(void)outputMotionData:(CMDeviceMotion*) motion {
-    CMQuaternion quat = motion.attitude.quaternion;
+    CMQuaternion q = motion.attitude.quaternion;
+    quat offset;
+    offset = quaternion_fromEuler(90.0f, 0.0f, 0.0f);
     
-    //      CGFloat roll  = atan2(2*(quat.y*quat.w - quat.x*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
-    //      CGFloat pitch = atan2(2*(quat.x*quat.w + quat.y*quat.z), 1 - 2*quat.x*quat.x - 2*quat.z*quat.z);
-    //      CGFloat yaw   =  asin(2*(quat.x*quat.y + quat.w*quat.z));
-    
-    CGFloat pitch = atan2(2*(quat.y*quat.z + quat.w*quat.x), quat.w*quat.w - quat.x*quat.x - quat.y*quat.y + quat.z*quat.z);
-    CGFloat yaw = asin(-2*(quat.x*quat.z - quat.w*quat.y));
-    CGFloat roll = atan2(2*(quat.x*quat.y + quat.w*quat.z), 1 - 2*quat.y*quat.y - 2*quat.z*quat.z);
-    
-    
-    if(pitch<0.0f) pitch = degToRad(360.0f) + pitch;
-    if(roll<0.0f) roll = degToRad(360.0f) + roll;
-    if(yaw<0.0f) yaw = degToRad(360.0f) + yaw;
+    SCNQuaternion tmp = [self orientationFromCMQuaternion:q];
 
-    //cYaw = -roll;
+    deviceQuat.x = tmp.x;
+    deviceQuat.y = tmp.y;
+    deviceQuat.z = tmp.z;
+    deviceQuat.w = tmp.w;
+}
+
+- (SCNQuaternion)orientationFromCMQuaternion:(CMQuaternion)q
+{
+    GLKQuaternion gq1 =  GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(-90), 1, 0, 0); // add a rotation of the pitch 90 degrees
+    GLKQuaternion gq2 =  GLKQuaternionMake(q.x, q.y, q.z, q.w); // the current orientation
+    GLKQuaternion qp  =  GLKQuaternionMultiply(gq1, gq2); // get the "new" orientation
+    CMQuaternion rq =   {.x = qp.q[0], .y = qp.q[1], .z = qp.q[2], .w = qp.q[3]};
     
+    return SCNVector4Make(-rq.x, -rq.y, rq.z, rq.w);
 }
 
 #pragma mark UpdatePins
