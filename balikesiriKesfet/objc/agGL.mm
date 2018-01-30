@@ -38,7 +38,7 @@
 #pragma mark - Global Bools
 bool checkFrameBuffer, drawTest, drawApp, glInitialized, iAvailable, locationInited, drawAppCalled, pinInfoViewOpened = false;
 #pragma mark - Global floats
-float cPitch, cYaw, cRoll, initYaw, heading, motionLastYaw=0.0f;
+float cPitch, cYaw, cRoll, initYaw, heading, motionLastYaw=0.0f, startingHeading;
 #pragma mark - Global Strings
 NSString *curLat, *curLng;
 #pragma mark - Global Location
@@ -294,11 +294,14 @@ bool pInited = false;
 //{
 //
 //}
-
+bool startHeadingStored=false;
 - (void) locationManager:(CLLocationManager *)manager
         didUpdateHeading:(CLHeading *)newHeading {
     heading = newHeading.trueHeading; //in degrees
-    
+    if(!startHeadingStored) {
+        startingHeading = newHeading.trueHeading;
+        startHeadingStored = true;
+    }
     NSLog(@"current heading: %f",heading);
 }
 
@@ -325,10 +328,10 @@ bool pInited = false;
 - (SCNQuaternion)orientationFromCMQuaternion:(CMQuaternion)q
 {
     GLKQuaternion gq1 =  GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(-90), 1, 0, 0); // add a rotation of the pitch 90 degrees
-    //GLKQuaternion gq3 =  GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(heading), 0, 1, 0); // add a rotation of the yaw
+    GLKQuaternion gq3 =  GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(0), 0, 1, 0); // add a rotation of the yaw
     GLKQuaternion gq2 =  GLKQuaternionMake(q.x, q.y, q.z, q.w); // the current orientation
     GLKQuaternion qp  =  GLKQuaternionMultiply(gq1, gq2); // get the "new" orientation
-    //qp = GLKQuaternionMultiply(gq3, qp);
+    qp = GLKQuaternionMultiply(gq3, qp);
     CMQuaternion rq =   {.x = qp.q[0], .y = qp.q[1], .z = qp.q[2], .w = qp.q[3]};
     
     return SCNVector4Make(-rq.x, -rq.y, rq.z, rq.w);
@@ -386,7 +389,7 @@ bool pInited = false;
                                                           double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
                                                           float dist = [currentLocation distanceFromLocation:tmpPinLoc];
                                                           
-                                                          float bearingOffset = (heading-bearing);
+                                                          double bearingOffset = (heading-bearing) + 90.0f;
                                                           NSLog(@"bearingOffset: %f",bearingOffset);
                                                           if(bearingOffset<0.0f){
                                                               bearingOffset = 360.0f + bearingOffset;
