@@ -202,7 +202,8 @@ bool pInited = false;
                     
                     //Bring pininfo view
                     if(selectedPinId >= 0) {
-                        self.pinInfoTitle.text = constDescrpList[selectedPinId];
+                        //self.pinInfoTitle.text = constDescrpList[selectedPinId];
+                        self.pinInfoTitle.text = constTextList[selectedPinId];
                         self.pinInfoDistance.text = constDistanceList[selectedPinId];
                     }
                     if(pinInfoViewOpened == false)
@@ -254,7 +255,6 @@ bool pInited = false;
     self.locationManager.headingFilter = kCLHeadingFilterNone;
     [self.locationManager startUpdatingLocation];
     [self.locationManager startUpdatingHeading];
-    NSLog(@"Update location started...",nil);
     
 }
 
@@ -263,7 +263,6 @@ bool pInited = false;
     [self.locationManager stopUpdatingLocation];
     [self.locationManager stopUpdatingHeading];
     self.locationManager = nil;
-    NSLog(@"Update location stopped...",nil);
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
@@ -298,7 +297,9 @@ bool pInited = false;
 
 - (void) locationManager:(CLLocationManager *)manager
         didUpdateHeading:(CLHeading *)newHeading {
-    heading = newHeading.magneticHeading; //in degrees
+    heading = newHeading.trueHeading; //in degrees
+    
+    NSLog(@"current heading: %f",heading);
 }
 
 
@@ -307,17 +308,11 @@ bool pInited = false;
 }
 
 -(void)outputAccelerationData:(CMAccelerometerData*) acceleration {
-    printf(
-           std::abs( acceleration.acceleration.y ) < std::abs( acceleration.acceleration.x )
-            ?   acceleration.acceleration.x > 0 ? "\nRight\n"  :   "\nLeft\n"
-            :   acceleration.acceleration.y > 0 ? "\nDown\n"   :   "\nUp\n"
-            );
+
 }
 
 -(void)outputMotionData:(CMDeviceMotion*) motion {
     CMQuaternion q = motion.attitude.quaternion;
-    quat offset;
-    offset = quaternion_fromEuler(90.0f, 0.0f, 0.0f);
     
     SCNQuaternion tmp = [self orientationFromCMQuaternion:q];
 
@@ -330,8 +325,10 @@ bool pInited = false;
 - (SCNQuaternion)orientationFromCMQuaternion:(CMQuaternion)q
 {
     GLKQuaternion gq1 =  GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(-90), 1, 0, 0); // add a rotation of the pitch 90 degrees
+    //GLKQuaternion gq3 =  GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(heading), 0, 1, 0); // add a rotation of the yaw
     GLKQuaternion gq2 =  GLKQuaternionMake(q.x, q.y, q.z, q.w); // the current orientation
     GLKQuaternion qp  =  GLKQuaternionMultiply(gq1, gq2); // get the "new" orientation
+    //qp = GLKQuaternionMultiply(gq3, qp);
     CMQuaternion rq =   {.x = qp.q[0], .y = qp.q[1], .z = qp.q[2], .w = qp.q[3]};
     
     return SCNVector4Make(-rq.x, -rq.y, rq.z, rq.w);
@@ -386,8 +383,20 @@ bool pInited = false;
 
                                                           CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
                                                           
-                                                          pLat = (tmpPinLoc.coordinate.latitude - currentLocation.coordinate.latitude)*100000;
-                                                          pLng = (tmpPinLoc.coordinate.longitude - currentLocation.coordinate.longitude)*100000;
+                                                          double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
+                                                          float dist = [currentLocation distanceFromLocation:tmpPinLoc];
+                                                          
+                                                          float bearingOffset = (heading-bearing);
+                                                          NSLog(@"bearingOffset: %f",bearingOffset);
+                                                          if(bearingOffset<0.0f){
+                                                              bearingOffset = 360.0f + bearingOffset;
+                                                          }
+                                                          if(bearingOffset>360.0f){
+                                                              bearingOffset = bearingOffset-360.0f;
+                                                          }
+                                                          NSLog(@"bearingOffset1: %f",bearingOffset);
+                                                          pLat = cos(degToRad(bearingOffset)) * dist;
+                                                          pLng = sin(degToRad(bearingOffset)) * dist;
                                                           
                                                           [constTextList addObject:jsonArray[cnt][@"title"]];
                                                           NSString* tmpDesc = jsonArray[cnt][@"description"];
@@ -396,17 +405,18 @@ bool pInited = false;
                                                               tmpDesc = @" ";
                                                           }
                                                           [constDescrpList addObject:tmpDesc];
-                                                          float dist = [currentLocation distanceFromLocation:tmpPinLoc];
+//                                                          float dist = [currentLocation distanceFromLocation:tmpPinLoc];
                                                           [constDistanceList addObject:[NSString stringWithFormat:@"%.2f KM",dist/1000.0f]];
                                                           
                                                           pinList[cnt].id = cnt;
-                                                          pinList[cnt].position = {-pLat, 0.0f, pLng};
+                                                          pinList[cnt].position = {pLat, 0.0f, pLng};
                                                           pinList[cnt].text = (char*)[constTextList[cnt] cStringUsingEncoding:NSUTF8StringEncoding];
                                                           pinList[cnt].size = 4.0f;
                                                           pinList[cnt].fontSize = 0.65f;
                                                           pinList[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
                                                           pinList[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
                                                           
+                                                          NSLog(@"name: %s bearing: %f heading: %f",pinList[cnt].text,bearing,heading);
                                                           LOGI("obj-c pin init [%d] text: %s address: %p\n", cnt, pinList[cnt].text, pinList[cnt].text);
                                                       }
                                                       LOGI("\n\n");
@@ -426,7 +436,14 @@ bool pInited = false;
     [dataTask resume];
 }
 
-
+-(double) getBearing:(double) lt1:(double) lg1:(double) lt2:(double) lg2 {
+    double dLon = (lg2-lg1);
+    double y = sin(degToRad(dLon)) * cos(degToRad(lt2));
+    double x = cos(degToRad(lt1))*sin(degToRad(lt2)) - sin(degToRad(lt1))*cos(degToRad(lt2))*cos(degToRad(dLon));
+    double brng = radToDeg((atan2(y, x)));
+    return brng;
+    //return (360 - ((brng + 360) % 360));
+}
 
 -(void) startCameraPreview {
     //-- Create CVOpenGLESTextureCacheRef for optimal CVImageBufferRef to GLES texture conversion.
