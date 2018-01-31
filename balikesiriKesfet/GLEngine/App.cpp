@@ -658,8 +658,8 @@ void AppDraw() {
     //glClear(GL_DEPTH_BUFFER_BIT);
     
     
-    glEnable( GL_DEPTH_TEST );
-    glDepthMask( GL_TRUE );
+    //glEnable( GL_DEPTH_TEST );
+    //glDepthMask( GL_TRUE );
     
     /*if(program->pid){
      glUseProgram(program->pid);
@@ -744,38 +744,32 @@ void AppDraw() {
 //    }
     
     if(isPinInited && true){
-        glDisable(GL_BLEND);
-        glBindVertexArrayOES(mvao);
-        //glBindVertexArray(mvao);
-        PROGRAM_draw( program );
-        float campos[] = {cam->getPosition().x,cam->getPosition().y,cam->getPosition().z};
-        
-        uniform = PROGRAM_get_uniform_location(program,(char *)"CAM_POS");
-        glUniform3fv(uniform,1,campos);
-        
-        GLfloat f = 0;
-        uniform = PROGRAM_get_uniform_location(program,(char *)"OFFSET");
-        glUniform1f(uniform,f);
-        
-        uniform = PROGRAM_get_uniform_location(program,(char *)"PROJECTIONMATRIX");
-        glUniformMatrix4fv(uniform,1,GL_FALSE,(float *)cam->getProjectionMatrix());
-        
-        uniform = PROGRAM_get_uniform_location(program,(char *)"VIEWMAT");
-        glUniformMatrix4fv(uniform,1,GL_FALSE,(float *)cam->getViewMatrix());
-        
-        
+//        glDisable(GL_BLEND);
+//        glBindVertexArrayOES(mvao);
+//        //glBindVertexArray(mvao);
+//        PROGRAM_draw( program );
+//        float campos[] = {cam->getPosition().x,cam->getPosition().y,cam->getPosition().z};
+//
+//        uniform = PROGRAM_get_uniform_location(program,(char *)"CAM_POS");
+//        glUniform3fv(uniform,1,campos);
         for(int i=0;i<pinSize;i++) {
-            drawPin(App::pinDatas[i]);
+            glDisable(GL_BLEND);
+            glBindVertexArrayOES(mvao);
+            PROGRAM_draw( program );
+            float campos[] = {cam->getPosition().x,cam->getPosition().y,cam->getPosition().z};
+            uniform = PROGRAM_get_uniform_location(program,(char *)"CAM_POS");
+            glUniform3fv(uniform,1,campos);
+            GLfloat f = 0;
+            uniform = PROGRAM_get_uniform_location(program,(char *)"OFFSET");
+            glUniform1f(uniform,f);
             
-        }
-        glBindVertexArrayOES(0);
-        //glBindVertexArray(0);
-    }
-    
-    //DRAW TEXTS
-#pragma mark-Draw Texts
-    if(isPinInited){
-        for(int i=0;i<pinSize;i++) {
+            uniform = PROGRAM_get_uniform_location(program,(char *)"PROJECTIONMATRIX");
+            glUniformMatrix4fv(uniform,1,GL_FALSE,(float *)cam->getProjectionMatrix());
+            uniform = PROGRAM_get_uniform_location(program,(char *)"VIEWMAT");
+            glUniformMatrix4fv(uniform,1,GL_FALSE,(float *)cam->getViewMatrix());
+            drawPin(App::pinDatas[i]);
+            glBindVertexArrayOES(0);
+            #pragma mark-Draw Texts
             //Position
             modelMat.m[3].x = App::pinDatas[i].position.x * worldScale;
             modelMat.m[3].y = App::pinDatas[i].position.y;
@@ -784,10 +778,44 @@ void AppDraw() {
             modelMat.m[0].x = App::pinDatas[i].size;
             modelMat.m[1].y = App::pinDatas[i].size;
             modelMat.m[2].z = App::pinDatas[i].size;
-
+            
             TEXT3D_print(App::pinDatas[i].text3D,font->program,cam,&modelMat,pinTextOffset);
         }
     }
+//        GLfloat f = 0;
+//        uniform = PROGRAM_get_uniform_location(program,(char *)"OFFSET");
+//        glUniform1f(uniform,f);
+        
+//        uniform = PROGRAM_get_uniform_location(program,(char *)"PROJECTIONMATRIX");
+//        glUniformMatrix4fv(uniform,1,GL_FALSE,(float *)cam->getProjectionMatrix());
+        
+//        uniform = PROGRAM_get_uniform_location(program,(char *)"VIEWMAT");
+//        glUniformMatrix4fv(uniform,1,GL_FALSE,(float *)cam->getViewMatrix());
+        
+        
+//        for(int i=0;i<pinSize;i++) {
+//            drawPin(App::pinDatas[i]);
+//
+//        }
+        //glBindVertexArrayOES(0);
+        //glBindVertexArray(0);
+    
+    //DRAW TEXTS
+
+//    if(isPinInited){
+//        for(int i=0;i<pinSize;i++) {
+//            //Position
+//            modelMat.m[3].x = App::pinDatas[i].position.x * worldScale;
+//            modelMat.m[3].y = App::pinDatas[i].position.y;
+//            modelMat.m[3].z = App::pinDatas[i].position.z * worldScale;
+//            //Size
+//            modelMat.m[0].x = App::pinDatas[i].size;
+//            modelMat.m[1].y = App::pinDatas[i].size;
+//            modelMat.m[2].z = App::pinDatas[i].size;
+//
+//            TEXT3D_print(App::pinDatas[i].text3D,font->program,cam,&modelMat,pinTextOffset);
+//        }
+//    }
     
     
 //    if(false && pinColliderProgram->pid){
