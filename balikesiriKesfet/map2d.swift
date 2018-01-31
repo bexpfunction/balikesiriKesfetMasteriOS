@@ -69,7 +69,8 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         annotationPopup.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         annotationPopup.layer.borderWidth = 1
         
-        mapKitView.showsUserLocation = true
+        self.mapKitView.delegate = self
+        self.mapKitView.showsUserLocation = true
         //mapKitView.layer.cornerRadius = 5
         
         popupScrollView.layer.cornerRadius = 5
@@ -172,6 +173,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         self.selectedPinId = -1
         self.pinListTV.deselectRow(at: self.pinListTV.indexPathForSelectedRow!, animated: true)
     }
+    
     
     //Update userLocation on map view
     func mapView(_ mapView: MKMapView,

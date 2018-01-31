@@ -8,9 +8,9 @@
 
 import UIKit
 import GLKit
+import UserNotifications
 import Firebase
 import FirebaseMessaging
-import UserNotifications
 import FBSDKShareKit
 
 @UIApplicationMain
@@ -75,15 +75,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        print("Handle push from foreground")
-        // custom code to handle push while app is in the foreground
-        print("\(notification.request.content.userInfo)")
-        if UIApplication.shared.applicationState == .active { // In iOS 10 if app is in foreground do nothing.
-            completionHandler([.alert, .badge, .sound])
-        } else { // If app is not active you can show banner, sound and badge.
-            completionHandler([.alert, .badge, .sound])
-        }
+        
     }
+    
+//    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+//        print("Handle push from foreground")
+//        // custom code to handle push while app is in the foreground
+//        print("\(notification.request.content.userInfo)")
+//        if UIApplication.shared.applicationState == .active { // In iOS 10 if app is in foreground do nothing.
+//            completionHandler([.alert, .badge, .sound])
+//        } else { // If app is not active you can show banner, sound and badge.
+//            completionHandler([.alert, .badge, .sound])
+//        }
+//    }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         print("Handle push from background or closed")

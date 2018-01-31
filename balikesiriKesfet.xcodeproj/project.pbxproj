@@ -10,6 +10,9 @@
 		9C5E9A61ED628B7537C20374 /* libPods-balikesiriKesfet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC9409506B01946FCD17C0A3 /* libPods-balikesiriKesfet.a */; };
 		B90186012004C27200552DE3 /* backTVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90186002004C27200552DE3 /* backTVController.swift */; };
 		B90186052005109900552DE3 /* uygulamaHakkinda.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90186042005109900552DE3 /* uygulamaHakkinda.swift */; };
+		B90311602021C8D000E1739F /* objcExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B903115F2021C8D000E1739F /* objcExtensions.swift */; };
+		B90311632021C99300E1739F /* objcPinPicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B90311622021C99300E1739F /* objcPinPicCell.m */; };
+		B90311652021D7A900E1739F /* objcPinPicCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B90311642021D7A900E1739F /* objcPinPicCell.xib */; };
 		B90D34E21F90D0B300A1BB68 /* articleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90D34E11F90D0B300A1BB68 /* articleCell.swift */; };
 		B91D6E231F9CD95500525C76 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B91D6E221F9CD95400525C76 /* GoogleService-Info.plist */; };
 		B91DEFEF1F93AF9900F80A27 /* haberDetaylari.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91DEFEE1F93AF9900F80A27 /* haberDetaylari.swift */; };
@@ -68,7 +71,6 @@
 		B946712C1F5B223800FDA6D3 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B946712B1F5B223800FDA6D3 /* QuartzCore.framework */; };
 		B946712E1F5B224000FDA6D3 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B946712D1F5B224000FDA6D3 /* OpenGLES.framework */; };
 		B94671301F5B224600FDA6D3 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B946712F1F5B224600FDA6D3 /* GLKit.framework */; };
-		B946713B1F5B51A200FDA6D3 /* agModu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B946713A1F5B51A200FDA6D3 /* agModu.swift */; };
 		B94EDB942003A743004D4655 /* AnaSayfa.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94EDB932003A743004D4655 /* AnaSayfa.swift */; };
 		B94EDB982003B391004D4655 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B94EDB962003B391004D4655 /* SWRevealViewController.m */; };
 		B952C4911FA867F70075CB8B /* App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B952C4901FA867F70075CB8B /* App.cpp */; };
@@ -89,16 +91,6 @@
 		B974489F1FAC7BD600C71F53 /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = B974488C1FAC7BD600C71F53 /* unzip.c */; };
 		B97448A01FAC7BD600C71F53 /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = B97448901FAC7BD600C71F53 /* zutil.c */; };
 		B97448A31FAC837500C71F53 /* utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B97448A11FAC837400C71F53 /* utils.cpp */; };
-		B9817B521FA1E6170073DF7F /* LocationNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9817B481FA1E6100073DF7F /* LocationNode.swift */; };
-		B9817B531FA1E6170073DF7F /* FloatingPoint+Radians.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9817B491FA1E6120073DF7F /* FloatingPoint+Radians.swift */; };
-		B9817B541FA1E6170073DF7F /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9817B4A1FA1E6130073DF7F /* CGPoint+Extensions.swift */; };
-		B9817B551FA1E6170073DF7F /* SceneLocationEstimate+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9817B4B1FA1E6140073DF7F /* SceneLocationEstimate+Extensions.swift */; };
-		B9817B561FA1E6170073DF7F /* CLLocation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9817B4C1FA1E6140073DF7F /* CLLocation+Extensions.swift */; };
-		B9817B571FA1E6170073DF7F /* SceneLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9817B4D1FA1E6150073DF7F /* SceneLocationView.swift */; };
-		B9817B581FA1E6170073DF7F /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9817B4E1FA1E6150073DF7F /* LocationManager.swift */; };
-		B9817B591FA1E6170073DF7F /* SceneLocationEstimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9817B4F1FA1E6160073DF7F /* SceneLocationEstimate.swift */; };
-		B9817B5A1FA1E6170073DF7F /* SCNVector3+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9817B501FA1E6160073DF7F /* SCNVector3+Extensions.swift */; };
-		B9817B5B1FA1E6170073DF7F /* SCNNode+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9817B511FA1E6170073DF7F /* SCNNode+Extensions.swift */; };
 		B9817B641FA233F30073DF7F /* hello.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B9817B621FA233F30073DF7F /* hello.cpp */; };
 		B9817B671FA240570073DF7F /* agGL.mm in Sources */ = {isa = PBXBuildFile; fileRef = B9817B661FA240570073DF7F /* agGL.mm */; };
 		B98B09C91F8CC82C0080D7EB /* map2d.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98B09C81F8CC82C0080D7EB /* map2d.swift */; };
@@ -159,6 +151,10 @@
 		7CB1937B018A557ED4106823 /* Pods-balikesiriKesfet.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-balikesiriKesfet.release.xcconfig"; path = "Pods/Target Support Files/Pods-balikesiriKesfet/Pods-balikesiriKesfet.release.xcconfig"; sourceTree = "<group>"; };
 		B90186002004C27200552DE3 /* backTVController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = backTVController.swift; sourceTree = "<group>"; };
 		B90186042005109900552DE3 /* uygulamaHakkinda.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = uygulamaHakkinda.swift; sourceTree = "<group>"; };
+		B903115F2021C8D000E1739F /* objcExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = objcExtensions.swift; sourceTree = "<group>"; };
+		B90311612021C99300E1739F /* objcPinPicCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = objcPinPicCell.h; sourceTree = "<group>"; };
+		B90311622021C99300E1739F /* objcPinPicCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = objcPinPicCell.m; sourceTree = "<group>"; };
+		B90311642021D7A900E1739F /* objcPinPicCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = objcPinPicCell.xib; sourceTree = "<group>"; };
 		B90D34E11F90D0B300A1BB68 /* articleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = articleCell.swift; sourceTree = "<group>"; };
 		B91C189C1FF0DC5400101101 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B91D6E221F9CD95400525C76 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -225,7 +221,6 @@
 		B946712B1F5B223800FDA6D3 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B946712D1F5B224000FDA6D3 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		B946712F1F5B224600FDA6D3 /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		B946713A1F5B51A200FDA6D3 /* agModu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = agModu.swift; sourceTree = "<group>"; };
 		B94EDB932003A743004D4655 /* AnaSayfa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnaSayfa.swift; sourceTree = "<group>"; };
 		B94EDB962003B391004D4655 /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		B94EDB972003B391004D4655 /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
@@ -265,16 +260,6 @@
 		B97448911FAC7BD600C71F53 /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
 		B97448A11FAC837400C71F53 /* utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = utils.cpp; sourceTree = "<group>"; };
 		B97448A21FAC837500C71F53 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
-		B9817B481FA1E6100073DF7F /* LocationNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationNode.swift; sourceTree = "<group>"; };
-		B9817B491FA1E6120073DF7F /* FloatingPoint+Radians.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FloatingPoint+Radians.swift"; sourceTree = "<group>"; };
-		B9817B4A1FA1E6130073DF7F /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
-		B9817B4B1FA1E6140073DF7F /* SceneLocationEstimate+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SceneLocationEstimate+Extensions.swift"; sourceTree = "<group>"; };
-		B9817B4C1FA1E6140073DF7F /* CLLocation+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CLLocation+Extensions.swift"; sourceTree = "<group>"; };
-		B9817B4D1FA1E6150073DF7F /* SceneLocationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLocationView.swift; sourceTree = "<group>"; };
-		B9817B4E1FA1E6150073DF7F /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		B9817B4F1FA1E6160073DF7F /* SceneLocationEstimate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneLocationEstimate.swift; sourceTree = "<group>"; };
-		B9817B501FA1E6160073DF7F /* SCNVector3+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNVector3+Extensions.swift"; sourceTree = "<group>"; };
-		B9817B511FA1E6170073DF7F /* SCNNode+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SCNNode+Extensions.swift"; sourceTree = "<group>"; };
 		B9817B621FA233F30073DF7F /* hello.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = hello.cpp; sourceTree = "<group>"; };
 		B9817B631FA233F30073DF7F /* hello.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = hello.hpp; sourceTree = "<group>"; };
 		B9817B651FA240570073DF7F /* agGL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = agGL.h; sourceTree = "<group>"; };
@@ -579,23 +564,6 @@
 			path = zlib;
 			sourceTree = "<group>";
 		};
-		B9817B471FA1E5D30073DF7F /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				B9817B4A1FA1E6130073DF7F /* CGPoint+Extensions.swift */,
-				B9817B4C1FA1E6140073DF7F /* CLLocation+Extensions.swift */,
-				B9817B491FA1E6120073DF7F /* FloatingPoint+Radians.swift */,
-				B9817B4E1FA1E6150073DF7F /* LocationManager.swift */,
-				B9817B481FA1E6100073DF7F /* LocationNode.swift */,
-				B9817B4F1FA1E6160073DF7F /* SceneLocationEstimate.swift */,
-				B9817B4B1FA1E6140073DF7F /* SceneLocationEstimate+Extensions.swift */,
-				B9817B4D1FA1E6150073DF7F /* SceneLocationView.swift */,
-				B9817B511FA1E6170073DF7F /* SCNNode+Extensions.swift */,
-				B9817B501FA1E6160073DF7F /* SCNVector3+Extensions.swift */,
-			);
-			name = Source;
-			sourceTree = "<group>";
-		};
 		B9817B5E1FA231B70073DF7F /* objc */ = {
 			isa = PBXGroup;
 			children = (
@@ -651,8 +619,12 @@
 				B90D34E11F90D0B300A1BB68 /* articleCell.swift */,
 				B92D6B491F979E3E0095007B /* newsPicCell.swift */,
 				B92BE48A1FA131270039D7B8 /* notificationCell.swift */,
+				B903115F2021C8D000E1739F /* objcExtensions.swift */,
 				B9A123591FFF743500F8DB0F /* pinListCell.swift */,
 				B9A1235B1FFFA99200F8DB0F /* pinPicCell.swift */,
+				B90311612021C99300E1739F /* objcPinPicCell.h */,
+				B90311622021C99300E1739F /* objcPinPicCell.m */,
+				B90311642021D7A900E1739F /* objcPinPicCell.xib */,
 			);
 			name = HelperClasses;
 			sourceTree = "<group>";
@@ -683,7 +655,6 @@
 				B9A1D19C1FAC8DC7005929EE /* Resources */,
 				B952C48E1FA867DB0075CB8B /* GLEngine */,
 				B9817B5E1FA231B70073DF7F /* objc */,
-				B9817B471FA1E5D30073DF7F /* Source */,
 				B92D6B4B1F9907520095007B /* balikesiriKesfet.entitlements */,
 				B9D1B9271F7BEDD800950C87 /* CppTest */,
 				B9C31D5E1F57507F0055E2CA /* AppDelegate.swift */,
@@ -725,7 +696,6 @@
 		B9C3BD071F578E16007E76CE /* ViewControllerClasses */ = {
 			isa = PBXGroup;
 			children = (
-				B946713A1F5B51A200FDA6D3 /* agModu.swift */,
 				B94EDB932003A743004D4655 /* AnaSayfa.swift */,
 				B90186002004C27200552DE3 /* backTVController.swift */,
 				B9C3BD041F578D72007E76CE /* balikesiriKesfetIntro.swift */,
@@ -906,6 +876,7 @@
 				B92027821FE930FB00B25F4D /* pin_model2.mtl in Resources */,
 				B920278A1FE930FB00B25F4D /* noise.png in Resources */,
 				B92027681FE92CC200B25F4D /* cameraFragment.glsl in Resources */,
+				B90311652021D7A900E1739F /* objcPinPicCell.xib in Resources */,
 				B9A1D19B1FAC8C37005929EE /* test.txt in Resources */,
 				B92027691FE92CC200B25F4D /* colorVertex.glsl in Resources */,
 				B92027841FE930FB00B25F4D /* cube.obj in Resources */,
@@ -989,11 +960,10 @@
 				B99088541FAE4E2A005B0B2E /* font.cpp in Sources */,
 				B974489F1FAC7BD600C71F53 /* unzip.c in Sources */,
 				B9F2A82D1FADC995004FC439 /* text-buffer.c in Sources */,
-				B9817B571FA1E6170073DF7F /* SceneLocationView.swift in Sources */,
 				B94EDB982003B391004D4655 /* SWRevealViewController.m in Sources */,
-				B946713B1F5B51A200FDA6D3 /* agModu.swift in Sources */,
 				B9817B641FA233F30073DF7F /* hello.cpp in Sources */,
 				B9F2A8281FADC995004FC439 /* distance-field.c in Sources */,
+				B90311602021C8D000E1739F /* objcExtensions.swift in Sources */,
 				B9F2A8291FADC995004FC439 /* edtaa3func.c in Sources */,
 				B9C31D611F57507F0055E2CA /* ViewController.swift in Sources */,
 				B92BE48B1FA131270039D7B8 /* notificationCell.swift in Sources */,
@@ -1008,24 +978,19 @@
 				B952C4911FA867F70075CB8B /* App.cpp in Sources */,
 				B936BC961FADF07A00D34EE4 /* pngrtran.c in Sources */,
 				B97448951FAC7BD600C71F53 /* crc32.c in Sources */,
-				B9817B551FA1E6170073DF7F /* SceneLocationEstimate+Extensions.swift in Sources */,
 				B990885C1FAE4E2A005B0B2E /* GfxMath.cpp in Sources */,
 				B936BC9C1FADF07A00D34EE4 /* pngwrite.c in Sources */,
 				B97448981FAC7BD600C71F53 /* infback.c in Sources */,
 				B936BC9A1FADF07A00D34EE4 /* pngvcrd.c in Sources */,
 				B97448941FAC7BD600C71F53 /* compress.c in Sources */,
 				B936BC8F1FADF07A00D34EE4 /* pngerror.c in Sources */,
-				B9817B521FA1E6170073DF7F /* LocationNode.swift in Sources */,
 				B99088581FAE4E2A005B0B2E /* EngineBase.cpp in Sources */,
 				B97448A01FAC7BD600C71F53 /* zutil.c in Sources */,
-				B9817B541FA1E6170073DF7F /* CGPoint+Extensions.swift in Sources */,
 				B99088591FAE4E2A005B0B2E /* program.cpp in Sources */,
 				B97448961FAC7BD600C71F53 /* deflate.c in Sources */,
 				B9A599F22019CFE7007EA04E /* sensorHelper.m in Sources */,
 				B974489A1FAC7BD600C71F53 /* inflate.c in Sources */,
-				B9817B581FA1E6170073DF7F /* LocationManager.swift in Sources */,
 				B98B09C91F8CC82C0080D7EB /* map2d.swift in Sources */,
-				B9817B591FA1E6170073DF7F /* SceneLocationEstimate.swift in Sources */,
 				B97448971FAC7BD600C71F53 /* gzio.c in Sources */,
 				B936BC991FADF07A00D34EE4 /* pngtrans.c in Sources */,
 				B9F2A8331FADC995004FC439 /* vertex-buffer.c in Sources */,
@@ -1034,7 +999,6 @@
 				B936BC8E1FADF07A00D34EE4 /* png.c in Sources */,
 				B94EDB942003A743004D4655 /* AnaSayfa.swift in Sources */,
 				B99088531FAE4E2A005B0B2E /* shader.cpp in Sources */,
-				B9817B5B1FA1E6170073DF7F /* SCNNode+Extensions.swift in Sources */,
 				B990885B1FAE4E2A005B0B2E /* obj.cpp in Sources */,
 				B9F2A82C1FADC995004FC439 /* platform.c in Sources */,
 				B90186052005109900552DE3 /* uygulamaHakkinda.swift in Sources */,
@@ -1049,7 +1013,6 @@
 				B936BC971FADF07A00D34EE4 /* pngrutil.c in Sources */,
 				B974489E1FAC7BD600C71F53 /* uncompr.c in Sources */,
 				B9A1235C1FFFA99200F8DB0F /* pinPicCell.swift in Sources */,
-				B9817B561FA1E6170073DF7F /* CLLocation+Extensions.swift in Sources */,
 				B92BE48D1FA13BB10039D7B8 /* duyurular.swift in Sources */,
 				B97448921FAC7BD600C71F53 /* memory.cpp in Sources */,
 				B9F2A82E1FADC995004FC439 /* texture-atlas.c in Sources */,
@@ -1062,7 +1025,6 @@
 				B9C31D5F1F57507F0055E2CA /* AppDelegate.swift in Sources */,
 				B92D6B4A1F979E3E0095007B /* newsPicCell.swift in Sources */,
 				B9F2A82F1FADC995004FC439 /* texture-font.c in Sources */,
-				B9817B5A1FA1E6170073DF7F /* SCNVector3+Extensions.swift in Sources */,
 				B936BC9B1FADF07A00D34EE4 /* pngwio.c in Sources */,
 				B94365FB20063A6800EBF112 /* allExtensions.swift in Sources */,
 				B9F2A8311FADC995004FC439 /* vector.c in Sources */,
@@ -1081,7 +1043,7 @@
 				B9F2A8301FADC995004FC439 /* utf8-utils.c in Sources */,
 				B9A1235A1FFF743500F8DB0F /* pinListCell.swift in Sources */,
 				B9F2A82A1FADC995004FC439 /* font-manager.c in Sources */,
-				B9817B531FA1E6170073DF7F /* FloatingPoint+Radians.swift in Sources */,
+				B90311632021C99300E1739F /* objcPinPicCell.m in Sources */,
 				B936BC951FADF07A00D34EE4 /* pngrio.c in Sources */,
 				B99088571FAE4E2A005B0B2E /* raycast.cpp in Sources */,
 				B936BC921FADF07A00D34EE4 /* pngmem.c in Sources */,
@@ -1214,6 +1176,7 @@
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = balikesiriKesfet/balikesiriKesfet.entitlements;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = GDRK82278T;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1298,6 +1261,7 @@
 				CLANG_CXX_LIBRARY = "libstdc++";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = balikesiriKesfet/balikesiriKesfet.entitlements;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = GDRK82278T;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

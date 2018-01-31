@@ -17,8 +17,9 @@
 #import "SWRevealViewController.h"
 #import <SceneKit/SceneKit.h>
 #import "quaternion.h"
+#import "objcPinPicCell.h"
 
-@interface agGL () <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, SWRevealViewControllerDelegate> {
+@interface agGL () <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UICollectionViewDelegate, SWRevealViewControllerDelegate> {
     Reachability *internetReachableFoo;
 }
 
@@ -37,6 +38,7 @@
 
 #pragma mark - Global Bools
 bool checkFrameBuffer, drawTest, drawApp, glInitialized, iAvailable, locationInited, drawAppCalled, pinInfoViewOpened = false;
+bool annotationOpened = false;
 #pragma mark - Global floats
 float cPitch, cYaw, cRoll, initYaw, heading, motionLastYaw=0.0f, startingHeading, updatingHeading;
 #pragma mark - Global Strings
@@ -46,13 +48,14 @@ CLLocation *currentLocation;
 #pragma mark - Global pinList
 static pinData* pinList = NULL;
 #pragma mark - Globals ints
-int pinCount = 0;
+int pinCount = 0, selectedPinId = -1;
 quat deviceQuat;
 NSMutableArray *constTextList;
 NSMutableArray *constDescrpList;
 NSMutableArray *constDistanceList;
 NSMutableArray *constPinLatList;
 NSMutableArray *constPinLngList;
+NSMutableArray *constPinImageList;
 
 @implementation agGL {
     
@@ -86,6 +89,16 @@ NSMutableArray *constPinLngList;
     iAvailable = false;
     locationInited = false;
     self.crosshairImag.alpha = 0.0f;
+    
+    //Setup annotationPopup
+    self.annotationPopup.layer.cornerRadius = 5;
+    self.annotationPopup.layer.borderWidth = 1;
+    self.annotationPopup.layer.borderColor = UIColor.whiteColor.CGColor;
+    self.annotationExitBut.layer.cornerRadius = 5;
+    self.annotationExitBut.layer.borderWidth = 1;
+    self.annotationExitBut.layer.borderColor = UIColor.whiteColor.CGColor;
+    self.galleryColView.delegate = self;
+    [self.galleryColView registerNib:[UINib nibWithNibName:@"objcPinPicCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"objcPinPicCell"];
     
     //Setup pininfoview
     self.pinInfoBg.layer.cornerRadius = 5;
@@ -190,7 +203,7 @@ bool pInited = false;
                 templateApp.ToucheBegan(screenWidth * UIScreen.mainScreen.scale / 2.0f,screenHeight * UIScreen.mainScreen.scale / 2.0f,1);
                 templateApp.ToucheEnded(screenWidth * UIScreen.mainScreen.scale / 2.0f,screenHeight * UIScreen.mainScreen.scale / 2.0f,1);
                 
-                int selectedPinId = -1;
+                selectedPinId = -1;
                 if(templateApp.GetSelectedPin() != NULL) {
                     for(int i=0; i<pinCount; i++) {
                         if(&pinList[i] == templateApp.GetSelectedPin()) {
@@ -248,6 +261,8 @@ bool pInited = false;
 }
 
 //Location Manager delegates
+
+
 - (void)startCaptureLocation
 {
     self.locationManager = [[CLLocationManager alloc] init];
@@ -284,11 +299,12 @@ bool pInited = false;
         [self updatePins];
         initYaw = degToRad(heading);
     }
-    if(locationInited && lDistance > 5.0f) {
+    if(locationInited && lDistance > 2.0f) {
         updateHeadingStored = false;
         curLat = [NSString stringWithFormat:@"%.8f",newLocation.coordinate.latitude];
         curLng = [NSString stringWithFormat:@"%.8f",newLocation.coordinate.longitude];
         initYaw = degToRad(heading);
+        //[self updatePins];
         //[self updatePinPositions];
     }
 }
@@ -331,10 +347,10 @@ bool startHeadingStored=false, updateHeadingStored = false;
 - (SCNQuaternion)orientationFromCMQuaternion:(CMQuaternion)q
 {
     GLKQuaternion gq1 =  GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(-90), 1, 0, 0); // add a rotation of the pitch 90 degrees
-    GLKQuaternion gq3 =  GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(0), 0, 1, 0); // add a rotation of the yaw
+    //GLKQuaternion gq3 =  GLKQuaternionMakeWithAngleAndAxis(GLKMathDegreesToRadians(0), 0, 1, 0); // add a rotation of the yaw
     GLKQuaternion gq2 =  GLKQuaternionMake(q.x, q.y, q.z, q.w); // the current orientation
     GLKQuaternion qp  =  GLKQuaternionMultiply(gq1, gq2); // get the "new" orientation
-    qp = GLKQuaternionMultiply(gq3, qp);
+    //qp = GLKQuaternionMultiply(gq3, qp);
     CMQuaternion rq =   {.x = qp.q[0], .y = qp.q[1], .z = qp.q[2], .w = qp.q[3]};
     
     return SCNVector4Make(-rq.x, -rq.y, rq.z, rq.w);
@@ -368,6 +384,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                           }
                                           else
                                           {
+                                              NSMutableArray *imageGallery = [[NSMutableArray alloc]init];
                                               //Re-init pins
                                               if ([jsonObj isKindOfClass:[NSArray class]])
                                               {
@@ -384,6 +401,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       constDescrpList   = [[NSMutableArray alloc]init];
                                                       constPinLatList   = [[NSMutableArray alloc]init];
                                                       constPinLngList   = [[NSMutableArray alloc]init];
+                                                      constPinImageList = [[NSMutableArray alloc]init];
                                                       
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
@@ -427,8 +445,14 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           pinList[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
                                                           pinList[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
                                                           
-                                                          NSLog(@"name: %s bearing: %f heading: %f",pinList[cnt].text,bearing,heading);
-                                                          LOGI("obj-c pin init [%d] text: %s address: %p\n", cnt, pinList[cnt].text, pinList[cnt].text);
+                                                          //NSLog(@"name: %s bearing: %f heading: %f",pinList[cnt].text,bearing,heading);
+                                                          //LOGI("obj-c pin init [%d] text: %s address: %p\n", cnt, pinList[cnt].text, pinList[cnt].text);
+                                                          
+                                                          //Add images to gallery array
+                                                          NSArray* imgGalJson = (NSArray*)jsonArray[cnt][@"pic2"];
+                                                          if(imgGalJson.count > 0) {
+                                                              [constPinImageList addObject:imgGalJson];
+                                                          }
                                                       }
                                                       LOGI("\n\n");
                                                       templateApp.SetPinDatas(pinList,pinCount,1.0f);
@@ -670,10 +694,54 @@ bool camSizeSet = false;
         pinInfoViewOpened = false;
     }];
 }
+-(void) annotationIn{
+    [self pinInfoViewOut];
+    annotationOpened = true;
+    [self.view addSubview:self.annotationPopup];
+    [self.annotationPopup setCenter:CGPointMake(self.view.center.x, self.view.center.y)];
+    self.annotationPopup.alpha = 0.0f;
+    
+    [UIView animateWithDuration:0.4f animations:^{
+        self.annotationPopup.alpha = 1.0f;
+    }];
+}
+-(void) annotationOut{
+    self.annotationPopup.alpha = 1.0f;
+    [UIView animateWithDuration:0.3f animations:^{
+        self.annotationPopup.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        [self.annotationPopup removeFromSuperview];
+        annotationOpened = false;
+    }];
+}
 
 
+#pragma mark PinInfoView
+- (IBAction)openAnnotation:(id)sender {
+    if(selectedPinId > -1){
+        [self.pinTitle setText:constTextList[selectedPinId]];
+        [self.pinInfo setText:constDescrpList[selectedPinId]];
+        [self annotationIn];
+    }
+}
 #pragma mark CollectionView for gallery
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
 
+-(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    if(pinCount > 0){
+        return pinCount;
+    } else {
+        return 0;
+    }
+}
+
+-(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    objcPinPicCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"objcPinPicCell" forIndexPath:indexPath];
+
+    return cell;
+}
 
 // Checks if we have an internet connection or not
 - (void)testInternetConnection

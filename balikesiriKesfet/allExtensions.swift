@@ -46,7 +46,7 @@ extension UITableView {
     }
 }
 
-extension UIImageView {
+@objc extension UIImageView {
     
     func downloadImage(from url: String){
         

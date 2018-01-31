@@ -11,6 +11,7 @@
 #import <OpenGLES/ES2/gl.h>
 #import <CoreMotion/CoreMotion.h>
 #import <CoreLocation/CoreLocation.h>
+//#import "balikesiriKesfet-Swift.h"
 #import "CaptureSessionManager.h"
 #import "App.h"
 #import "EngineBase.h"
@@ -33,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *pinInfoDistance;
 @property (weak, nonatomic) IBOutlet UILabel *pinInfoTitle;
 @property (weak, nonatomic) IBOutlet UIImageView *crosshairImag;
+- (IBAction)openAnnotation:(id)sender;
 
 - (void)startCaptureLocation;
 - (void)stopCaptureLocation;
