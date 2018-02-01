@@ -56,6 +56,7 @@ NSMutableArray *constDistanceList;
 NSMutableArray *constPinLatList;
 NSMutableArray *constPinLngList;
 NSMutableArray *constPinImageList;
+NSMutableArray *constPinGalleryImages;
 
 @implementation agGL {
     
@@ -211,7 +212,6 @@ bool pInited = false;
                         if(&pinList[i] == templateApp.GetSelectedPin()) {
                             pinList[i].borderColor = {1.0f, 0.0f, 0.0f};
                             selectedPinId = pinList[i].id;
-                            NSLog(@"image list count: %lu",(unsigned long)[constPinImageList[selectedPinId] count]);
                         }
                         else {
                             pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
@@ -400,12 +400,13 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
                                                       
                                                       //Fill const arrays
-                                                      constTextList     = [[NSMutableArray alloc]init];
-                                                      constDistanceList = [[NSMutableArray alloc]init];
-                                                      constDescrpList   = [[NSMutableArray alloc]init];
-                                                      constPinLatList   = [[NSMutableArray alloc]init];
-                                                      constPinLngList   = [[NSMutableArray alloc]init];
-                                                      constPinImageList = [[NSMutableArray alloc]init];
+                                                      constTextList         = [[NSMutableArray alloc]init];
+                                                      constDistanceList     = [[NSMutableArray alloc]init];
+                                                      constDescrpList       = [[NSMutableArray alloc]init];
+                                                      constPinLatList       = [[NSMutableArray alloc]init];
+                                                      constPinLngList       = [[NSMutableArray alloc]init];
+                                                      constPinImageList     = [[NSMutableArray alloc]init];
+                                                      constPinGalleryImages = [[NSMutableArray alloc] init];
                                                       
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
@@ -418,44 +419,43 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           
                                                           double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
                                                           float dist = [currentLocation distanceFromLocation:tmpPinLoc];
+                                                          float projecDist = [self mapNumber:0.01f :2.0f :0.4f :0.8f :dist];
                                                           
                                                           double bearingOffset = (heading-bearing) + 90.0f;
-                                                          NSLog(@"bearingOffset: %f",bearingOffset);
                                                           if(bearingOffset<0.0f){
                                                               bearingOffset = 360.0f + bearingOffset;
                                                           }
                                                           if(bearingOffset>360.0f){
                                                               bearingOffset = bearingOffset-360.0f;
                                                           }
-                                                          NSLog(@"bearingOffset1: %f",bearingOffset);
-                                                          pLat = cos(degToRad(bearingOffset)) * dist;
-                                                          pLng = sin(degToRad(bearingOffset)) * dist;
+                                                          pLat = cos(degToRad(bearingOffset)) * projecDist;
+                                                          pLng = sin(degToRad(bearingOffset)) * projecDist;
                                                           
                                                           [constTextList addObject:jsonArray[cnt][@"title"]];
                                                           NSString* tmpDesc = jsonArray[cnt][@"description"];
-                                                          NSLog(@"tmpdesc %@",tmpDesc);
                                                           if(tmpDesc == [NSNull null]) {
                                                               tmpDesc = @" ";
                                                           }
                                                           [constDescrpList addObject:tmpDesc];
 //                                                          float dist = [currentLocation distanceFromLocation:tmpPinLoc];
                                                           [constDistanceList addObject:[NSString stringWithFormat:@"%.2f KM",dist/1000.0f]];
-                                                          
+
                                                           pinList[cnt].id = cnt;
                                                           pinList[cnt].position = {pLat, 0.0f, pLng};
                                                           pinList[cnt].text = (char*)[constTextList[cnt] cStringUsingEncoding:NSUTF8StringEncoding];
-                                                          pinList[cnt].size = 4.0f;
+                                                          pinList[cnt].size = 1.0f;
                                                           pinList[cnt].fontSize = 0.65f;
                                                           pinList[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
                                                           pinList[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
                                                           
-                                                          //NSLog(@"name: %s bearing: %f heading: %f",pinList[cnt].text,bearing,heading);
-                                                          //LOGI("obj-c pin init [%d] text: %s address: %p\n", cnt, pinList[cnt].text, pinList[cnt].text);
-                                                          
                                                           //Add images to gallery array
-                                                          NSMutableArray* imgGalJson = (NSMutableArray*)jsonArray[cnt][@"pic2"];
-                                                          NSLog(@"pin[%d] imgcnt: %lu",cnt,(unsigned long)imgGalJson.count);
-                                                          [constPinImageList addObject:imgGalJson];
+                                                          NSMutableArray* imgGalJson    = [[jsonArray[cnt][@"pic2"] allObjects] mutableCopy];
+                                                          [imgGalJson removeObject:@""];
+                                                          if(imgGalJson.count > 0){
+                                                              [constPinImageList addObject:imgGalJson];
+                                                          } else {
+                                                              constPinImageList[cnt] = [[NSMutableArray alloc] init];
+                                                          }
                                                       }
                                                       LOGI("\n\n");
                                                       templateApp.SetPinDatas(pinList,pinCount,1.0f);
@@ -500,13 +500,17 @@ bool startHeadingStored=false, updateHeadingStored = false;
     }
 }
 
--(double) getBearing:(double) lt1:(double) lg1:(double) lt2:(double) lg2 {
+-(double)getBearing:(double)lt1:(double)lg1:(double)lt2:(double)lg2 {
     double dLon = (lg2-lg1);
     double y = sin(degToRad(dLon)) * cos(degToRad(lt2));
     double x = cos(degToRad(lt1))*sin(degToRad(lt2)) - sin(degToRad(lt1))*cos(degToRad(lt2))*cos(degToRad(dLon));
     double brng = radToDeg((atan2(y, x)));
     return brng;
     //return (360 - ((brng + 360) % 360));
+}
+
+-(float)mapNumber:(float)a1:(float)a2:(float)b1:(float)b2:(float)x {
+    return (x-a1) / (a2-a1) * (b2 - b1) + b1;
 }
 
 -(void) startCameraPreview {
@@ -725,15 +729,23 @@ bool camSizeSet = false;
 
 
 #pragma mark PinInfoView
+int storedPinId=-1;
 - (IBAction)openAnnotation:(id)sender {
     if(selectedPinId > -1){
-        [self.pinTitle setText:constTextList[selectedPinId]];
-        [self.pinInfo setText:constDescrpList[selectedPinId]];
+        storedPinId = selectedPinId;
+        if([constPinImageList[storedPinId] count]<1){
+            self.galleryColView.alpha = 0.0f;
+        } else {
+            self.galleryColView.alpha = 1.0f;
+        }
+        [self.pinTitle setText:constTextList[storedPinId]];
+        [self.pinInfo setText:constDescrpList[storedPinId]];
         [self annotationIn];
     }
 }
 
 - (IBAction)closeAnnotation:(id)sender {
+    storedPinId = -1;
     [self annotationOut];
 }
 #pragma mark CollectionView for gallery
@@ -742,8 +754,8 @@ bool camSizeSet = false;
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if(pinCount > 0 && selectedPinId > -1){
-        return [constPinImageList[selectedPinId] count];
+    if(pinCount > 0 && storedPinId > -1){
+        return [constPinImageList[storedPinId] count];
     } else {
         return 0;
     }
@@ -751,11 +763,13 @@ bool camSizeSet = false;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     objcPinPicCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"objcPinPicCell" forIndexPath:indexPath];
-    if(![constPinImageList[selectedPinId][indexPath.item] isEqualToString:@""]) {
-        NSString* imageUrl = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/%@",constPinImageList[selectedPinId][indexPath.item]];
-        NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
-        cell.detailPic.image = [UIImage imageWithData: imageData];
-    }
+    if([constPinImageList[storedPinId] count] > 0) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSString* imageUrl = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/%@",constPinImageList[storedPinId][indexPath.item]];
+            NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
+            cell.detailPic.image = [UIImage imageWithData:imageData];
+        });
+        }
     return cell;
 }
 

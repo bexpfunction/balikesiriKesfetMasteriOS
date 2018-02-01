@@ -143,6 +143,8 @@
 		B9F2A8311FADC995004FC439 /* vector.c in Sources */ = {isa = PBXBuildFile; fileRef = B9F2A5D71FADC990004FC439 /* vector.c */; };
 		B9F2A8321FADC995004FC439 /* vertex-attribute.c in Sources */ = {isa = PBXBuildFile; fileRef = B9F2A5D91FADC990004FC439 /* vertex-attribute.c */; };
 		B9F2A8331FADC995004FC439 /* vertex-buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = B9F2A5DB1FADC990004FC439 /* vertex-buffer.c */; };
+		B9F5419F2023514500D3718A /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F5419E2023514500D3718A /* Reachability.swift */; };
+		B9F541A1202365ED00D3718A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F541A0202365ED00D3718A /* NetworkManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -358,6 +360,8 @@
 		B9F2A5DA1FADC990004FC439 /* vertex-attribute.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vertex-attribute.h"; sourceTree = "<group>"; };
 		B9F2A5DB1FADC990004FC439 /* vertex-buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "vertex-buffer.c"; sourceTree = "<group>"; };
 		B9F2A5DC1FADC990004FC439 /* vertex-buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "vertex-buffer.h"; sourceTree = "<group>"; };
+		B9F5419E2023514500D3718A /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		B9F541A0202365ED00D3718A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		BC9409506B01946FCD17C0A3 /* libPods-balikesiriKesfet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-balikesiriKesfet.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -622,6 +626,8 @@
 				B9A1235B1FFFA99200F8DB0F /* pinPicCell.swift */,
 				B90311612021C99300E1739F /* objcPinPicCell.h */,
 				B90311622021C99300E1739F /* objcPinPicCell.m */,
+				B9F5419E2023514500D3718A /* Reachability.swift */,
+				B9F541A0202365ED00D3718A /* NetworkManager.swift */,
 			);
 			name = HelperClasses;
 			sourceTree = "<group>";
@@ -956,6 +962,7 @@
 				B99088541FAE4E2A005B0B2E /* font.cpp in Sources */,
 				B974489F1FAC7BD600C71F53 /* unzip.c in Sources */,
 				B9F2A82D1FADC995004FC439 /* text-buffer.c in Sources */,
+				B9F541A1202365ED00D3718A /* NetworkManager.swift in Sources */,
 				B94EDB982003B391004D4655 /* SWRevealViewController.m in Sources */,
 				B9817B641FA233F30073DF7F /* hello.cpp in Sources */,
 				B9F2A8281FADC995004FC439 /* distance-field.c in Sources */,
@@ -1032,6 +1039,7 @@
 				B974489C1FAC7BD600C71F53 /* ioapi.c in Sources */,
 				B9B21E141F584FB0003F0317 /* haberler.swift in Sources */,
 				B97448931FAC7BD600C71F53 /* adler32.c in Sources */,
+				B9F5419F2023514500D3718A /* Reachability.swift in Sources */,
 				B936BC931FADF07A00D34EE4 /* pngpread.c in Sources */,
 				B9F2A5A41FADC567004FC439 /* NvTriStripObjects.cpp in Sources */,
 				B92BE4741F9E0AAD0039D7B8 /* bizeYazin.swift in Sources */,

@@ -752,7 +752,7 @@ void AppDraw() {
 //
 //        uniform = PROGRAM_get_uniform_location(program,(char *)"CAM_POS");
 //        glUniform3fv(uniform,1,campos);
-        for(int i=0;i<pinSize;i++) {
+        for(int i=pinSize-1;i>=0;i--) {
             glDisable(GL_BLEND);
             glBindVertexArrayOES(mvao);
             PROGRAM_draw( program );

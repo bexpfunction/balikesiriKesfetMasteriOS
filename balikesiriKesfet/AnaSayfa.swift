@@ -28,6 +28,7 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
     @IBOutlet weak var webBView: UIView!
     @IBOutlet weak var bizeYazinBView: UIView!
     
+    let network: NetworkManager = NetworkManager.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +69,7 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
         uygHakkindaBut.layer.borderWidth = 1
         uygHakkindaBut.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         
+        
         //Reveal View Controller Setup
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
@@ -83,27 +85,35 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
     
     //Button actions
     @IBAction func haberlerClick(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "haberlerVC")
-        self.navigationController?.pushViewController(controller, animated: true)
+        if(checkConnection(failMessage: "Haberler sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let controller = storyboard.instantiateViewController(withIdentifier: "haberlerVC")
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
     
     @IBAction func agModuClick(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "agVC")
-        self.navigationController?.pushViewController(controller, animated: true)
+        if(checkConnection(failMessage: "Artırılmış gerçeklik moduna ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let controller = storyboard.instantiateViewController(withIdentifier: "agVC")
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
     
     @IBAction func haritaClick(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "haritaVC")
-        self.navigationController?.pushViewController(controller, animated: true)
+        if(checkConnection(failMessage: "Harita sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let controller = storyboard.instantiateViewController(withIdentifier: "haritaVC")
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
     
     @IBAction func duyuruClicked(_ sender: UIButton) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "duyuruVC")
-        self.navigationController?.pushViewController(controller, animated: true)
+        if(checkConnection(failMessage: "Duyurular sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let controller = storyboard.instantiateViewController(withIdentifier: "duyuruVC")
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
     }
     
     @IBAction func webButClicked(_ sender: UIButton) {
@@ -152,6 +162,34 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
         exit(0)
     }
 
+    
+    func checkConnection(failMessage: String) -> Bool {
+        var connected:Bool
+        connected = false
+        let alert = UIAlertController(title: "UYARI", message: failMessage, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Tamam", style: UIAlertActionStyle.default, handler: {
+            action in
+            switch action.style{
+            case .default:
+                break
+            case.cancel:
+                break
+            case.destructive:
+                break
+            }
+        }))
+
+        NetworkManager.isReachable { _ in
+            connected = true
+        }
+        
+        NetworkManager.isUnreachable { _ in
+            self.present(alert, animated: true, completion: nil)
+            connected = false
+        }
+        
+        return connected
+    }
     
     //Delegate functions
     //SWReveal Delegate
