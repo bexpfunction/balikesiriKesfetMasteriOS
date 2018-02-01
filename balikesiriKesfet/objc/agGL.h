@@ -35,6 +35,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *pinInfoTitle;
 @property (weak, nonatomic) IBOutlet UIImageView *crosshairImag;
 - (IBAction)openAnnotation:(id)sender;
+- (IBAction)closeAnnotation:(id)sender;
 
 - (void)startCaptureLocation;
 - (void)stopCaptureLocation;

@@ -734,8 +734,8 @@ Title</string>
                                                 <rect key="frame" x="0.0" y="268" width="375" height="33"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="sajdksadjksajdkadjsakldjsadjsakdljaskldjsakld" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bhy-jt-uX7">
-                                                        <rect key="frame" x="22" y="8" width="330" height="20.5"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Bhy-jt-uX7">
+                                                        <rect key="frame" x="8" y="6" width="359" height="21"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -763,23 +763,23 @@ Title</string>
                                                                 <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Q9L-pO-N4d" userLabel="CardView">
                                                                     <rect key="frame" x="4" y="4" width="367" height="52"/>
                                                                     <subviews>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="99.99 KM" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W5j-Vf-yFd">
-                                                                            <rect key="frame" x="8" y="18.5" width="47" height="13"/>
-                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99.99 KM" textAlignment="natural" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="W5j-Vf-yFd">
+                                                                            <rect key="frame" x="8" y="19.5" width="47" height="13"/>
                                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="11"/>
                                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
-                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yXm-EP-MMk" userLabel="pinTitleLabel">
-                                                                            <rect key="frame" x="73" y="16" width="35.5" height="18"/>
-                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yXm-EP-MMk" userLabel="pinTitleLabel">
+                                                                            <rect key="frame" x="73" y="17" width="35.5" height="18"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="35.5" id="PqP-PH-lzh"/>
+                                                                            </constraints>
                                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                                             <nil key="highlightedColor"/>
                                                                         </label>
-                                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d4w-bx-grR">
-                                                                            <rect key="frame" x="140.5" y="11.5" width="59" height="27"/>
-                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d4w-bx-grR">
+                                                                            <rect key="frame" x="287" y="12.5" width="70" height="27"/>
                                                                             <color key="backgroundColor" red="0.19215686274509802" green="0.39215686274509803" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                                                                             <state key="normal" title="Detaylı Bilgi">
@@ -788,6 +788,15 @@ Title</string>
                                                                         </button>
                                                                     </subviews>
                                                                     <color key="backgroundColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                    <constraints>
+                                                                        <constraint firstItem="W5j-Vf-yFd" firstAttribute="centerY" secondItem="Q9L-pO-N4d" secondAttribute="centerY" id="2iV-dk-aM0"/>
+                                                                        <constraint firstItem="W5j-Vf-yFd" firstAttribute="leading" secondItem="Q9L-pO-N4d" secondAttribute="leading" constant="8" id="C9X-QI-TV5"/>
+                                                                        <constraint firstItem="d4w-bx-grR" firstAttribute="centerY" secondItem="Q9L-pO-N4d" secondAttribute="centerY" id="KWh-wK-A0H"/>
+                                                                        <constraint firstItem="yXm-EP-MMk" firstAttribute="leading" secondItem="W5j-Vf-yFd" secondAttribute="trailing" constant="18" id="SRf-fK-R1W"/>
+                                                                        <constraint firstAttribute="trailing" secondItem="d4w-bx-grR" secondAttribute="trailing" constant="10" id="Tbl-2f-BLL"/>
+                                                                        <constraint firstItem="d4w-bx-grR" firstAttribute="leading" relation="lessThanOrEqual" secondItem="yXm-EP-MMk" secondAttribute="trailing" constant="178.5" id="qs1-lu-eXc"/>
+                                                                        <constraint firstItem="yXm-EP-MMk" firstAttribute="centerY" secondItem="Q9L-pO-N4d" secondAttribute="centerY" id="zPP-NL-xqO"/>
+                                                                    </constraints>
                                                                 </view>
                                                             </subviews>
                                                             <constraints>
@@ -1255,6 +1264,7 @@ Title</string>
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
                             <connections>
+                                <action selector="closeAnnotation:" destination="PD7-vy-1HA" eventType="touchUpInside" id="0KM-jy-7Cs"/>
                                 <action selector="dismissAnnPopup:" destination="7pK-FQ-N5F" eventType="touchUpInside" id="ZWZ-Fj-cWw"/>
                             </connections>
                         </button>

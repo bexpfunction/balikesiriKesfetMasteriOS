@@ -44,7 +44,7 @@ float cPitch, cYaw, cRoll, initYaw, heading, motionLastYaw=0.0f, startingHeading
 #pragma mark - Global Strings
 NSString *curLat, *curLng;
 #pragma mark - Global Location
-CLLocation *currentLocation;
+CLLocation *currentLocation, *averageLocation;
 #pragma mark - Global pinList
 static pinData* pinList = NULL;
 #pragma mark - Globals ints
@@ -98,12 +98,15 @@ NSMutableArray *constPinImageList;
     self.annotationExitBut.layer.borderWidth = 1;
     self.annotationExitBut.layer.borderColor = UIColor.whiteColor.CGColor;
     self.galleryColView.delegate = self;
-    [self.galleryColView registerNib:[UINib nibWithNibName:@"objcPinPicCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"objcPinPicCell"];
+    //[self.galleryColView registerNib:[UINib nibWithNibName:@"objcPinPicCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"objcPinPicCell"];
     
     //Setup pininfoview
     self.pinInfoBg.layer.cornerRadius = 5;
     self.pinInfoBg.layer.borderColor = UIColor.whiteColor.CGColor;
     self.pinInfoBg.layer.borderWidth = 1;
+    self.pinInfoDetailBut.layer.cornerRadius = 5;
+    self.pinInfoDetailBut.layer.borderWidth = 1;
+    self.pinInfoDetailBut.layer.borderColor = UIColor.whiteColor.CGColor;
     
     [self testInternetConnection];
 }
@@ -131,15 +134,15 @@ NSMutableArray *constPinImageList;
         [self outputMotionData:motion];
     }];
     
-    [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue]
-                                    withHandler:^(CMGyroData* gyro, NSError *error) {
-                                        [self outputGyroData:gyro];
-                                    }];
-    
-    
-    [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData* acceleration, NSError *error) {
-        [self outputAccelerationData:acceleration];
-    }];
+//    [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue]
+//                                    withHandler:^(CMGyroData* gyro, NSError *error) {
+//                                        [self outputGyroData:gyro];
+//                                    }];
+//
+//
+//    [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData* acceleration, NSError *error) {
+//        [self outputAccelerationData:acceleration];
+//    }];
     
     self.crosshairImag.alpha = 1.0f;
 }
@@ -291,6 +294,7 @@ bool pInited = false;
            fromLocation:(CLLocation *)oldLocation
 {
     currentLocation = newLocation;
+    NSLog(@"curloc: %f , %f",currentLocation.coordinate.latitude,currentLocation.coordinate.longitude);
     CLLocationDistance lDistance = [newLocation distanceFromLocation:oldLocation];
     if(!locationInited) {
         locationInited = true;
@@ -452,6 +456,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           NSArray* imgGalJson = (NSArray*)jsonArray[cnt][@"pic2"];
                                                           if(imgGalJson.count > 0) {
                                                               [constPinImageList addObject:imgGalJson];
+                                                              NSLog(@"image: %@",imgGalJson[0]);
                                                           }
                                                       }
                                                       LOGI("\n\n");
@@ -676,14 +681,16 @@ bool camSizeSet = false;
 
 #pragma mark POPUPS
 -(void) pinInfoViewIn{
-    pinInfoViewOpened = true;
-    [self.view addSubview:self.pinInfoView];
-    [self.pinInfoView setCenter:CGPointMake(self.view.center.x, self.view.bounds.size.height-self.pinInfoView.bounds.size.height)];
-    self.pinInfoView.alpha = 0.0f;
-    
-    [UIView animateWithDuration:0.4f animations:^{
-        self.pinInfoView.alpha = 1.0f;
-    }];
+    if(!annotationOpened) {
+        pinInfoViewOpened = true;
+        [self.view addSubview:self.pinInfoView];
+        [self.pinInfoView setCenter:CGPointMake(self.view.center.x, self.view.bounds.size.height-self.pinInfoView.bounds.size.height)];
+        self.pinInfoView.alpha = 0.0f;
+        
+        [UIView animateWithDuration:0.4f animations:^{
+            self.pinInfoView.alpha = 1.0f;
+        }];
+    }
 }
 -(void) pinInfoViewOut{
     self.pinInfoView.alpha = 1.0f;
@@ -696,6 +703,9 @@ bool camSizeSet = false;
 }
 -(void) annotationIn{
     [self pinInfoViewOut];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.galleryColView reloadData];
+    });
     annotationOpened = true;
     [self.view addSubview:self.annotationPopup];
     [self.annotationPopup setCenter:CGPointMake(self.view.center.x, self.view.center.y)];
@@ -724,14 +734,18 @@ bool camSizeSet = false;
         [self annotationIn];
     }
 }
+
+- (IBAction)closeAnnotation:(id)sender {
+    [self annotationOut];
+}
 #pragma mark CollectionView for gallery
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 1;
 }
 
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if(pinCount > 0){
-        return pinCount;
+    if(pinCount > 0 && selectedPinId > -1){
+        return [constPinImageList[selectedPinId] count];
     } else {
         return 0;
     }
@@ -739,7 +753,8 @@ bool camSizeSet = false;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     objcPinPicCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"objcPinPicCell" forIndexPath:indexPath];
-
+    NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: @"https://media1.britannica.com/eb-media/60/138360-004-AE67E550.jpg"]];
+    cell.detailPic.image = [UIImage imageWithData: imageData];
     return cell;
 }
 
