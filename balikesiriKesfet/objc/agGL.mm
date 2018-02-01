@@ -98,7 +98,6 @@ NSMutableArray *constPinImageList;
     self.annotationExitBut.layer.borderWidth = 1;
     self.annotationExitBut.layer.borderColor = UIColor.whiteColor.CGColor;
     self.galleryColView.delegate = self;
-    //[self.galleryColView registerNib:[UINib nibWithNibName:@"objcPinPicCell" bundle:[NSBundle mainBundle]] forCellWithReuseIdentifier:@"objcPinPicCell"];
     
     //Setup pininfoview
     self.pinInfoBg.layer.cornerRadius = 5;
@@ -212,6 +211,7 @@ bool pInited = false;
                         if(&pinList[i] == templateApp.GetSelectedPin()) {
                             pinList[i].borderColor = {1.0f, 0.0f, 0.0f};
                             selectedPinId = pinList[i].id;
+                            NSLog(@"image list count: %lu",(unsigned long)[constPinImageList[selectedPinId] count]);
                         }
                         else {
                             pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
@@ -453,11 +453,9 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           //LOGI("obj-c pin init [%d] text: %s address: %p\n", cnt, pinList[cnt].text, pinList[cnt].text);
                                                           
                                                           //Add images to gallery array
-                                                          NSArray* imgGalJson = (NSArray*)jsonArray[cnt][@"pic2"];
-                                                          if(imgGalJson.count > 0) {
-                                                              [constPinImageList addObject:imgGalJson];
-                                                              NSLog(@"image: %@",imgGalJson[0]);
-                                                          }
+                                                          NSMutableArray* imgGalJson = (NSMutableArray*)jsonArray[cnt][@"pic2"];
+                                                          NSLog(@"pin[%d] imgcnt: %lu",cnt,(unsigned long)imgGalJson.count);
+                                                          [constPinImageList addObject:imgGalJson];
                                                       }
                                                       LOGI("\n\n");
                                                       templateApp.SetPinDatas(pinList,pinCount,1.0f);
@@ -753,8 +751,11 @@ bool camSizeSet = false;
 
 -(UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     objcPinPicCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"objcPinPicCell" forIndexPath:indexPath];
-    NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: @"https://media1.britannica.com/eb-media/60/138360-004-AE67E550.jpg"]];
-    cell.detailPic.image = [UIImage imageWithData: imageData];
+    if(![constPinImageList[selectedPinId][indexPath.item] isEqualToString:@""]) {
+        NSString* imageUrl = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/%@",constPinImageList[selectedPinId][indexPath.item]];
+        NSData * imageData = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString: imageUrl]];
+        cell.detailPic.image = [UIImage imageWithData: imageData];
+    }
     return cell;
 }
 

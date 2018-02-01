@@ -12,7 +12,6 @@
 		B90186052005109900552DE3 /* uygulamaHakkinda.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90186042005109900552DE3 /* uygulamaHakkinda.swift */; };
 		B90311602021C8D000E1739F /* objcExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B903115F2021C8D000E1739F /* objcExtensions.swift */; };
 		B90311632021C99300E1739F /* objcPinPicCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B90311622021C99300E1739F /* objcPinPicCell.m */; };
-		B90311652021D7A900E1739F /* objcPinPicCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B90311642021D7A900E1739F /* objcPinPicCell.xib */; };
 		B90D34E21F90D0B300A1BB68 /* articleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90D34E11F90D0B300A1BB68 /* articleCell.swift */; };
 		B91D6E231F9CD95500525C76 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B91D6E221F9CD95400525C76 /* GoogleService-Info.plist */; };
 		B91DEFEF1F93AF9900F80A27 /* haberDetaylari.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91DEFEE1F93AF9900F80A27 /* haberDetaylari.swift */; };
@@ -154,7 +153,6 @@
 		B903115F2021C8D000E1739F /* objcExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = objcExtensions.swift; sourceTree = "<group>"; };
 		B90311612021C99300E1739F /* objcPinPicCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = objcPinPicCell.h; sourceTree = "<group>"; };
 		B90311622021C99300E1739F /* objcPinPicCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = objcPinPicCell.m; sourceTree = "<group>"; };
-		B90311642021D7A900E1739F /* objcPinPicCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = objcPinPicCell.xib; sourceTree = "<group>"; };
 		B90D34E11F90D0B300A1BB68 /* articleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = articleCell.swift; sourceTree = "<group>"; };
 		B91C189C1FF0DC5400101101 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		B91D6E221F9CD95400525C76 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -624,7 +622,6 @@
 				B9A1235B1FFFA99200F8DB0F /* pinPicCell.swift */,
 				B90311612021C99300E1739F /* objcPinPicCell.h */,
 				B90311622021C99300E1739F /* objcPinPicCell.m */,
-				B90311642021D7A900E1739F /* objcPinPicCell.xib */,
 			);
 			name = HelperClasses;
 			sourceTree = "<group>";
@@ -876,7 +873,6 @@
 				B92027821FE930FB00B25F4D /* pin_model2.mtl in Resources */,
 				B920278A1FE930FB00B25F4D /* noise.png in Resources */,
 				B92027681FE92CC200B25F4D /* cameraFragment.glsl in Resources */,
-				B90311652021D7A900E1739F /* objcPinPicCell.xib in Resources */,
 				B9A1D19B1FAC8C37005929EE /* test.txt in Resources */,
 				B92027691FE92CC200B25F4D /* colorVertex.glsl in Resources */,
 				B92027841FE930FB00B25F4D /* cube.obj in Resources */,
