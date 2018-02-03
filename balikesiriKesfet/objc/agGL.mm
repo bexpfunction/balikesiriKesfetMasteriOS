@@ -246,7 +246,6 @@ bool pInited = false;
                 //Update text pointers
                 for(int i=0; i<pinCount; i++){
                     pinList[i].text = (char*)[constAnimTextList[i] cStringUsingEncoding:NSUTF8StringEncoding];
-                    //LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
                 }
                 templateApp.SetPinDatas(pinList, pinCount, 1);
             }
@@ -269,7 +268,7 @@ bool pInited = false;
 -(void)update {
     
 }
-int animationSkipper = 0;
+
 -(void)animateTexts {
     for(int c=0; c<constPinIsAnimated.count; c++){
         if([constPinIsAnimated[c] boolValue]){
