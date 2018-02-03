@@ -19,8 +19,43 @@ class backTVController: UITableViewController, FBSDKLoginButtonDelegate {
     //Cells
     @IBOutlet weak var fbLoginButtonCell: UITableViewCell!
     
+    let network: NetworkManager = NetworkManager.sharedInstance
+    
     //Button actions
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //Haberler selected
+        if(indexPath.row == 1){
+            if(checkConnection(failMessage: "Haberler sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let controller = storyboard.instantiateViewController(withIdentifier: "haberlerNavC")
+                self.revealViewController().pushFrontViewController(controller, animated: true)
+            }
+        }
+        //AG selected
+        if(indexPath.row == 2){
+            if(checkConnection(failMessage: "Artırılmış gerçeklik moduna ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let controller = storyboard.instantiateViewController(withIdentifier: "agNavC")
+                self.revealViewController().pushFrontViewController(controller, animated: true)
+            }
+        }
+        //Harita selected
+        if(indexPath.row == 3){
+            if(checkConnection(failMessage: "Harita sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let controller = storyboard.instantiateViewController(withIdentifier: "haritaNavC")
+                self.revealViewController().pushFrontViewController(controller, animated: true)
+            }
+        }
+        //Duyuru selected
+        if(indexPath.row == 4){
+            if(checkConnection(failMessage: "Duyurular sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let controller = storyboard.instantiateViewController(withIdentifier: "duyuruNavC")
+                self.revealViewController().pushFrontViewController(controller, animated: true)
+            }
+        }
+        
         if(indexPath.row == 6){
             let url = URL(string: "http://www.balikesir.bel.tr")!
             if UIApplication.shared.canOpenURL(url) {
@@ -120,5 +155,33 @@ class backTVController: UITableViewController, FBSDKLoginButtonDelegate {
         NSLog("logged out!!")
         self.fbProfileImage.isHidden = true
         self.performSegue(withIdentifier: "toIntro", sender: self)
+    }
+    
+    func checkConnection(failMessage: String) -> Bool {
+        var connected:Bool
+        connected = false
+        let alert = UIAlertController(title: "UYARI", message: failMessage, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Tamam", style: UIAlertActionStyle.default, handler: {
+            action in
+            switch action.style{
+            case .default:
+                break
+            case.cancel:
+                break
+            case.destructive:
+                break
+            }
+        }))
+        
+        NetworkManager.isReachable { _ in
+            connected = true
+        }
+        
+        NetworkManager.isUnreachable { _ in
+            self.present(alert, animated: true, completion: nil)
+            connected = false
+        }
+        
+        return connected
     }
 }

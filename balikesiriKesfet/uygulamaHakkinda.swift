@@ -12,9 +12,19 @@ class uygulamaHakkinda: UIViewController, SWRevealViewControllerDelegate {
 
     //Buttons
     @IBOutlet weak var openMenuBut: UIBarButtonItem!
+    @IBOutlet weak var botView: UIView!
+    @IBOutlet weak var topView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.topView.layer.cornerRadius = 5;
+        self.topView.layer.borderColor = UIColor.white.cgColor;
+        self.topView.layer.borderWidth = 1;
+        
+        self.botView.layer.cornerRadius = 5;
+        self.botView.layer.borderColor = UIColor.white.cgColor;
+        self.botView.layer.borderWidth = 1;
+        
         //Reveal View Controller Setup
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))

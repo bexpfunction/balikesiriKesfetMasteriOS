@@ -51,6 +51,8 @@ static pinData* pinList = NULL;
 int pinCount = 0, selectedPinId = -1;
 quat deviceQuat;
 NSMutableArray *constTextList;
+NSMutableArray *constAnimTextList;
+NSMutableArray *constAnimStates;
 NSMutableArray *constDescrpList;
 NSMutableArray *constDistanceList;
 NSMutableArray *constPinLatList;
@@ -109,6 +111,7 @@ NSMutableArray *constPinGalleryImages;
     self.pinInfoDetailBut.layer.borderColor = UIColor.whiteColor.CGColor;
     
     [self testInternetConnection];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -134,15 +137,10 @@ NSMutableArray *constPinGalleryImages;
         [self outputMotionData:motion];
     }];
     
-//    [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue]
-//                                    withHandler:^(CMGyroData* gyro, NSError *error) {
-//                                        [self outputGyroData:gyro];
-//                                    }];
-//
-//
-//    [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData* acceleration, NSError *error) {
-//        [self outputAccelerationData:acceleration];
-//    }];
+    [NSTimer scheduledTimerWithTimeInterval:0.5f repeats:true block:^(NSTimer * _Nonnull timer) {
+        [self animateTexts];
+    }];
+
     
     self.crosshairImag.alpha = 1.0f;
 }
@@ -177,6 +175,10 @@ NSMutableArray *constPinGalleryImages;
             LOGI("\nThere IS framebuffer!!!\n");
     }
     
+    //Get device
+    //NSLog(@"current device: %@",[[UIDevice currentDevice] model]);
+    NSLog(@"current device: %@",[[NSUUID UUID] UUIDString]);
+    
     //Get resolution
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width ;
@@ -184,7 +186,7 @@ NSMutableArray *constPinGalleryImages;
 
     //TEMPLATE APP
     templateApp.SetCameraSize(1080.0f,1920.0f);
-    templateApp.InitCamera(65.0f,1.0f,1000.0f,0.5f,true);
+    templateApp.InitCamera(65.0f,0.01f,10.0f,0.5f,true);
     templateApp.Init((int)screenWidth * (int)UIScreen.mainScreen.scale,(int)screenHeight * (int)UIScreen.mainScreen.scale);
     glInitialized = true;
 }
@@ -210,11 +212,11 @@ bool pInited = false;
                 if(templateApp.GetSelectedPin() != NULL) {
                     for(int i=0; i<pinCount; i++) {
                         if(&pinList[i] == templateApp.GetSelectedPin()) {
-                            pinList[i].borderColor = {1.0f, 0.0f, 0.0f};
+                            pinList[i].color = {0.0f, 0.52f, 1.0f, 1.0f};
                             selectedPinId = pinList[i].id;
                         }
                         else {
-                            pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
+                            pinList[i].color = {0.14f, 0.30f, 0.43f, 1.0f};
                         }
                     }
                     
@@ -229,11 +231,16 @@ bool pInited = false;
                 } else {
                     selectedPinId = -1;
                     for(int i=0; i<pinCount; i++) {
-                        pinList[i].borderColor = {1.0f, 1.0f, 1.0f};
+                        pinList[i].color = {0.14f, 0.30f, 0.43f, 1.0f};
                     }
-                    //Remove pininfo view
-                    if(pinInfoViewOpened == true)
-                        [self pinInfoViewOut];
+                    //Remove pininfo view withtimer
+                    if(pinInfoViewOpened == true){
+                        [NSTimer scheduledTimerWithTimeInterval:3.0f repeats:false block:^(NSTimer * _Nonnull timer) {
+                            NSLog(@"timer");
+                            [self controlPopupVisibility];
+                        }];
+                        //[self pinInfoViewOut];
+                    }
                 }
                 
                 //Update text pointers
@@ -241,6 +248,7 @@ bool pInited = false;
                     pinList[i].text = (char*)[constTextList[i] cStringUsingEncoding:NSUTF8StringEncoding];
                     //LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
                 }
+                //templateApp.SetPinDatas(pinList, pinCount, 1);
             }
             templateApp.Draw();
             drawAppCalled = true;
@@ -260,6 +268,9 @@ bool pInited = false;
 
 -(void)update {
     
+}
+int animState = 0;
+-(void)animateTexts {
     
 }
 
@@ -363,7 +374,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
 #pragma mark UpdatePins
 -(void) updatePins {
     pInited = false;
-    NSString *generatedURL = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=1",curLat,curLng];
+    NSString *generatedURL = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=2",curLat,curLng];
     NSLog(@"generated: %@",generatedURL);
     NSURLRequest *request = [NSURLRequest requestWithURL:
                              [NSURL URLWithString:generatedURL]];
@@ -388,7 +399,6 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                           }
                                           else
                                           {
-                                              NSMutableArray *imageGallery = [[NSMutableArray alloc]init];
                                               //Re-init pins
                                               if ([jsonObj isKindOfClass:[NSArray class]])
                                               {
@@ -406,7 +416,16 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       constPinLatList       = [[NSMutableArray alloc]init];
                                                       constPinLngList       = [[NSMutableArray alloc]init];
                                                       constPinImageList     = [[NSMutableArray alloc]init];
-                                                      constPinGalleryImages = [[NSMutableArray alloc] init];
+                                                      constPinGalleryImages = [[NSMutableArray alloc]init];
+                                                      constAnimTextList     = [[NSMutableArray alloc]init];
+                                                      constAnimStates       = [[NSMutableArray alloc]init];
+                                                      
+                                                      //Get furthest and closest distances and record them
+                                                      CLLocation* closestPinLoc     = [[CLLocation alloc] initWithLatitude:[(jsonArray[0][@"lat"]) floatValue] longitude:[(jsonArray[0][@"lng"]) floatValue]];
+                                                      CLLocation* furthestPinLoc    = [[CLLocation alloc] initWithLatitude:[(jsonArray[jsonArray.count-1][@"lat"]) floatValue] longitude:[(jsonArray[jsonArray.count-1][@"lng"]) floatValue]];
+                                                      
+                                                      float closestDist  = [currentLocation distanceFromLocation:closestPinLoc];
+                                                      float furthestDist = [currentLocation distanceFromLocation:furthestPinLoc];
                                                       
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
@@ -419,8 +438,8 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           
                                                           double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
                                                           float dist = [currentLocation distanceFromLocation:tmpPinLoc];
-                                                          float projecDist = [self mapNumber:0.01f :2.0f :0.4f :0.8f :dist];
-                                                          
+                                                          float projecDist = [self mapNumber:closestDist :furthestDist :0.4f :0.8f :dist];
+
                                                           double bearingOffset = (heading-bearing) + 90.0f;
                                                           if(bearingOffset<0.0f){
                                                               bearingOffset = 360.0f + bearingOffset;
@@ -432,6 +451,8 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           pLng = sin(degToRad(bearingOffset)) * projecDist;
                                                           
                                                           [constTextList addObject:jsonArray[cnt][@"title"]];
+                                                          [constAnimTextList addObject:[NSString stringWithFormat:@"%@",jsonArray[cnt][@"title"]]];
+                                                          
                                                           NSString* tmpDesc = jsonArray[cnt][@"description"];
                                                           if(tmpDesc == [NSNull null]) {
                                                               tmpDesc = @" ";
@@ -443,9 +464,9 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           pinList[cnt].id = cnt;
                                                           pinList[cnt].position = {pLat, 0.0f, pLng};
                                                           pinList[cnt].text = (char*)[constTextList[cnt] cStringUsingEncoding:NSUTF8StringEncoding];
-                                                          pinList[cnt].size = 1.0f;
+                                                          pinList[cnt].size = 0.04f;
                                                           pinList[cnt].fontSize = 0.65f;
-                                                          pinList[cnt].color = {0.0f, 1.0f, 0.0f, 1.0f};
+                                                          pinList[cnt].color = {0.14f, 0.30f, 0.43f, 1.0f};
                                                           pinList[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
                                                           
                                                           //Add images to gallery array
@@ -512,6 +533,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
 -(float)mapNumber:(float)a1:(float)a2:(float)b1:(float)b2:(float)x {
     return (x-a1) / (a2-a1) * (b2 - b1) + b1;
 }
+
 
 -(void) startCameraPreview {
     //-- Create CVOpenGLESTextureCacheRef for optimal CVImageBufferRef to GLES texture conversion.
@@ -682,6 +704,11 @@ bool camSizeSet = false;
 }
 
 #pragma mark POPUPS
+-(void)controlPopupVisibility {
+    if(selectedPinId==-1 && pinInfoViewOpened)
+        [self pinInfoViewOut];
+}
+
 -(void) pinInfoViewIn{
     if(!annotationOpened) {
         pinInfoViewOpened = true;

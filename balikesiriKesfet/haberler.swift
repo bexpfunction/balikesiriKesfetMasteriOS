@@ -28,6 +28,8 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource, SW
     
     var sv : UIView!
     
+    let network: NetworkManager = NetworkManager.sharedInstance
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -133,14 +135,15 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource, SW
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let haberDetayVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "haberDetay") as! haberDetaylari
-        
-        
-        haberDetayVC.idFromSelection = self.articleList[indexPath.item].id
+        if(checkConnection(failMessage: "Haber detayları sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+            let haberDetayVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "haberDetay") as! haberDetaylari
+            
+            
+            haberDetayVC.idFromSelection = self.articleList[indexPath.item].id
 
-        self.navigationController?.pushViewController(haberDetayVC, animated: true)
-        //self.present(haberDetayVC, animated: true, completion: nil)
+            self.navigationController?.pushViewController(haberDetayVC, animated: true)
+            //self.present(haberDetayVC, animated: true, completion: nil)
+        }
     }
     
     //SWReveal Delegate
@@ -170,5 +173,33 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource, SW
             }
             )
         }
+    }
+    
+    func checkConnection(failMessage: String) -> Bool {
+        var connected:Bool
+        connected = false
+        let alert = UIAlertController(title: "UYARI", message: failMessage, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Tamam", style: UIAlertActionStyle.default, handler: {
+            action in
+            switch action.style{
+            case .default:
+                break
+            case.cancel:
+                break
+            case.destructive:
+                break
+            }
+        }))
+        
+        NetworkManager.isReachable { _ in
+            connected = true
+        }
+        
+        NetworkManager.isUnreachable { _ in
+            self.present(alert, animated: true, completion: nil)
+            connected = false
+        }
+        
+        return connected
     }
 }

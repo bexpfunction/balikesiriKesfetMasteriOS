@@ -120,11 +120,12 @@ MEMORY *mopen(const char *filename, unsigned char relative_path )
     CFStringRef fTName, fEName;
     fTName = CFStringCreateWithCString(NULL, vec[0].c_str(), kCFStringEncodingUTF8);
     fEName = CFStringCreateWithCString(NULL, vec[1].c_str(), kCFStringEncodingUTF8);
-    LOGI("\n\nFileName:%s\nFileExtension:%s",vec[0].c_str(),vec[1].c_str());
+    //LOGI("\n\nFileName:%s\nFileExtension:%s",vec[0].c_str(),vec[1].c_str());
     f = open_data_file(fTName, fEName);
 
     if( !f ) {
-        LOGI("\n\n\n Couldn't open with fopen..., %s \n\n\n", fname );return NULL;
+        //LOGI("\n\n\n Couldn't open with fopen..., %s \n\n\n", fname );
+        return NULL;
         
     }
     
@@ -143,7 +144,7 @@ MEMORY *mopen(const char *filename, unsigned char relative_path )
 		fread( memory->buffer, memory->size, 1, f );
 		memory->buffer[ memory->size ] = 0;
 		//LOGI("Size:%d FileName:%s Data:%s",memory->size, memory->filename,memory->buffer);
-        LOGI("\n\nSize:%d FileName:%s\n\n",memory->size, memory->filename);
+        //LOGI("\n\nSize:%d FileName:%s\n\n",memory->size, memory->filename);
 		fclose( f );
 		
 		return memory;

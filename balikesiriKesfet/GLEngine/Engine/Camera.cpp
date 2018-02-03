@@ -110,7 +110,7 @@ void Camera::setRotation(vec3 &rotation) {
 
 void Camera::setRotationMatrix(mat4 rotationMatrix) {
     rotationMat = rotationMatrix;
-    LOGI("\ncamrotmat: %f\n",rotationMat.m[1].w);
+    //LOGI("\ncamrotmat: %f\n",rotationMat.m[1].w);
     createViewMatrix();
 }
 

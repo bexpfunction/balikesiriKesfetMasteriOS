@@ -31,7 +31,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     var linkList : [String?] = []
     var galeri : [String?] = []
     
-    
+    let network: NetworkManager = NetworkManager.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,12 +135,14 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let galeriVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "galeri") as! galeri
-        
-        
-        galeriVC.imgUrl = self.galeri[indexPath.item]!
-        
-        self.navigationController?.pushViewController(galeriVC, animated: true)
+        if(checkConnection(failMessage: "Galeri sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+            let galeriVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "galeri") as! galeri
+            
+            
+            galeriVC.imgUrl = self.galeri[indexPath.item]!
+            
+            self.navigationController?.pushViewController(galeriVC, animated: true)
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -158,6 +160,34 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
+    }
+    
+    func checkConnection(failMessage: String) -> Bool {
+        var connected:Bool
+        connected = false
+        let alert = UIAlertController(title: "UYARI", message: failMessage, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Tamam", style: UIAlertActionStyle.default, handler: {
+            action in
+            switch action.style{
+            case .default:
+                break
+            case.cancel:
+                break
+            case.destructive:
+                break
+            }
+        }))
+        
+        NetworkManager.isReachable { _ in
+            connected = true
+        }
+        
+        NetworkManager.isUnreachable { _ in
+            self.present(alert, animated: true, completion: nil)
+            connected = false
+        }
+        
+        return connected
     }
     
     //SWReveal Delegate

@@ -1053,14 +1053,98 @@ Title</string>
                     <view key="view" contentMode="scaleToFill" id="3Gf-Fw-IK1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="czu-uY-wT7">
+                                <rect key="frame" x="16" y="519" width="343" height="128"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Geliştirici Xloop Interactive Applications" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zmJ-bY-Isc">
+                                        <rect key="frame" x="8" y="100" width="327" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="zmJ-bY-Isc" secondAttribute="height" multiplier="327:20" id="M6u-z1-MQe"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bbb" translatesAutoresizingMaskIntoConstraints="NO" id="O78-0e-6Fb">
+                                        <rect key="frame" x="103" y="5" width="136" height="87"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="O78-0e-6Fb" secondAttribute="height" multiplier="136:87" id="BXe-NG-5Jh"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686274509802" green="0.39215686274509803" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="zmJ-bY-Isc" secondAttribute="bottom" constant="8" id="14l-Sr-v1n"/>
+                                    <constraint firstAttribute="trailing" secondItem="zmJ-bY-Isc" secondAttribute="trailing" constant="8" id="Bh5-OR-vKo"/>
+                                    <constraint firstItem="zmJ-bY-Isc" firstAttribute="leading" secondItem="czu-uY-wT7" secondAttribute="leading" constant="8" id="LDL-L0-xS4"/>
+                                    <constraint firstItem="O78-0e-6Fb" firstAttribute="leading" secondItem="czu-uY-wT7" secondAttribute="leading" constant="103" id="UPF-6Z-f0j"/>
+                                    <constraint firstItem="O78-0e-6Fb" firstAttribute="top" secondItem="czu-uY-wT7" secondAttribute="top" constant="5" id="Wm5-cP-uKO"/>
+                                    <constraint firstAttribute="trailing" secondItem="O78-0e-6Fb" secondAttribute="trailing" constant="104" id="cpD-Vt-UJp"/>
+                                    <constraint firstItem="zmJ-bY-Isc" firstAttribute="centerX" secondItem="czu-uY-wT7" secondAttribute="centerX" id="fb3-Pk-poh"/>
+                                    <constraint firstItem="O78-0e-6Fb" firstAttribute="centerX" secondItem="czu-uY-wT7" secondAttribute="centerX" id="uzK-tq-YD6"/>
+                                    <constraint firstItem="zmJ-bY-Isc" firstAttribute="leading" secondItem="O78-0e-6Fb" secondAttribute="trailing" constant="-231" id="vx2-fH-gwC"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aRN-Yp-0Kb">
+                                <rect key="frame" x="16" y="72" width="343" height="420"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0OF-un-FOa">
+                                        <rect key="frame" x="8" y="133" width="327" height="279"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="0OF-un-FOa" secondAttribute="height" multiplier="109:93" id="kQf-6B-qbt"/>
+                                        </constraints>
+                                        <mutableString key="text">Bu uygulama Balıkesir Büyükşehir Belediyesi tarafından Balıkesir halkının kullanımı için hizmete sokulmuştur.
+
+Balıkesir'i Keşfet uygulaması sayesinde kullanıcılar şehirde bulundukları lokasyonlara yakın olan ve önceden belediye yetkilileri tarafından işaretlenmiş yerler, etkinlikler veya belediye hizmetleri hakkında içeriklere ulaşabilir, uygulamada yer alan 'Artırılmış Gerçeklik' özelliğiyle mobil cihazın kamerasından önemli yerleri görebilir ve bunlar hakkında detaylı bilgi alabilirler.</mutableString>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="uyg_logo" translatesAutoresizingMaskIntoConstraints="NO" id="GqA-Ks-ERD">
+                                        <rect key="frame" x="8" y="8" width="327" height="117"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="GqA-Ks-ERD" secondAttribute="height" multiplier="109:39" id="Kpd-HS-zh4"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.10657293349999999" green="0.47882246969999998" blue="0.69482511280000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="GqA-Ks-ERD" firstAttribute="top" secondItem="aRN-Yp-0Kb" secondAttribute="top" constant="8" id="2d3-ee-6Ya"/>
+                                    <constraint firstItem="0OF-un-FOa" firstAttribute="leading" secondItem="aRN-Yp-0Kb" secondAttribute="leading" constant="8" id="8nF-n8-YQn"/>
+                                    <constraint firstAttribute="trailing" secondItem="0OF-un-FOa" secondAttribute="trailing" constant="8" id="BJk-Ki-yV8"/>
+                                    <constraint firstAttribute="bottom" secondItem="0OF-un-FOa" secondAttribute="bottom" constant="8" id="DRG-bN-i44"/>
+                                    <constraint firstAttribute="trailing" secondItem="GqA-Ks-ERD" secondAttribute="trailing" constant="8" id="UFc-ul-rzj"/>
+                                    <constraint firstItem="0OF-un-FOa" firstAttribute="centerX" secondItem="aRN-Yp-0Kb" secondAttribute="centerX" id="byu-cJ-7ah"/>
+                                    <constraint firstItem="GqA-Ks-ERD" firstAttribute="leading" secondItem="aRN-Yp-0Kb" secondAttribute="leading" constant="8" id="pmI-NU-nUO"/>
+                                    <constraint firstItem="GqA-Ks-ERD" firstAttribute="centerX" secondItem="aRN-Yp-0Kb" secondAttribute="centerX" id="zwn-Bg-azy"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <color key="tintColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="m9e-Bj-Qi8" firstAttribute="top" secondItem="czu-uY-wT7" secondAttribute="bottom" constant="20" id="0cf-6L-UZK"/>
+                            <constraint firstItem="czu-uY-wT7" firstAttribute="leading" secondItem="3Gf-Fw-IK1" secondAttribute="leading" constant="16" id="BnD-Gg-MFu"/>
+                            <constraint firstItem="aRN-Yp-0Kb" firstAttribute="leading" secondItem="3Gf-Fw-IK1" secondAttribute="leading" constant="16" id="Duq-du-kXL"/>
+                            <constraint firstItem="aRN-Yp-0Kb" firstAttribute="leading" secondItem="czu-uY-wT7" secondAttribute="trailing" constant="-343" id="HLH-lc-3Fd"/>
+                            <constraint firstItem="czu-uY-wT7" firstAttribute="top" secondItem="aRN-Yp-0Kb" secondAttribute="bottom" constant="27" id="N7h-F9-RYQ"/>
+                            <constraint firstAttribute="trailing" secondItem="czu-uY-wT7" secondAttribute="trailing" constant="16" id="Uu2-Qc-sDU"/>
+                            <constraint firstItem="czu-uY-wT7" firstAttribute="centerX" secondItem="3Gf-Fw-IK1" secondAttribute="centerX" id="Wmj-C7-aar"/>
+                            <constraint firstItem="aRN-Yp-0Kb" firstAttribute="top" secondItem="Id6-aN-4MM" secondAttribute="bottom" constant="8" symbolic="YES" id="aYZ-mF-85e"/>
+                            <constraint firstAttribute="bottom" secondItem="aRN-Yp-0Kb" secondAttribute="bottom" constant="175" id="awe-hD-uLS"/>
+                            <constraint firstAttribute="trailing" secondItem="aRN-Yp-0Kb" secondAttribute="trailing" constant="16" id="x18-BU-m9C"/>
+                            <constraint firstItem="aRN-Yp-0Kb" firstAttribute="centerX" secondItem="3Gf-Fw-IK1" secondAttribute="centerX" id="zX7-WX-Fjs"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="UYGULAMA HAKKINDA" id="v2L-oK-M4b">
                         <barButtonItem key="leftBarButtonItem" image="reveal-icon" style="plain" id="eK7-Fk-cyg"/>
                     </navigationItem>
                     <connections>
+                        <outlet property="botView" destination="czu-uY-wT7" id="Srz-zh-jCz"/>
                         <outlet property="openMenuBut" destination="eK7-Fk-cyg" id="t4F-wL-pNa"/>
+                        <outlet property="topView" destination="aRN-Yp-0Kb" id="mSJ-Qh-1VA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="a8V-Q9-ycl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1420,7 +1504,7 @@ Title</string>
                                     <color key="titleColor" red="1" green="1" blue="0.99987989659999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="uygHkClick:" destination="hvs-J4-wf3" eventType="touchUpInside" id="qUu-kt-Twj"/>
+                                    <segue destination="pz9-L9-7Z2" kind="show" id="9du-lG-wlQ"/>
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uwc-Jo-6rh">
@@ -1632,6 +1716,115 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
             </objects>
             <point key="canvasLocation" x="-1466.4000000000001" y="-537.48125937031489"/>
         </scene>
+        <!--UYGULAMA HAKKINDA-->
+        <scene sceneID="GEr-Mg-uuV">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5fQ-jT-ZeV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController title="UYGULAMA HAKKINDA" id="X8W-3z-wce" userLabel="UYGULAMA HAKKINDA" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="sck-Qy-1CO"/>
+                        <viewControllerLayoutGuide type="bottom" id="CpM-MS-qLZ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="exb-H5-bcJ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Udx-DC-5fr">
+                                <rect key="frame" x="16" y="535" width="343" height="112"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bbb" translatesAutoresizingMaskIntoConstraints="NO" id="8WV-a4-4FC">
+                                        <rect key="frame" x="103" y="8" width="136" height="76"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="8WV-a4-4FC" secondAttribute="height" multiplier="34:19" id="aYC-w0-2iA"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Geliştirici Xloop Interactive Applications" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5Wr-FX-xFs">
+                                        <rect key="frame" x="8" y="92" width="327" height="16"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="5Wr-FX-xFs" secondAttribute="height" multiplier="327:16" id="2hn-Zj-tiK"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="5Wr-FX-xFs" secondAttribute="trailing" constant="8" id="DKC-6L-HaM"/>
+                                    <constraint firstItem="5Wr-FX-xFs" firstAttribute="top" secondItem="8WV-a4-4FC" secondAttribute="bottom" constant="8" id="KG2-XK-dV9"/>
+                                    <constraint firstItem="8WV-a4-4FC" firstAttribute="top" secondItem="Udx-DC-5fr" secondAttribute="top" constant="8" id="Mgr-0c-v1f"/>
+                                    <constraint firstAttribute="bottom" secondItem="5Wr-FX-xFs" secondAttribute="bottom" constant="4" id="Mob-tG-6H1"/>
+                                    <constraint firstItem="8WV-a4-4FC" firstAttribute="leading" secondItem="Udx-DC-5fr" secondAttribute="leading" constant="103" id="NsM-Ni-ljT"/>
+                                    <constraint firstAttribute="trailing" secondItem="8WV-a4-4FC" secondAttribute="trailing" constant="104" id="R7G-E0-xa4"/>
+                                    <constraint firstItem="8WV-a4-4FC" firstAttribute="centerX" secondItem="Udx-DC-5fr" secondAttribute="centerX" id="YZr-Xa-Y8y"/>
+                                    <constraint firstItem="5Wr-FX-xFs" firstAttribute="leading" secondItem="Udx-DC-5fr" secondAttribute="leading" constant="8" id="btH-cV-VGv"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v9J-Rg-Y4p">
+                                <rect key="frame" x="16" y="80" width="343" height="447"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lWO-nx-rMr">
+                                        <rect key="frame" x="8" y="156" width="327" height="283"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="lWO-nx-rMr" secondAttribute="height" multiplier="327:283" id="Aez-L6-jNX"/>
+                                        </constraints>
+                                        <mutableString key="text">Bu uygulama Balıkesir Büyükşehir Belediyesi tarafından Balıkesir halkının kullanımı için hizmete sokulmuştur.
+
+Balıkesir'i Keşfet uygulaması sayesinde kullanıcılar şehirde bulundukları lokasyonlara yakın olan ve önceden belediye yetkilileri tarafından işaretlenmiş yerler, etkinlikler veya belediye hizmetleri hakkında içeriklere ulaşabilir, uygulamada yer alan 'Artırılmış Gerçeklik' özelliğiyle mobil cihazın kamerasından önemli yerleri görebilir ve bunlar hakkında detaylı bilgi alabilirler.</mutableString>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="uyg_logo" translatesAutoresizingMaskIntoConstraints="NO" id="dMR-yY-hFy">
+                                        <rect key="frame" x="8" y="31" width="327" height="117"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="dMR-yY-hFy" secondAttribute="height" multiplier="109:39" id="0wB-qJ-zyU"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" red="0.19215686269999999" green="0.3921568627" blue="0.57647058819999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.10657293349999999" green="0.47882246969999998" blue="0.69482511280000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="lWO-nx-rMr" secondAttribute="trailing" constant="8" id="DLx-b4-I29"/>
+                                    <constraint firstItem="lWO-nx-rMr" firstAttribute="leading" secondItem="v9J-Rg-Y4p" secondAttribute="leading" constant="8" id="EOf-bk-FKd"/>
+                                    <constraint firstItem="dMR-yY-hFy" firstAttribute="top" secondItem="v9J-Rg-Y4p" secondAttribute="top" constant="31" id="UMN-i5-HBU"/>
+                                    <constraint firstItem="dMR-yY-hFy" firstAttribute="leading" secondItem="v9J-Rg-Y4p" secondAttribute="leading" constant="8" id="WQS-2A-0Tn"/>
+                                    <constraint firstItem="lWO-nx-rMr" firstAttribute="centerX" secondItem="v9J-Rg-Y4p" secondAttribute="centerX" id="dqb-Rc-Nvz"/>
+                                    <constraint firstItem="lWO-nx-rMr" firstAttribute="top" secondItem="dMR-yY-hFy" secondAttribute="bottom" constant="8" id="jLE-bi-XXe"/>
+                                    <constraint firstAttribute="trailing" secondItem="dMR-yY-hFy" secondAttribute="trailing" constant="8" id="naI-KL-0JD"/>
+                                    <constraint firstItem="dMR-yY-hFy" firstAttribute="centerX" secondItem="v9J-Rg-Y4p" secondAttribute="centerX" id="spe-xV-31E"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.13725490196078433" green="0.30196078431372547" blue="0.43137254901960786" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Udx-DC-5fr" firstAttribute="leading" secondItem="exb-H5-bcJ" secondAttribute="leading" constant="16" id="LPR-dA-Jwc"/>
+                            <constraint firstAttribute="trailing" secondItem="Udx-DC-5fr" secondAttribute="trailing" constant="16" id="PIF-0D-ro0"/>
+                            <constraint firstItem="Udx-DC-5fr" firstAttribute="centerX" secondItem="exb-H5-bcJ" secondAttribute="centerX" id="Y5t-qJ-rhA"/>
+                            <constraint firstItem="Udx-DC-5fr" firstAttribute="leading" secondItem="v9J-Rg-Y4p" secondAttribute="trailing" constant="-343" id="brD-3k-fNg"/>
+                            <constraint firstItem="Udx-DC-5fr" firstAttribute="top" secondItem="lWO-nx-rMr" secondAttribute="bottom" constant="16" id="c7z-Ko-BVR"/>
+                            <constraint firstAttribute="trailing" secondItem="v9J-Rg-Y4p" secondAttribute="trailing" constant="16" id="eMO-Ga-SqB"/>
+                            <constraint firstItem="Udx-DC-5fr" firstAttribute="top" secondItem="v9J-Rg-Y4p" secondAttribute="bottom" constant="8" symbolic="YES" id="eno-o1-WOf"/>
+                            <constraint firstItem="v9J-Rg-Y4p" firstAttribute="leading" secondItem="exb-H5-bcJ" secondAttribute="leading" constant="16" id="jDs-wp-aDj"/>
+                            <constraint firstItem="CpM-MS-qLZ" firstAttribute="top" secondItem="Udx-DC-5fr" secondAttribute="bottom" constant="20" id="n5u-CJ-uxX"/>
+                            <constraint firstItem="v9J-Rg-Y4p" firstAttribute="top" secondItem="sck-Qy-1CO" secondAttribute="bottom" constant="16" id="rj7-Y4-uGk"/>
+                            <constraint firstItem="v9J-Rg-Y4p" firstAttribute="centerX" secondItem="exb-H5-bcJ" secondAttribute="centerX" id="sJy-YX-twq"/>
+                            <constraint firstItem="Udx-DC-5fr" firstAttribute="top" secondItem="exb-H5-bcJ" secondAttribute="top" constant="535" id="zyf-eG-l8K"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="UYGULAMA HAKKINDA" id="tOJ-YO-2ZO">
+                        <barButtonItem key="backBarButtonItem" title="Geri" id="50H-qL-lHg"/>
+                        <barButtonItem key="leftBarButtonItem" title="Geri" style="plain" id="7L5-QA-Kxb">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <segue destination="hvs-J4-wf3" kind="presentation" id="REv-XX-3pg"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="-111.2" y="-537.48125937031489"/>
+        </scene>
         <!--Reveal View Controller-->
         <scene sceneID="IWq-MH-SjJ">
             <objects>
@@ -1701,9 +1894,6 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="wUM-0J-LsX" kind="custom" identifier="" customClass="SWRevealViewControllerSeguePushController" id="FAC-vt-Byz"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="hma-B7-MEK">
                                         <rect key="frame" x="0.0" y="88" width="375" height="44"/>
@@ -1721,9 +1911,6 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="Yal-nq-PEw" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="iT8-f7-mc0"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="grp-S9-wYD">
                                         <rect key="frame" x="0.0" y="132" width="375" height="44"/>
@@ -1741,9 +1928,6 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="gBp-v2-tCQ" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="zdO-ud-cGL"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="Ufe-aJ-hHw">
                                         <rect key="frame" x="0.0" y="176" width="375" height="44"/>
@@ -1761,9 +1945,6 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="Sj1-4z-ZBa" kind="custom" customClass="SWRevealViewControllerSeguePushController" id="AnF-en-5Fc"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" id="SaA-3L-mJA">
                                         <rect key="frame" x="0.0" y="220" width="375" height="44"/>
@@ -2071,9 +2252,33 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
             </objects>
             <point key="canvasLocation" x="-4255" y="2548"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="KaM-Z4-GPw">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pz9-L9-7Z2" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="3VG-JO-3ob">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.13725490200000001" green="0.30196078430000001" blue="0.43137254899999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="X8W-3z-wce" kind="relationship" relationship="rootViewController" id="CCy-rg-jnw"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RO2-OD-eMa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-756" y="-537"/>
+        </scene>
     </scenes>
     <resources>
         <image name="balikesir_bb_logo_single" width="350" height="350"/>
+        <image name="bbb" width="482" height="242"/>
         <image name="crosshair2" width="512" height="512"/>
         <image name="locat" width="40" height="40"/>
         <image name="logo192" width="192" height="192"/>
@@ -2089,5 +2294,6 @@ ve daha bir çok özellikten faydalanabilirsiniz.</string>
     <inferredMetricsTieBreakers>
         <segue reference="sZi-0r-fjD"/>
         <segue reference="BlR-cA-HGs"/>
+        <segue reference="REv-XX-3pg"/>
     </inferredMetricsTieBreakers>
 </document>

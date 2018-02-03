@@ -134,7 +134,7 @@ void TEXT3D_createTextVertices(TEXT3D* text3d){
             ind_array+=sizeof(unsigned short)*6;
             row++;
         }else{
-            LOGI("Unsupported or reduntant char");
+            //LOGI("Unsupported or reduntant char");
         }
         text++;
         
@@ -245,7 +245,7 @@ void TEXT3D_setPosition(TEXT3D *text, vec3 pos) {
 }
 
 void Text3D_free(TEXT3D *text) {
-    LOGI("\n\n\nTEXT3D_free called!!\n\n\n");
+    //LOGI("\n\n\nTEXT3D_free called!!\n\n\n");
     glDeleteBuffers(1,&text->vbo);
     glDeleteBuffers(1,&text->triVbo);
     free(text);

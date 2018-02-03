@@ -180,10 +180,10 @@ void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset){
     //pinSize = size;
     //pinTextOffset = pinTextMaxOffset;
     //App::pinDatas = pins;
-    for(int i = 0; i < size; i++) {
-        LOGI("c++ setPindatas pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pins[i].position.x,pins[i].text,pins[i].text);
-    }
-    LOGI("\n");
+//    for(int i = 0; i < size; i++) {
+//        LOGI("c++ setPindatas pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pins[i].position.x,pins[i].text,pins[i].text);
+//    }
+    //LOGI("\n");
     tempPinSize = size;
     tempPinMaxOffset = pinTextMaxOffset;
     tempPinData = pins;
@@ -585,9 +585,9 @@ void initPins() {
 
     if(pinSize>0){
         for(int i=0; i<pinSize; i++){
-            LOGI("c++ initPins pin[%d] posx: %.3f textaddress: %p text: %s\n",i,App::pinDatas[i].position.x,App::pinDatas[i].text,App::pinDatas[i].text);
+            //LOGI("c++ initPins pin[%d] posx: %.3f textaddress: %p text: %s\n",i,App::pinDatas[i].position.x,App::pinDatas[i].text,App::pinDatas[i].text);
         }
-        LOGI("\n\n");
+        //LOGI("\n\n");
     }
     
     for(int i=0;i<pinSize;i++) {
@@ -597,7 +597,7 @@ void initPins() {
         App::pinDatas[i].text3D = TEXT3D_init(App::pinDatas[i].text,font,p,App::pinDatas[i].fontSize/100.0f);
 
     }
-    LOGI("\n\nc++ pinsInited\n");
+    //LOGI("\n\nc++ pinsInited\n");
     isPinInited = true;
 }
 
