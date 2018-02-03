@@ -246,6 +246,7 @@ bool pInited = false;
                 //Update text pointers
                 for(int i=0; i<pinCount; i++){
                     pinList[i].text = (char*)[constAnimTextList[i] cStringUsingEncoding:NSUTF8StringEncoding];
+                    LOGI("name: %s\n",pinList[i].text);
                 }
                 templateApp.SetPinDatas(pinList, pinCount, 1);
             }
