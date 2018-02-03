@@ -19,6 +19,7 @@ struct pinData{
 public:
     int id;
     vec3 position;
+    float originY;
     char *text;
     TEXT3D *text3D;
     float size;

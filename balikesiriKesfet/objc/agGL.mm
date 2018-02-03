@@ -59,6 +59,8 @@ NSMutableArray *constPinLatList;
 NSMutableArray *constPinLngList;
 NSMutableArray *constPinImageList;
 NSMutableArray *constPinGalleryImages;
+NSMutableArray *constPinOriginY;
+NSMutableArray *constPinIsAnimated;
 
 @implementation agGL {
     
@@ -111,7 +113,6 @@ NSMutableArray *constPinGalleryImages;
     self.pinInfoDetailBut.layer.borderColor = UIColor.whiteColor.CGColor;
     
     [self testInternetConnection];
-
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -236,7 +237,6 @@ bool pInited = false;
                     //Remove pininfo view withtimer
                     if(pinInfoViewOpened == true){
                         [NSTimer scheduledTimerWithTimeInterval:3.0f repeats:false block:^(NSTimer * _Nonnull timer) {
-                            NSLog(@"timer");
                             [self controlPopupVisibility];
                         }];
                         //[self pinInfoViewOut];
@@ -245,10 +245,10 @@ bool pInited = false;
                 
                 //Update text pointers
                 for(int i=0; i<pinCount; i++){
-                    pinList[i].text = (char*)[constTextList[i] cStringUsingEncoding:NSUTF8StringEncoding];
+                    pinList[i].text = (char*)[constAnimTextList[i] cStringUsingEncoding:NSUTF8StringEncoding];
                     //LOGI("obj-c mainLoop pin[%d] posx: %.3f textaddress: %p text: %s\n",i,pinList[i].position.x,pinList[i].text,pinList[i].text);
                 }
-                //templateApp.SetPinDatas(pinList, pinCount, 1);
+                templateApp.SetPinDatas(pinList, pinCount, 1);
             }
             templateApp.Draw();
             drawAppCalled = true;
@@ -269,9 +269,23 @@ bool pInited = false;
 -(void)update {
     
 }
-int animState = 0;
+int animationSkipper = 0;
 -(void)animateTexts {
-    
+    for(int c=0; c<constPinIsAnimated.count; c++){
+        if([constPinIsAnimated[c] boolValue]){
+            NSInteger aState = [constAnimStates[c] integerValue];
+            NSRange animSubString = NSMakeRange(aState, 25);
+            NSString *whole = [NSString stringWithFormat:@"%@   %@",constTextList[c],constTextList[c]];
+            [constAnimTextList replaceObjectAtIndex:c withObject:[whole substringWithRange:animSubString]];
+
+            NSNumber *nextAstate = [NSNumber numberWithInteger: [constAnimStates[c] integerValue]+1];
+            [constAnimStates replaceObjectAtIndex:c withObject:nextAstate];
+            if([constAnimStates[c] integerValue] > [constTextList[c] length]+2){
+                nextAstate = [NSNumber numberWithInteger:0];
+                [constAnimStates replaceObjectAtIndex:c withObject:nextAstate];
+            }
+        }
+    }
 }
 
 //Location Manager delegates
@@ -419,6 +433,8 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       constPinGalleryImages = [[NSMutableArray alloc]init];
                                                       constAnimTextList     = [[NSMutableArray alloc]init];
                                                       constAnimStates       = [[NSMutableArray alloc]init];
+                                                      constPinOriginY       = [[NSMutableArray alloc]init];
+                                                      constPinIsAnimated    = [[NSMutableArray alloc]init];
                                                       
                                                       //Get furthest and closest distances and record them
                                                       CLLocation* closestPinLoc     = [[CLLocation alloc] initWithLatitude:[(jsonArray[0][@"lat"]) floatValue] longitude:[(jsonArray[0][@"lng"]) floatValue]];
@@ -426,6 +442,9 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       
                                                       float closestDist  = [currentLocation distanceFromLocation:closestPinLoc];
                                                       float furthestDist = [currentLocation distanceFromLocation:furthestPinLoc];
+                                                      float k10 = 0.7f;
+                                                      float k25 = 0.33f;
+                                                      
                                                       
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
@@ -460,12 +479,41 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           [constDescrpList addObject:tmpDesc];
 //                                                          float dist = [currentLocation distanceFromLocation:tmpPinLoc];
                                                           [constDistanceList addObject:[NSString stringWithFormat:@"%.2f KM",dist/1000.0f]];
-
+    
+                                                          //Set offset and animstates depending on the title
+                                                          if([constTextList[cnt] length] <= 10)
+                                                          {
+                                                              NSNumber *isAnimated = [NSNumber numberWithBool:false];
+                                                              NSNumber *animState  = [NSNumber numberWithInteger:0];
+                                                              [constPinIsAnimated addObject:isAnimated];
+                                                              [constAnimStates addObject:animState];
+                                                              pinList[cnt].fontSize = k10;
+                                                          }
+                                                          else if ([constTextList[cnt] length]  <= 25)
+                                                          {
+                                                              NSNumber *isAnimated = [NSNumber numberWithBool:false];
+                                                              [constPinIsAnimated addObject:isAnimated];
+                                                              NSNumber *animState  = [NSNumber numberWithInteger:0];
+                                                              [constAnimStates addObject:animState];
+                                                              pinList[cnt].fontSize = [self mapNumber:10.0f :25.0f :k10*0.8f :k25 :[constTextList[cnt] length]];
+                                                              pinList[cnt].originY = [self mapNumber:10.0f :25.0f :0.0f :0.005f :[constTextList[cnt] length]];
+                                                          }
+                                                          else
+                                                          {
+                                                              pinList[cnt].originY= 0.005f;
+                                                              pinList[cnt].fontSize = k25;
+                                                              NSNumber *isAnimated = [NSNumber numberWithBool:true];
+                                                              [constPinIsAnimated addObject:isAnimated];
+                                                              NSNumber *animState  = [NSNumber numberWithInteger:0];
+                                                              [constAnimStates addObject:animState];
+                                                          }
+                                                          
                                                           pinList[cnt].id = cnt;
                                                           pinList[cnt].position = {pLat, 0.0f, pLng};
-                                                          pinList[cnt].text = (char*)[constTextList[cnt] cStringUsingEncoding:NSUTF8StringEncoding];
+                                                          pinList[cnt].text = (char*)[constAnimTextList[cnt] cStringUsingEncoding:NSUTF8StringEncoding];
                                                           pinList[cnt].size = 0.04f;
-                                                          pinList[cnt].fontSize = 0.65f;
+                                                          //pinList[cnt].originY = 0.0f;
+                                                          //pinList[cnt].fontSize = 0.65f;
                                                           pinList[cnt].color = {0.14f, 0.30f, 0.43f, 1.0f};
                                                           pinList[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
                                                           

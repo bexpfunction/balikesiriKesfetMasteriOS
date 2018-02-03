@@ -73,6 +73,8 @@
 		B94EDB942003A743004D4655 /* AnaSayfa.swift in Sources */ = {isa = PBXBuildFile; fileRef = B94EDB932003A743004D4655 /* AnaSayfa.swift */; };
 		B94EDB982003B391004D4655 /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B94EDB962003B391004D4655 /* SWRevealViewController.m */; };
 		B952C4911FA867F70075CB8B /* App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B952C4901FA867F70075CB8B /* App.cpp */; };
+		B958FE432025BCA300524ED0 /* pin_maya.obj in Resources */ = {isa = PBXBuildFile; fileRef = B958FE412025BCA300524ED0 /* pin_maya.obj */; };
+		B958FE442025BCA300524ED0 /* pin_maya.mtl in Resources */ = {isa = PBXBuildFile; fileRef = B958FE422025BCA300524ED0 /* pin_maya.mtl */; };
 		B96061CF200CC48D001B8306 /* debugLocation.gpx in Resources */ = {isa = PBXBuildFile; fileRef = B96061CE200CC48D001B8306 /* debugLocation.gpx */; };
 		B97448921FAC7BD600C71F53 /* memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B97448731FAC7BD600C71F53 /* memory.cpp */; };
 		B97448931FAC7BD600C71F53 /* adler32.c in Sources */ = {isa = PBXBuildFile; fileRef = B97448771FAC7BD600C71F53 /* adler32.c */; };
@@ -227,6 +229,8 @@
 		B952C48F1FA867F70075CB8B /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		B952C4901FA867F70075CB8B /* App.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = App.cpp; sourceTree = "<group>"; };
 		B952C4CA1FA9BCB50075CB8B /* Logger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
+		B958FE412025BCA300524ED0 /* pin_maya.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pin_maya.obj; sourceTree = "<group>"; };
+		B958FE422025BCA300524ED0 /* pin_maya.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = pin_maya.mtl; sourceTree = "<group>"; };
 		B96061CE200CC48D001B8306 /* debugLocation.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = debugLocation.gpx; sourceTree = "<group>"; };
 		B97448731FAC7BD600C71F53 /* memory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = memory.cpp; sourceTree = "<group>"; };
 		B97448741FAC7BD600C71F53 /* memory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = memory.h; sourceTree = "<group>"; };
@@ -399,6 +403,8 @@
 		B920276E1FE930CB00B25F4D /* EngineAssets */ = {
 			isa = PBXGroup;
 			children = (
+				B958FE422025BCA300524ED0 /* pin_maya.mtl */,
+				B958FE412025BCA300524ED0 /* pin_maya.obj */,
 				B920277E1FE930FA00B25F4D /* arial.ttf */,
 				B92027721FE930F800B25F4D /* cube.mtl */,
 				B92027731FE930F800B25F4D /* cube.obj */,
@@ -860,6 +866,7 @@
 				B92027881FE930FB00B25F4D /* pin_model2.obj in Resources */,
 				B920278C1FE930FB00B25F4D /* model.mtl in Resources */,
 				B92027901FE930FB00B25F4D /* plane.obj in Resources */,
+				B958FE432025BCA300524ED0 /* pin_maya.obj in Resources */,
 				B92027871FE930FB00B25F4D /* droidSerif.ttf in Resources */,
 				B920276D1FE92CC200B25F4D /* font_fragment.glsl in Resources */,
 				B920276C1FE92CC200B25F4D /* cameraVertex.glsl in Resources */,
@@ -872,6 +879,7 @@
 				B920278E1FE930FB00B25F4D /* roboto.ttf in Resources */,
 				B91D6E231F9CD95500525C76 /* GoogleService-Info.plist in Resources */,
 				B9A1D1A11FAC97AC005929EE /* fragment.glsl in Resources */,
+				B958FE442025BCA300524ED0 /* pin_maya.mtl in Resources */,
 				B92027891FE930FB00B25F4D /* Vera.ttf in Resources */,
 				B92027661FE92CC200B25F4D /* font_vertex.glsl in Resources */,
 				B920276B1FE92CC200B25F4D /* vertexColorVertex.glsl in Resources */,

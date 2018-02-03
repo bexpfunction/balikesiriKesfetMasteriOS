@@ -772,7 +772,7 @@ void AppDraw() {
             #pragma mark-Draw Texts
             //Position
             modelMat.m[3].x = App::pinDatas[i].position.x * worldScale;
-            modelMat.m[3].y = App::pinDatas[i].position.y;
+            modelMat.m[3].y = App::pinDatas[i].position.y + App::pinDatas[i].originY;
             modelMat.m[3].z = App::pinDatas[i].position.z * worldScale;
             //Size
             modelMat.m[0].x = App::pinDatas[i].size;
