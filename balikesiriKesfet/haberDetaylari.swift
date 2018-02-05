@@ -35,7 +35,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("height: %@",self.view.bounds.height)
         //Reveal View Controller Setup
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
@@ -45,6 +45,11 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
+        
+        self.newsTitle.text = ""
+        self.newsText1.text = ""
+        self.newsText2.text = ""
+        self.linkList.removeAll()
         
         //Gallery Collection View Setup
         self.galleryColView.layer.cornerRadius = 5

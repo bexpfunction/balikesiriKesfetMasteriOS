@@ -33,6 +33,9 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource, SW
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tblView.estimatedRowHeight = 156.0
+        tblView.rowHeight = UITableViewAutomaticDimension
+        
         //Reveal View Controller Setup
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))

@@ -213,11 +213,11 @@ bool pInited = false;
                 if(templateApp.GetSelectedPin() != NULL) {
                     for(int i=0; i<pinCount; i++) {
                         if(&pinList[i] == templateApp.GetSelectedPin()) {
-                            pinList[i].color = {0.0f, 0.52f, 1.0f, 1.0f};
+                            pinList[i].borderColor = {0.0f, 0.52f, 1.0f, 1.0f};
                             selectedPinId = pinList[i].id;
                         }
                         else {
-                            pinList[i].color = {0.14f, 0.30f, 0.43f, 1.0f};
+                            pinList[i].borderColor = {0.14f, 0.30f, 0.43f, 1.0f};
                         }
                     }
                     
@@ -232,7 +232,7 @@ bool pInited = false;
                 } else {
                     selectedPinId = -1;
                     for(int i=0; i<pinCount; i++) {
-                        pinList[i].color = {0.14f, 0.30f, 0.43f, 1.0f};
+                        pinList[i].borderColor = {0.14f, 0.30f, 0.43f, 1.0f};
                     }
                     //Remove pininfo view withtimer
                     if(pinInfoViewOpened == true){
@@ -510,12 +510,12 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           
                                                           pinList[cnt].id = cnt;
                                                           pinList[cnt].position = {pLat, 0.0f, pLng};
-                                                          pinList[cnt].text = (char*)[constAnimTextList[cnt] cStringUsingEncoding:NSUTF8StringEncoding];
+                                                          pinList[cnt].text = (char*)[constTextList[cnt] cStringUsingEncoding:NSUTF8StringEncoding];
                                                           pinList[cnt].size = 0.04f;
                                                           //pinList[cnt].originY = 0.0f;
                                                           //pinList[cnt].fontSize = 0.65f;
-                                                          pinList[cnt].color = {0.14f, 0.30f, 0.43f, 1.0f};
-                                                          pinList[cnt].borderColor = {1.0f, 1.0f, 1.0f, 1.0f};
+                                                          pinList[cnt].color = {1.0f, 1.0f, 1.0f, 1.0f};
+                                                          pinList[cnt].borderColor = {0.14f, 0.30f, 0.43f, 1.0f};
                                                           
                                                           //Add images to gallery array
                                                           NSMutableArray* imgGalJson    = [[jsonArray[cnt][@"pic2"] allObjects] mutableCopy];

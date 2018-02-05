@@ -109,6 +109,7 @@
 		B990885E1FAE4E2A005B0B2E /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B990884F1FAE4E2A005B0B2E /* texture.cpp */; };
 		B990885F1FAE4E2A005B0B2E /* vector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B99088511FAE4E2A005B0B2E /* vector.cpp */; };
 		B99B8D621FA5DA8A00C41020 /* openGlIncludeTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B99B8D601FA5DA8A00C41020 /* openGlIncludeTest.cpp */; };
+		B99E3DC02028ABFB00C8D2FB /* uygHkndIntro.swift in Sources */ = {isa = PBXBuildFile; fileRef = B99E3DBF2028ABFB00C8D2FB /* uygHkndIntro.swift */; };
 		B9A1235A1FFF743500F8DB0F /* pinListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A123591FFF743500F8DB0F /* pinListCell.swift */; };
 		B9A1235C1FFFA99200F8DB0F /* pinPicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9A1235B1FFFA99200F8DB0F /* pinPicCell.swift */; };
 		B9A1D19B1FAC8C37005929EE /* test.txt in Resources */ = {isa = PBXBuildFile; fileRef = B9A1D19A1FAC8C37005929EE /* test.txt */; };
@@ -298,6 +299,7 @@
 		B99088521FAE4E2A005B0B2E /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = matrix.h; sourceTree = "<group>"; };
 		B99B8D601FA5DA8A00C41020 /* openGlIncludeTest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = openGlIncludeTest.cpp; sourceTree = "<group>"; };
 		B99B8D611FA5DA8A00C41020 /* openGlIncludeTest.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = openGlIncludeTest.hpp; sourceTree = "<group>"; };
+		B99E3DBF2028ABFB00C8D2FB /* uygHkndIntro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = uygHkndIntro.swift; sourceTree = "<group>"; };
 		B9A123591FFF743500F8DB0F /* pinListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pinListCell.swift; sourceTree = "<group>"; };
 		B9A1235B1FFFA99200F8DB0F /* pinPicCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pinPicCell.swift; sourceTree = "<group>"; };
 		B9A1D19A1FAC8C37005929EE /* test.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = test.txt; path = balikesiriKesfet/Resources/test.txt; sourceTree = SOURCE_ROOT; };
@@ -717,6 +719,7 @@
 				B98B09C81F8CC82C0080D7EB /* map2d.swift */,
 				B90186042005109900552DE3 /* uygulamaHakkinda.swift */,
 				B9C31D601F57507F0055E2CA /* ViewController.swift */,
+				B99E3DBF2028ABFB00C8D2FB /* uygHkndIntro.swift */,
 			);
 			name = ViewControllerClasses;
 			sourceTree = "<group>";
@@ -972,6 +975,7 @@
 				B9F2A82D1FADC995004FC439 /* text-buffer.c in Sources */,
 				B9F541A1202365ED00D3718A /* NetworkManager.swift in Sources */,
 				B94EDB982003B391004D4655 /* SWRevealViewController.m in Sources */,
+				B99E3DC02028ABFB00C8D2FB /* uygHkndIntro.swift in Sources */,
 				B9817B641FA233F30073DF7F /* hello.cpp in Sources */,
 				B9F2A8281FADC995004FC439 /* distance-field.c in Sources */,
 				B90311602021C8D000E1739F /* objcExtensions.swift in Sources */,

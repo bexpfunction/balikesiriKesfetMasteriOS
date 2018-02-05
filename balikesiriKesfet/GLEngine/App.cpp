@@ -103,6 +103,8 @@ int cameraTextureIdUV;
 
 void AppToucheBegan( float x, float y, unsigned int tap_count )
 {
+    App::selectedPin = NULL;
+    
     touchBegan = true;
     touchPos.x = x;
     touchPos.y = y;
@@ -118,7 +120,6 @@ void AppToucheBegan( float x, float y, unsigned int tap_count )
             break;
         }
     }
-    App::selectedPin = NULL;
 }
 
 pinData* AppGetSelectedPin(){
