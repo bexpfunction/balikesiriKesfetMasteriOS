@@ -49,6 +49,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.newsTitle.text = ""
         self.newsText1.text = ""
         self.newsText2.text = ""
+        self.linkListText.text = ""
         self.linkList.removeAll()
         
         //Gallery Collection View Setup
@@ -113,6 +114,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
                     self.newsText1.sizeToFit()
                     self.newsText2.sizeToFit()
                     self.newsTitle.sizeToFit()
+                    self.linkListText.text = "";
                     for eLink in self.linkList {
                         self.linkListText.text?.append(eLink!)
                     }

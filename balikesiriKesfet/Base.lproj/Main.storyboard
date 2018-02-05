@@ -459,7 +459,7 @@ Gerçeklik</string>
         <!--HABER DETAYLARI-->
         <scene sceneID="qkn-8m-djJ">
             <objects>
-                <viewController storyboardIdentifier="haberDetay" title="HABER DETAYLARI" automaticallyAdjustsScrollViewInsets="NO" modalTransitionStyle="flipHorizontal" id="s6a-ev-bap" customClass="haberDetaylari" customModule="balikesiriKesfet" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="haberDetay" title="HABER DETAYLARI" modalTransitionStyle="flipHorizontal" id="s6a-ev-bap" customClass="haberDetaylari" customModule="balikesiriKesfet" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="UxM-wc-jC2"/>
                         <viewControllerLayoutGuide type="bottom" id="Syr-fA-OHr"/>
@@ -468,7 +468,7 @@ Gerçeklik</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="1Du-rO-MEo">
+                            <scrollView multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="1000" directionalLockEnabled="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="white" translatesAutoresizingMaskIntoConstraints="NO" id="1Du-rO-MEo">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LZ2-P3-Scr">
@@ -554,7 +554,7 @@ Title</string>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="231" id="aSy-SZ-7Ib"/>
                                                         </constraints>
-                                                        <fontDescription key="fontDescription" name="HelveticaNeue-LightItalic" family="Helvetica Neue" pointSize="17"/>
+                                                        <fontDescription key="fontDescription" name="HelveticaNeue-LightItalic" family="Helvetica Neue" pointSize="14"/>
                                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -563,6 +563,7 @@ Title</string>
                                                     <constraint firstAttribute="height" secondItem="laV-rO-Zph" secondAttribute="height" id="8zV-8B-zXh"/>
                                                     <constraint firstItem="CEn-0J-bbh" firstAttribute="top" secondItem="kgi-rb-a1T" secondAttribute="top" constant="4" id="F6S-ei-nHV"/>
                                                     <constraint firstAttribute="height" secondItem="CEn-0J-bbh" secondAttribute="height" id="HEU-PY-zPt"/>
+                                                    <constraint firstAttribute="trailing" secondItem="laV-rO-Zph" secondAttribute="trailing" id="ZjJ-2d-7Go"/>
                                                     <constraint firstItem="laV-rO-Zph" firstAttribute="top" secondItem="CEn-0J-bbh" secondAttribute="top" id="e79-aG-OFu"/>
                                                     <constraint firstItem="laV-rO-Zph" firstAttribute="leading" secondItem="CEn-0J-bbh" secondAttribute="trailing" constant="8" id="koe-44-fZO"/>
                                                     <constraint firstItem="CEn-0J-bbh" firstAttribute="leading" secondItem="kgi-rb-a1T" secondAttribute="leading" id="v0a-G1-2gJ"/>
@@ -800,6 +801,9 @@ Title</string>
                                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d4w-bx-grR">
                                                                             <rect key="frame" x="287" y="12.5" width="70" height="27"/>
                                                                             <color key="backgroundColor" red="0.19215686274509802" green="0.39215686274509803" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                                            <constraints>
+                                                                                <constraint firstAttribute="width" constant="70" id="Paj-sb-j4W"/>
+                                                                            </constraints>
                                                                             <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
                                                                             <state key="normal" title="Detaylı Bilgi">
                                                                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2300,6 +2304,6 @@ Balıkesir'i Keşfet uygulaması sayesinde kullanıcılar şehirde bulundukları
     <inferredMetricsTieBreakers>
         <segue reference="sZi-0r-fjD"/>
         <segue reference="BlR-cA-HGs"/>
-        <segue reference="H0n-th-AwB"/>
+        <segue reference="REv-XX-3pg"/>
     </inferredMetricsTieBreakers>
 </document>

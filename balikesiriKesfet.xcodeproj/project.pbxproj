@@ -717,9 +717,9 @@
 				B91DEFEE1F93AF9900F80A27 /* haberDetaylari.swift */,
 				B9B21E131F584FB0003F0317 /* haberler.swift */,
 				B98B09C81F8CC82C0080D7EB /* map2d.swift */,
+				B99E3DBF2028ABFB00C8D2FB /* uygHkndIntro.swift */,
 				B90186042005109900552DE3 /* uygulamaHakkinda.swift */,
 				B9C31D601F57507F0055E2CA /* ViewController.swift */,
-				B99E3DBF2028ABFB00C8D2FB /* uygHkndIntro.swift */,
 			);
 			name = ViewControllerClasses;
 			sourceTree = "<group>";

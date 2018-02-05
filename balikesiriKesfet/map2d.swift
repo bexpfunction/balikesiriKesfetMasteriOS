@@ -91,6 +91,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         self.locationManager.requestAlwaysAuthorization()
         //Foreground use
         self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.allowsBackgroundLocationUpdates = true
         if CLLocationManager.locationServicesEnabled(){
             self.locationManager.delegate = self
             self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;

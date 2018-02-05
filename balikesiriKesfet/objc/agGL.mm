@@ -43,8 +43,9 @@ bool annotationOpened = false;
 float cPitch, cYaw, cRoll, initYaw, heading, motionLastYaw=0.0f, startingHeading, updatingHeading;
 #pragma mark - Global Strings
 NSString *curLat, *curLng;
-#pragma mark - Global Location
+#pragma mark - Global Locations
 CLLocation *currentLocation, *averageLocation;
+CLLocation* closestPinLoc, *furthestPinLoc;
 #pragma mark - Global pinList
 static pinData* pinList = NULL;
 #pragma mark - Globals ints
@@ -78,6 +79,7 @@ NSMutableArray *constPinIsAnimated;
 #pragma mark - ViewController Methods And Delegates
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     //Setup side menu
     [self.openMenuBut setTarget:self.revealViewController];
     [self.openMenuBut setAction:@selector(revealToggle:)];
@@ -112,6 +114,19 @@ NSMutableArray *constPinIsAnimated;
     self.pinInfoDetailBut.layer.borderWidth = 1;
     self.pinInfoDetailBut.layer.borderColor = UIColor.whiteColor.CGColor;
     
+    //Fill const arrays
+    constTextList         = [[NSMutableArray alloc]init];
+    constDistanceList     = [[NSMutableArray alloc]init];
+    constDescrpList       = [[NSMutableArray alloc]init];
+    constPinLatList       = [[NSMutableArray alloc]init];
+    constPinLngList       = [[NSMutableArray alloc]init];
+    constPinImageList     = [[NSMutableArray alloc]init];
+    constPinGalleryImages = [[NSMutableArray alloc]init];
+    constAnimTextList     = [[NSMutableArray alloc]init];
+    constAnimStates       = [[NSMutableArray alloc]init];
+    constPinOriginY       = [[NSMutableArray alloc]init];
+    constPinIsAnimated    = [[NSMutableArray alloc]init];
+    
     [self testInternetConnection];
 }
 
@@ -140,6 +155,12 @@ NSMutableArray *constPinIsAnimated;
     
     [NSTimer scheduledTimerWithTimeInterval:0.5f repeats:true block:^(NSTimer * _Nonnull timer) {
         [self animateTexts];
+    }];
+    
+    [NSTimer scheduledTimerWithTimeInterval:3.0f repeats:true block:^(NSTimer * _Nonnull timer) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+        [self updatePinPositions];
+        });
     }];
 
     
@@ -242,14 +263,13 @@ bool pInited = false;
                         //[self pinInfoViewOut];
                     }
                 }
-                
-                //Update text pointers
-                for(int i=0; i<pinCount; i++){
-                    pinList[i].text = (char*)[constAnimTextList[i] cStringUsingEncoding:NSUTF8StringEncoding];
-                    LOGI("name: %s\n",pinList[i].text);
-                }
-                templateApp.SetPinDatas(pinList, pinCount, 1);
             }
+            for(int c=0; c<pinCount; c++){
+                pinList[c].text = (char*)[constAnimTextList[c] cStringUsingEncoding:NSUTF8StringEncoding];
+                //NSLog(@"name: %s",pinList[c].text);
+            }
+            //NSLog(@"\n");
+            templateApp.SetPinDatas(pinList, pinCount, 1);
             templateApp.Draw();
             drawAppCalled = true;
         }
@@ -286,6 +306,7 @@ bool pInited = false;
             }
         }
     }
+    
 }
 
 //Location Manager delegates
@@ -295,7 +316,7 @@ bool pInited = false;
 {
     self.locationManager = [[CLLocationManager alloc] init];
     self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
     
     self.locationManager.headingFilter = kCLHeadingFilterNone;
     [self.locationManager startUpdatingLocation];
@@ -328,13 +349,12 @@ bool pInited = false;
         [self updatePins];
         initYaw = degToRad(heading);
     }
-    if(locationInited && lDistance > 2.0f) {
+    if(locationInited && lDistance > 10.0f) {
         updateHeadingStored = false;
         curLat = [NSString stringWithFormat:@"%.8f",newLocation.coordinate.latitude];
         curLng = [NSString stringWithFormat:@"%.8f",newLocation.coordinate.longitude];
         initYaw = degToRad(heading);
-        //[self updatePins];
-        //[self updatePinPositions];
+        [self updatePinPositions];
     }
 }
 
@@ -354,13 +374,13 @@ bool startHeadingStored=false, updateHeadingStored = false;
 }
 
 
--(void)outputGyroData:(CMGyroData*) gyro {
-
-}
-
--(void)outputAccelerationData:(CMAccelerometerData*) acceleration {
-
-}
+//-(void)outputGyroData:(CMGyroData*) gyro {
+//
+//}
+//
+//-(void)outputAccelerationData:(CMAccelerometerData*) acceleration {
+//
+//}
 
 -(void)outputMotionData:(CMDeviceMotion*) motion {
     CMQuaternion q = motion.attitude.quaternion;
@@ -423,22 +443,22 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       pinList = NULL;
                                                       pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
                                                       
-                                                      //Fill const arrays
-                                                      constTextList         = [[NSMutableArray alloc]init];
-                                                      constDistanceList     = [[NSMutableArray alloc]init];
-                                                      constDescrpList       = [[NSMutableArray alloc]init];
-                                                      constPinLatList       = [[NSMutableArray alloc]init];
-                                                      constPinLngList       = [[NSMutableArray alloc]init];
-                                                      constPinImageList     = [[NSMutableArray alloc]init];
-                                                      constPinGalleryImages = [[NSMutableArray alloc]init];
-                                                      constAnimTextList     = [[NSMutableArray alloc]init];
-                                                      constAnimStates       = [[NSMutableArray alloc]init];
-                                                      constPinOriginY       = [[NSMutableArray alloc]init];
-                                                      constPinIsAnimated    = [[NSMutableArray alloc]init];
+                                                      //Reset arrays
+                                                      [constTextList removeAllObjects];
+                                                      [constDistanceList removeAllObjects];
+                                                      [constDescrpList removeAllObjects];
+                                                      [constPinLatList removeAllObjects];
+                                                      [constPinLngList removeAllObjects];
+                                                      [constPinImageList removeAllObjects];
+                                                      [constPinGalleryImages removeAllObjects];
+                                                      [constAnimTextList removeAllObjects];
+                                                      [constAnimStates removeAllObjects];
+                                                      [constPinOriginY removeAllObjects];
+                                                      [constPinIsAnimated removeAllObjects];
                                                       
                                                       //Get furthest and closest distances and record them
-                                                      CLLocation* closestPinLoc     = [[CLLocation alloc] initWithLatitude:[(jsonArray[0][@"lat"]) floatValue] longitude:[(jsonArray[0][@"lng"]) floatValue]];
-                                                      CLLocation* furthestPinLoc    = [[CLLocation alloc] initWithLatitude:[(jsonArray[jsonArray.count-1][@"lat"]) floatValue] longitude:[(jsonArray[jsonArray.count-1][@"lng"]) floatValue]];
+                                                    closestPinLoc     = [[CLLocation alloc] initWithLatitude:[(jsonArray[0][@"lat"]) floatValue] longitude:[(jsonArray[0][@"lng"]) floatValue]];
+                                                    furthestPinLoc    = [[CLLocation alloc] initWithLatitude:[(jsonArray[jsonArray.count-1][@"lat"]) floatValue] longitude:[(jsonArray[jsonArray.count-1][@"lng"]) floatValue]];
                                                       
                                                       float closestDist  = [currentLocation distanceFromLocation:closestPinLoc];
                                                       float furthestDist = [currentLocation distanceFromLocation:furthestPinLoc];
@@ -455,6 +475,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           
                                                           CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
                                                           
+#pragma mark Calculate Bearing and set pin positions
                                                           double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
                                                           float dist = [currentLocation distanceFromLocation:tmpPinLoc];
                                                           float projecDist = [self mapNumber:closestDist :furthestDist :0.4f :0.8f :dist];
@@ -488,6 +509,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                               [constPinIsAnimated addObject:isAnimated];
                                                               [constAnimStates addObject:animState];
                                                               pinList[cnt].fontSize = k10;
+                                                              pinList[cnt].originY= 0.0f;
                                                           }
                                                           else if ([constTextList[cnt] length]  <= 25)
                                                           {
@@ -544,27 +566,31 @@ bool startHeadingStored=false, updateHeadingStored = false;
 }
 
 -(void) updatePinPositions {
-    if(pInited && pinCount>0) {
+    if(pInited && pinCount>0 && false) {
+        float closestDist  = [currentLocation distanceFromLocation:closestPinLoc];
+        float furthestDist = [currentLocation distanceFromLocation:furthestPinLoc];
+        double bearingOffset = 0.0f;
         for(int i=0;i<pinCount;i++) {
             float pLat = [constPinLatList[i] floatValue]; float pLng = [constPinLngList[i] floatValue];
             CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
             double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
             float dist = [currentLocation distanceFromLocation:tmpPinLoc];
+            float projecDist = [self mapNumber:closestDist :furthestDist :0.4f :0.8f :dist];
             
-            double bearingOffset = (heading-bearing) + 90.0f;
+            bearingOffset = (heading-bearing) + 90.0f;
             if(bearingOffset<0.0f){
                 bearingOffset = 360.0f + bearingOffset;
             }
             if(bearingOffset>360.0f){
                 bearingOffset = bearingOffset-360.0f;
             }
-            pLat = cos(degToRad(bearingOffset)) * dist;
-            pLng = sin(degToRad(bearingOffset)) * dist;
+            pLat = cos(degToRad(bearingOffset)) * projecDist;
+            pLng = sin(degToRad(bearingOffset)) * projecDist;
             
             pinList[i].position = {pLat, 0.0f, pLng};
+            NSLog(@"%@ bearing: %f current loc: %f , %f pinloc: %f , %f",constTextList[0],bearingOffset,currentLocation.coordinate.latitude, currentLocation.coordinate.longitude,pLat,pLng);
         }
-        templateApp.SetPinDatas(pinList, pinCount, 1.0f);
-        NSLog(@"pin pos updated");
+        
         updateHeadingStored = true;
     }
 }
@@ -718,6 +744,7 @@ bool camSizeSet = false;
     [self.motionManager stopMagnetometerUpdates];
     [self.motionManager stopAccelerometerUpdates];
     [self stopCaptureLocation];
+
     templateApp.Exit();
     //Dealloc
     drawApp = false;

@@ -12,12 +12,14 @@ import UserNotifications
 import Firebase
 import FirebaseMessaging
 import FBSDKShareKit
+import CoreLocation
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, CLLocationManagerDelegate {
 
     var window: UIWindow?
-
+    var currentLocation:CLLocation?
+    var locationManager:CLLocationManager?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -36,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
         }
         application.registerForRemoteNotifications()
-        
+        //self.setupLocationManager()
         return true
     }
     
@@ -120,6 +122,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
+    func setupLocationManager(){
+        locationManager = CLLocationManager()
+        locationManager?.delegate = self
+        self.locationManager?.requestAlwaysAuthorization()
+        locationManager?.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        self.locationManager?.allowsBackgroundLocationUpdates = true
+        locationManager?.startUpdatingLocation()
+        
+    }
+    
+    // Below method will provide you current location.
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        if currentLocation == nil {
+            currentLocation = locations.last;
+            //locationManager?.stopMonitoringSignificantLocationChanges()
+            let locationValue:CLLocationCoordinate2D = manager.location!.coordinate
+            
+            print("locations = \(locationValue)")
+            
+            //locationManager?.stopUpdatingLocation()
+        }
+    }
+    
+    // Below Mehtod will print error if not able to update location.
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error")
+    }
 
 }
 

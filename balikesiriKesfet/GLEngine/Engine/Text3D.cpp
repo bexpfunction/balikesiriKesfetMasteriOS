@@ -163,6 +163,7 @@ void TEXT3D_print(TEXT3D *text,PROGRAM *program, Camera *cam,mat4 *modelMat,floa
     
     char uniform,attribute;
     //assert(text->program->pid);
+    
     if(text) {
         if (program) {
             PROGRAM_draw(program);

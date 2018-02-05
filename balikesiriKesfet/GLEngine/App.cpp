@@ -165,6 +165,7 @@ int tempPinSize;
 float tempPinMaxOffset;
 void AppSetPinDatas(pinData *pins,int size,float pinTextMaxOffset){
 
+    deletePins();
     tempPinSize = size;
     tempPinMaxOffset = pinTextMaxOffset;
     tempPinData = pins;
@@ -512,10 +513,11 @@ void deletePins(){
         for (int i = 0; i < pinSize; i++) {
             Text3D_free(App::pinDatas[i].text3D);
         }
-        free(App::pinDatas);
+        App::pinDatas = NULL;
+        //free(App::pinDatas);
         pinSize = 0;
         isPinInited = false;
-        LOGI("Pins Deleted\n");
+        //LOGI("Pins Deleted\n");
     }
 }
 
@@ -548,7 +550,6 @@ void AppDraw() {
     }
     
     if(isPinInited && true){
-        
         if(App::selectedPin != NULL){
             //Draw rest first
             for(int i=pinSize-1;i>=0;i--) {
@@ -638,7 +639,7 @@ void AppDraw() {
                 modelMat.m[0].x = App::pinDatas[i].size;
                 modelMat.m[1].y = App::pinDatas[i].size;
                 modelMat.m[2].z = App::pinDatas[i].size;
-                
+
                 TEXT3D_print(App::pinDatas[i].text3D,font->program,cam,&modelMat,pinTextOffset);
             }
         }
@@ -845,8 +846,6 @@ void debugMatricies(){
 }
 
 void  AppExit(){
-    LOGI("AppExit Called\n");
-    
     pinSize = 0;
     if(program != NULL){
         SHADER_free(program->fragment_shader);
