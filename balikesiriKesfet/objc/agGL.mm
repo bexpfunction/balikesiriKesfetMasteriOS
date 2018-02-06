@@ -62,6 +62,9 @@ NSMutableArray *constPinImageList;
 NSMutableArray *constPinGalleryImages;
 NSMutableArray *constPinOriginY;
 NSMutableArray *constPinIsAnimated;
+NSMutableArray *constGlobalBearingOffsets;
+#pragma mark UserDefaults
+NSUserDefaults *pinDefaults;
 
 @implementation agGL {
     
@@ -126,6 +129,8 @@ NSMutableArray *constPinIsAnimated;
     constAnimStates       = [[NSMutableArray alloc]init];
     constPinOriginY       = [[NSMutableArray alloc]init];
     constPinIsAnimated    = [[NSMutableArray alloc]init];
+    constGlobalBearingOffsets = [[NSMutableArray alloc]init];
+    pinDefaults = [NSUserDefaults standardUserDefaults];
     
     [self testInternetConnection];
 }
@@ -158,11 +163,13 @@ NSMutableArray *constPinIsAnimated;
     }];
     
     [NSTimer scheduledTimerWithTimeInterval:3.0f repeats:true block:^(NSTimer * _Nonnull timer) {
-        dispatch_async(dispatch_get_main_queue(), ^{
         [self updatePinPositions];
-        });
     }];
 
+    UITapGestureRecognizer *singleFingerTap =
+    [[UITapGestureRecognizer alloc] initWithTarget:self
+                                            action:@selector(handleSingleTap:)];
+    [self.view addGestureRecognizer:singleFingerTap];
     
     self.crosshairImag.alpha = 1.0f;
 }
@@ -443,6 +450,10 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       pinList = NULL;
                                                       pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
                                                       
+                                                      //Store defaults
+                                                      [pinDefaults setObject:jsonArray forKey:@"pinDefaults"];
+                                                      [pinDefaults synchronize];
+                                                      
                                                       //Reset arrays
                                                       [constTextList removeAllObjects];
                                                       [constDistanceList removeAllObjects];
@@ -455,6 +466,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       [constAnimStates removeAllObjects];
                                                       [constPinOriginY removeAllObjects];
                                                       [constPinIsAnimated removeAllObjects];
+                                                      [constGlobalBearingOffsets removeAllObjects];
                                                       
                                                       //Get furthest and closest distances and record them
                                                     closestPinLoc     = [[CLLocation alloc] initWithLatitude:[(jsonArray[0][@"lat"]) floatValue] longitude:[(jsonArray[0][@"lng"]) floatValue]];
@@ -479,7 +491,8 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
                                                           float dist = [currentLocation distanceFromLocation:tmpPinLoc];
                                                           float projecDist = [self mapNumber:closestDist :furthestDist :0.4f :0.8f :dist];
-
+                                                          
+                                                          
                                                           double bearingOffset = (heading-bearing) + 90.0f;
                                                           if(bearingOffset<0.0f){
                                                               bearingOffset = 360.0f + bearingOffset;
@@ -487,6 +500,8 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           if(bearingOffset>360.0f){
                                                               bearingOffset = bearingOffset-360.0f;
                                                           }
+                                                          NSNumber* bearOff = [NSNumber numberWithFloat:bearingOffset];
+                                                          [constGlobalBearingOffsets addObject:bearOff];
                                                           pLat = cos(degToRad(bearingOffset)) * projecDist;
                                                           pLng = sin(degToRad(bearingOffset)) * projecDist;
                                                           
@@ -566,9 +581,10 @@ bool startHeadingStored=false, updateHeadingStored = false;
 }
 
 -(void) updatePinPositions {
-    if(pInited && pinCount>0 && false) {
+    if(pInited && pinCount>0) {
         float closestDist  = [currentLocation distanceFromLocation:closestPinLoc];
         float furthestDist = [currentLocation distanceFromLocation:furthestPinLoc];
+        NSLog(@"update furthest: %f , closest: %f",furthestDist, closestDist);
         double bearingOffset = 0.0f;
         for(int i=0;i<pinCount;i++) {
             float pLat = [constPinLatList[i] floatValue]; float pLng = [constPinLngList[i] floatValue];
@@ -584,11 +600,10 @@ bool startHeadingStored=false, updateHeadingStored = false;
             if(bearingOffset>360.0f){
                 bearingOffset = bearingOffset-360.0f;
             }
-            pLat = cos(degToRad(bearingOffset)) * projecDist;
-            pLng = sin(degToRad(bearingOffset)) * projecDist;
+            pLat = cos(degToRad([constGlobalBearingOffsets[i] floatValue])) * projecDist;
+            pLng = sin(degToRad([constGlobalBearingOffsets[i] floatValue])) * projecDist;
             
             pinList[i].position = {pLat, 0.0f, pLng};
-            NSLog(@"%@ bearing: %f current loc: %f , %f pinloc: %f , %f",constTextList[0],bearingOffset,currentLocation.coordinate.latitude, currentLocation.coordinate.longitude,pLat,pLng);
         }
         
         updateHeadingStored = true;
@@ -608,6 +623,24 @@ bool startHeadingStored=false, updateHeadingStored = false;
     return (x-a1) / (a2-a1) * (b2 - b1) + b1;
 }
 
+- (void)handleSingleTap:(UITapGestureRecognizer *)recognizer
+{
+    CGPoint location = [recognizer locationInView:[recognizer.view superview]];
+    if(!annotationOpened){
+        if(selectedPinId > -1){
+            storedPinId = selectedPinId;
+            if([constPinImageList[storedPinId] count]<1){
+                self.galleryColView.alpha = 0.0f;
+            } else {
+                self.galleryColView.alpha = 1.0f;
+            }
+            [self.pinTitle setText:constTextList[storedPinId]];
+            [self.pinInfo setText:constDescrpList[storedPinId]];
+            [self annotationIn];
+        }
+    }
+    
+}
 
 -(void) startCameraPreview {
     //-- Create CVOpenGLESTextureCacheRef for optimal CVImageBufferRef to GLES texture conversion.

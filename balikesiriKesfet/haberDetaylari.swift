@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import FBSDKShareKit
+import FBSDKLoginKit
 
 class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, SWRevealViewControllerDelegate {
     
@@ -19,6 +21,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     @IBOutlet weak var linkListText: UITextView!
     @IBOutlet weak var galleryColView: UICollectionView!
     @IBOutlet weak var scrollableContentView: UIView!
+    @IBOutlet weak var fbShareButton: FBSDKShareButton!
     
     var idFromSelection : String?
     
@@ -35,7 +38,6 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("height: %@",self.view.bounds.height)
         //Reveal View Controller Setup
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
@@ -58,8 +60,15 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.galleryColView.layer.borderColor = UIColor.white.cgColor
         
         fetchDetails()
+       
         
         NSLog("colview size: \(self.galleryColView.bounds.size.width)")
+    }
+    
+    @IBAction func fbShare(_ sender: Any) {
+        let fbShareContent : FBSDKShareLinkContent = FBSDKShareLinkContent()
+        fbShareContent.contentURL = URL(string: "http://app.balikesirikesfet.com/news_detail?h="+idFromSelection!)!
+        self.fbShareButton.shareContent = fbShareContent
     }
     
     func fetchDetails() {
@@ -92,7 +101,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
                 if let linkList = json["link"] as? [String] {
                     for link in linkList{
-                        let linkUrl = link+"\n"
+                        let linkUrl = link
                         self.linkList.append(linkUrl)
                     }
                 }
@@ -196,6 +205,8 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         return connected
     }
+    
+    
     
     //SWReveal Delegate
     func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
