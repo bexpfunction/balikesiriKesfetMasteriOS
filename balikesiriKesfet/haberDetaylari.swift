@@ -10,7 +10,7 @@ import UIKit
 import FBSDKShareKit
 import FBSDKLoginKit
 
-class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, SWRevealViewControllerDelegate {
+class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextViewDelegate, SWRevealViewControllerDelegate {
     
     @IBOutlet weak var openMenuBut: UIBarButtonItem!
     @IBOutlet weak var newsTitle: UILabel!
@@ -54,22 +54,27 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.linkListText.text = ""
         self.linkList.removeAll()
         
+        self.thumbsImage.layer.borderWidth = 1
+        self.thumbsImage.layer.borderColor = UIColor.white.cgColor
+        self.thumbsImage.layer.cornerRadius = 1
+        
         //Gallery Collection View Setup
         self.galleryColView.layer.cornerRadius = 5
         self.galleryColView.layer.borderWidth = 1
         self.galleryColView.layer.borderColor = UIColor.white.cgColor
         
+        self.linkListText.delegate = self
+        if(FBSDKAccessToken.current() == nil) {
+            self.fbShareButton.isHidden = true
+        } else {
+            self.fbShareButton.isHidden = false
+        }
         fetchDetails()
        
         
         NSLog("colview size: \(self.galleryColView.bounds.size.width)")
     }
     
-    @IBAction func fbShare(_ sender: Any) {
-        let fbShareContent : FBSDKShareLinkContent = FBSDKShareLinkContent()
-        fbShareContent.contentURL = URL(string: "http://app.balikesirikesfet.com/news_detail?h="+idFromSelection!)!
-        self.fbShareButton.shareContent = fbShareContent
-    }
     
     func fetchDetails() {
         let detailUrl = "http://app.balikesirikesfet.com/news_detail?h="+idFromSelection!
@@ -102,7 +107,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
                 if let linkList = json["link"] as? [String] {
                     for link in linkList{
                         let linkUrl = link
-                        self.linkList.append(linkUrl)
+                        self.linkList.append(linkUrl+"\n")
                     }
                 }
                 if let picList = json["galeri"] as? [String] {
@@ -128,6 +133,10 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
                         self.linkListText.text?.append(eLink!)
                     }
                     self.galleryColView.reloadData()
+                    let content : FBSDKShareLinkContent = FBSDKShareLinkContent()
+                    content.contentURL = URL(string: "http://app.balikesirikesfet.com/news_detail?h="+self.idFromSelection!)!
+
+                    self.fbShareButton.shareContent = content
                 }
                 
             } catch let error {
@@ -206,7 +215,11 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         return connected
     }
     
-    
+    //Textview delegate
+    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+        NSLog("tapped url")
+        return true;
+    }
     
     //SWReveal Delegate
     func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {

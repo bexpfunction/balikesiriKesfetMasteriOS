@@ -14,10 +14,12 @@
 #import <string>
 #import <malloc/malloc.h>
 #import <AVFoundation/AVFoundation.h>
+#import <UserNotifications/UserNotifications.h>
 #import "SWRevealViewController.h"
 #import <SceneKit/SceneKit.h>
 #import "quaternion.h"
 #import "objcPinPicCell.h"
+#import "balikesiriKesfet-swift.h"
 
 @interface agGL () <CLLocationManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, UICollectionViewDelegate, SWRevealViewControllerDelegate> {
     Reachability *internetReachableFoo;
@@ -107,6 +109,9 @@ NSUserDefaults *pinDefaults;
     self.annotationExitBut.layer.cornerRadius = 5;
     self.annotationExitBut.layer.borderWidth = 1;
     self.annotationExitBut.layer.borderColor = UIColor.whiteColor.CGColor;
+    self.showOnMapBut.layer.cornerRadius = 5;
+    self.showOnMapBut.layer.borderWidth = 1;
+    self.showOnMapBut.layer.borderColor = UIColor.whiteColor.CGColor;
     self.galleryColView.delegate = self;
     
     //Setup pininfoview
@@ -347,6 +352,7 @@ bool pInited = false;
            fromLocation:(CLLocation *)oldLocation
 {
     currentLocation = newLocation;
+    //[self sendPinNotificationWithPinName:@"pinname" :@"description"];
     NSLog(@"curloc: %f , %f",currentLocation.coordinate.latitude,currentLocation.coordinate.longitude);
     CLLocationDistance lDistance = [newLocation distanceFromLocation:oldLocation];
     if(!locationInited) {
@@ -451,8 +457,9 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
                                                       
                                                       //Store defaults
-                                                      [pinDefaults setObject:jsonArray forKey:@"pinDefaults"];
-                                                      [pinDefaults synchronize];
+//                                                      [pinDefaults removeObjectForKey:@"pinDefaults"];
+//                                                      [pinDefaults setObject:jsonArray forKey:@"pinDefaults"];
+//                                                      [pinDefaults synchronize];
                                                       
                                                       //Reset arrays
                                                       [constTextList removeAllObjects];
@@ -584,7 +591,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
     if(pInited && pinCount>0) {
         float closestDist  = [currentLocation distanceFromLocation:closestPinLoc];
         float furthestDist = [currentLocation distanceFromLocation:furthestPinLoc];
-        NSLog(@"update furthest: %f , closest: %f",furthestDist, closestDist);
+        //NSLog(@"update furthest: %f , closest: %f",furthestDist, closestDist);
         double bearingOffset = 0.0f;
         for(int i=0;i<pinCount;i++) {
             float pLat = [constPinLatList[i] floatValue]; float pLng = [constPinLngList[i] floatValue];
@@ -640,6 +647,21 @@ bool startHeadingStored=false, updateHeadingStored = false;
         }
     }
     
+}
+
+-(void) sendPinNotificationWithPinName: (NSString*) name: (NSString*) description {
+    UNMutableNotificationContent *content = [UNMutableNotificationContent new];
+    content.title = @"Yeni Pin Alındı";
+    content.body = [NSString stringWithFormat:@"%@ %@",name,description];
+    content.sound = [UNNotificationSound defaultSound];
+    UNTimeIntervalNotificationTrigger *trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:1 repeats:NO];
+    UNNotificationRequest *notifRequest = [UNNotificationRequest requestWithIdentifier:@"Pin Notif" content:content trigger:trigger];
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center addNotificationRequest:notifRequest withCompletionHandler:^(NSError * _Nullable error) {
+        if (!error) {
+            NSLog(@"add NotificationRequest succeeded!");
+        }
+    }];
 }
 
 -(void) startCameraPreview {
@@ -882,6 +904,21 @@ int storedPinId=-1;
 - (IBAction)closeAnnotation:(id)sender {
     storedPinId = -1;
     [self annotationOut];
+}
+
+#pragma mark ShowOnMap
+- (IBAction)showOnMap:(id)sender {
+    annotationOpened = false;
+    NSInteger myObjcData = (NSInteger)storedPinId;
+    storedPinId = -1;
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setInteger:myObjcData forKey:@"mapSelectedPinId"];
+    [defaults synchronize];
+    
+    UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"haritaVC"];
+    //map2d *vc = [sb instantiateViewControllerWithIdentifier:@"haritaVC"];
+    [self.navigationController pushViewController:vc animated:true];
 }
 #pragma mark CollectionView for gallery
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {

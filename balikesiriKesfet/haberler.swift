@@ -127,6 +127,8 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource, SW
         cell.date.text = self.articleList[indexPath.item].date
         cell.imgView.downloadImage(from: (self.articleList[indexPath.item].picUrl!))
         cell.imgView.layer.cornerRadius = 3
+        cell.imgView.layer.borderWidth = 1
+        cell.imgView.layer.borderColor = UIColor.white.cgColor
         cell.imgView.layer.masksToBounds = false
         //cell.contentView.backgroundColor = UIColor(red: 10/255, green: 109/255, blue: 165/255, alpha: 1.0)
         cell.cardView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)

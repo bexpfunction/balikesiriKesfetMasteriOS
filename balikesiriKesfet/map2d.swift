@@ -27,11 +27,14 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     var locatFirstUpdated = false
     var pinList = [Pin]()
     var selectedPinId : Int!
+    var passedPinId : Int!
     var deSelectedPinID : Int!
     let locationManager = CLLocationManager()
     var currentLocation = CLLocation()
+    var annotationList : [MKPointAnnotation] = []
     var sv : UIView!
     
+    let prefs:UserDefaults = UserDefaults.standard
     
     @IBOutlet weak var openMenuBut: UIBarButtonItem!
     @IBOutlet weak var annotationPopupExitBut: UIButton!
@@ -62,6 +65,8 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         
         self.selectedPinId = -1
         self.deSelectedPinID = -1
+        self.passedPinId = self.prefs.integer(forKey: "mapSelectedPinId")
+        NSLog("passed: \(self.passedPinId)")
         self.addressLabel.text = ""
         self.mapFollowButton.setImage(#imageLiteral(resourceName: "locat"), for: .normal)
 
@@ -112,6 +117,10 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        self.passedPinId = -1
     }
     
     func animateIn() {
@@ -289,6 +298,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                     tmpPin.distance = distance
                     
                     self.mapKitView.addAnnotation(annotation)
+                    self.annotationList.append(annotation)
                     
                     tmpPin.id = count
                     count = count + 1
@@ -299,6 +309,19 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                 DispatchQueue.main.async {
                     self.pinListTV.reloadData() {
                         UIViewController.removeSpinner(spinner: self.sv)
+                    }
+                    if self.passedPinId > -1 {
+                        self.selectedPinId = self.passedPinId
+                        self.prefs.set(-1, forKey: "mapSelectedPinId")
+                        self.mapKitView.selectAnnotation(self.annotationList[self.passedPinId], animated: true)
+                        let indPath = NSIndexPath(item: self.passedPinId, section: 0)
+                        
+                        var region : MKCoordinateRegion!
+                        var span : MKCoordinateSpan!
+                        span = MKCoordinateSpanMake(0.0025, 0.0025)
+                        region = MKCoordinateRegion(center: CLLocationCoordinate2DMake(Double(self.pinList[self.selectedPinId].lat!)!, Double(self.pinList[self.selectedPinId].lng!)!), span: span)
+                        self.mapKitView.setRegion(region, animated: true)
+                        self.pinListTV.selectRow(at: indPath as IndexPath, animated: true, scrollPosition: UITableViewScrollPosition.middle)
                     }
                 }
             } catch let error {

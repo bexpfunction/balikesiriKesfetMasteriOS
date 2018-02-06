@@ -34,6 +34,10 @@ class duyurular: UIViewController, UITableViewDelegate, UITableViewDataSource, S
         revealViewController().rearViewRevealWidth = 190
         revealViewController().rearViewRevealOverdraw = 250
         revealViewController().delegate = self
+        
+//        notificationsTable.estimatedRowHeight = 110
+//        notificationsTable.rowHeight = UITableViewAutomaticDimension
+        
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
@@ -99,8 +103,11 @@ class duyurular: UIViewController, UITableViewDelegate, UITableViewDataSource, S
         cell.cardView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)
         cell.contentView.backgroundColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0)
         cell.nTitle.text = self.notificationList[indexPath.item].title
+        //cell.nTitle.sizeToFit()
         cell.nAbstract.text = self.notificationList[indexPath.item].abstract
+        //cell.nAbstract.sizeToFit()
         cell.nDate.text = self.notificationList[indexPath.item].date
+        //cell.nDate.sizeToFit()
             
         return cell
     }

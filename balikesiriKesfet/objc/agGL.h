@@ -29,6 +29,7 @@
 @property (strong, nonatomic) IBOutlet UIView *annotationPopup;
 @property (weak, nonatomic) IBOutlet UIButton *annotationExitBut;
 @property (strong, nonatomic) IBOutlet UIView *pinInfoView;
+@property (weak, nonatomic) IBOutlet UIButton *showOnMapBut;
 @property (weak, nonatomic) IBOutlet UIView *pinInfoBg;
 @property (weak, nonatomic) IBOutlet UIButton *pinInfoDetailBut;
 @property (weak, nonatomic) IBOutlet UILabel *pinInfoDistance;
@@ -36,6 +37,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *crosshairImag;
 - (IBAction)openAnnotation:(id)sender;
 - (IBAction)closeAnnotation:(id)sender;
+- (IBAction)showOnMap:(id)sender;
 
 - (void)startCaptureLocation;
 - (void)stopCaptureLocation;
