@@ -105,48 +105,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         if ( application.applicationState == .inactive || application.applicationState == .background){
-            
+            let map2dVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "haritaNavC") as! map2d
+            let navigationController = self.window?.rootViewController as! UINavigationController
+            navigationController.pushViewController(map2dVC, animated: true)
             //handle tapping on push notification and here you can open needed controller
+            
         }
     }
     
-    //Background fetch
-    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-       let sessionConfig = URLSessionConfiguration.default
-        self.setupLocationManager()
-        
-        
-        var haveData = false
-        self.locationManager.startUpdatingLocation()
-        let urlString = "http://app.balikesirikesfet.com/json_distance?lat=\(self.currentLocation.coordinate.latitude)&lng=\(self.currentLocation.coordinate.longitude)&dis=2"
-        self.scheduleLocal(title: "url", description: "\(urlString)")
-        let urlRequest = URLRequest(url: URL(string: urlString)!)
-
-        let task = URLSession.shared.dataTask(with: urlRequest){(data, response, error) in
-            if error != nil {
-                print(error as Any)
-                return
-            } else {
-                haveData = true
-
-            }
-            do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [[String:AnyObject]]
-
-
-            } catch let error {
-                print(error)
-            }
-        }
-        task.resume()
-        if(haveData){
-            self.scheduleLocal(title: "Fetch update", description: "Fetched")
-            completionHandler(UIBackgroundFetchResult.newData)
-        } else {
-            self.scheduleLocal(title: "Fetch update", description: "No data")
-            completionHandler(UIBackgroundFetchResult.noData)
-        }
-    }
     
     //Local notif
     func scheduleLocal(title : String!, description : String!) {
@@ -195,6 +161,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
 
     
+    func fetchPinsWith(lat: Double, lng: Double) {
+        let urlString = "http://app.balikesirikesfet.com/json_distance?lat=\(NSString(format: "%.10f",lat))&lng=\(NSString(format: "%.10f",lng))&dis=2"
+        print("url: \(urlString)")
+        let urlRequest = URLRequest(url: URL(string: urlString)!)
+        
+        let task = URLSession.shared.dataTask(with: urlRequest){(data, response, error) in
+            if error != nil {
+                print(error as Any)
+                return
+            }
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [[String:AnyObject]]
+                var notifiedPins = UserDefaults.standard.array(forKey: "notifiedPinList") as? [String]
+                for pin in json {
+                    if (pin["bildirim"] as? String) != nil {
+                        if(notifiedPins == nil) {
+                            notifiedPins = []
+                            let pinId = pin["id"] as? String
+                            notifiedPins?.append(pinId!)
+                            UserDefaults.standard.set(notifiedPins, forKey: "notifiedPinList")
+                            let title = pin["title"] as? String
+                            self.scheduleLocal(title: "Yeni Yer Bildirimi", description: "\(String(describing: title)) çok yakınınızda")
+                            break
+                        } else {
+                            let pinId = pin["id"] as! String
+                            if(notifiedPins?.contains(pinId))!{
+                                
+                            } else {
+                                notifiedPins?.append(pinId)
+                                UserDefaults.standard.set(notifiedPins, forKey: "notifiedPinList")
+                                let title = pin["title"] as! String
+                                self.scheduleLocal(title: "Yeni Yer Bildirimi", description: "\(title) çok yakınınızda")
+                                break
+                            }
+                        }
+                    }
+                }
+                
+                notifiedPins?.removeAll()
+            } catch let error {
+                print(error)
+            }
+        }
+        task.resume()
+    }
+    
     func setupLocationManager(){
         self.locationManager.delegate = self
         self.locationManager.pausesLocationUpdatesAutomatically = false
@@ -204,6 +216,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         self.locationManager.distanceFilter = kCLDistanceFilterNone
         self.locationManager.startUpdatingLocation()
     }
+    
+    
+    // Below method will provide you current location.
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        if UIApplication.shared.applicationState == .active {
+            currentLocation = locations.last!
+            let location = locations.last
+            lastLocation = location!
+        } else {
+            self.fetchPinsWith(lat: (locations.last?.coordinate.latitude)!, lng: (locations.last?.coordinate.longitude)!)
+            let location = locations.last
+            lastLocation = location!
+            currentLocation = location!
+        }
+    }
+    
+//    func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+//        createRegion(location: self.currentLocation)
+//        self.scheduleLocal(title: "Yeni Yer Bildirimi", description: "\(self.currentLocation.coordinate) çok yakınınızda")
+//    }
+    
     
 //    func createRegion(location:CLLocation?) {
 //
@@ -225,30 +259,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //            //Stop your location manager for updating location and start regionMonitoring
 //            self.locationManager.stopUpdatingLocation()
 //            self.locationManager.startMonitoring(for: region)
+//            print("Region created with: \(location?.coordinate)")
 //        }
 //        else {
 //            print("System can't track regions")
 //        }
 //    }
-    
-    // Below method will provide you current location.
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        
-        if UIApplication.shared.applicationState == .active {
-            currentLocation = locations.last!
-            let location = locations.last
-            lastLocation = location!
-            
-        } else {
-            
-            let location = locations.last
-            lastLocation = location!
-            currentLocation = location!
-            print("not active with location: \(location?.coordinate)")
-            self.scheduleLocal(title: "Location Update", description: "Pos: \(location!.coordinate)")
-        }
-    }
-    
     
     // Below Mehtod will print error if not able to update location.
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

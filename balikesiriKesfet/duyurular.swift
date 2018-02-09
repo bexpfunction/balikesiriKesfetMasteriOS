@@ -35,8 +35,8 @@ class duyurular: UIViewController, UITableViewDelegate, UITableViewDataSource, S
         revealViewController().rearViewRevealOverdraw = 250
         revealViewController().delegate = self
         
-//        notificationsTable.estimatedRowHeight = 110
-//        notificationsTable.rowHeight = UITableViewAutomaticDimension
+        self.notificationsTable.estimatedRowHeight = 110.0
+        self.notificationsTable.rowHeight = UITableViewAutomaticDimension
         
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())

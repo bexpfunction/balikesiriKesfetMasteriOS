@@ -22,8 +22,6 @@ class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
     @IBOutlet weak var buttonWindow: UIView!
     @IBOutlet weak var loginButton: FBSDKLoginButton!
     
-    let prefs:UserDefaults = UserDefaults.standard
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -57,8 +55,6 @@ class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
         self.loginButton.readPermissions = ["public_profile", "email", "user_friends"]
         self.loginButton.delegate = self
         self.navigationItem.hidesBackButton = true
-        
-        print("savedpins: \(String(describing: UserDefaults.standard.object(forKey: "savedPins")))")
     }
     
     

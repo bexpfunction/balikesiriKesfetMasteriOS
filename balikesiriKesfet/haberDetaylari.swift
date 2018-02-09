@@ -33,6 +33,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     var pic : String?
     var linkList : [String?] = []
     var galeri : [String?] = []
+    var sv : UIView!
     
     let network: NetworkManager = NetworkManager.sharedInstance
     
@@ -70,13 +71,11 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
             self.fbShareButton.isHidden = false
         }
         fetchDetails()
-       
-        
-        NSLog("colview size: \(self.galleryColView.bounds.size.width)")
     }
     
     
     func fetchDetails() {
+        self.sv = UIViewController.displaySpinner(onView: self.view)
         let detailUrl = "http://app.balikesirikesfet.com/news_detail?h="+idFromSelection!
         
         let urlRequest = URLRequest(url: URL(string: detailUrl)!)
@@ -137,11 +136,13 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
                     content.contentURL = URL(string: "http://app.balikesirikesfet.com/news_detail?h="+self.idFromSelection!)!
 
                     self.fbShareButton.shareContent = content
+                    
                 }
                 
             } catch let error {
                 print(error as Any)
             }
+            UIViewController.removeSpinner(spinner: self.sv)
         }
         
         task.resume()
