@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Balıkesir'i Keşfet</string>
+	<string>Balıkesir&apos;i Keşfet</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -32,7 +32,7 @@
 	<key>FacebookAppID</key>
 	<string>136571520285648</string>
 	<key>FacebookDisplayName</key>
-	<string>Balıkesir'i Keşfet</string>
+	<string>Balıkesir&apos;i Keşfet</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>

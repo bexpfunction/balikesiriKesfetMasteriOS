@@ -483,7 +483,8 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       float furthestDist = [currentLocation distanceFromLocation:furthestPinLoc];
                                                       float k10 = 0.7f;
                                                       float k25 = 0.33f;
-                                                      
+                                                      float start = -0.12f;
+                                                      float end = 0.17f;
                                                       
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
@@ -511,6 +512,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           [constGlobalBearingOffsets addObject:bearOff];
                                                           pLat = cos(degToRad(bearingOffset)) * projecDist;
                                                           pLng = sin(degToRad(bearingOffset)) * projecDist;
+                                                          float altitude = [self mapNumber:closestDist :furthestDist :start :end :dist];
                                                           
                                                           [constTextList addObject:jsonArray[cnt][@"title"]];
                                                           [constAnimTextList addObject:[NSString stringWithFormat:@"%@",jsonArray[cnt][@"title"]]];
@@ -553,7 +555,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           }
                                                           
                                                           pinList[cnt].id = cnt;
-                                                          pinList[cnt].position = {pLat, 0.0f, pLng};
+                                                          pinList[cnt].position = {pLat, altitude, pLng};
                                                           pinList[cnt].text = (char*)[constTextList[cnt] cStringUsingEncoding:NSUTF8StringEncoding];
                                                           pinList[cnt].size = 0.04f;
                                                           //pinList[cnt].originY = 0.0f;
@@ -591,6 +593,9 @@ bool startHeadingStored=false, updateHeadingStored = false;
     if(pInited && pinCount>0) {
         float closestDist  = [currentLocation distanceFromLocation:closestPinLoc];
         float furthestDist = [currentLocation distanceFromLocation:furthestPinLoc];
+        float start = -0.12f;
+        float end = 0.17f;
+        
         //NSLog(@"update furthest: %f , closest: %f",furthestDist, closestDist);
         double bearingOffset = 0.0f;
         for(int i=0;i<pinCount;i++) {
@@ -599,7 +604,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
             double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
             float dist = [currentLocation distanceFromLocation:tmpPinLoc];
             float projecDist = [self mapNumber:closestDist :furthestDist :0.4f :0.8f :dist];
-            
+            float altitude = [self mapNumber:closestDist :furthestDist :start :end :dist];
             bearingOffset = (heading-bearing) + 90.0f;
             if(bearingOffset<0.0f){
                 bearingOffset = 360.0f + bearingOffset;
@@ -610,7 +615,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
             pLat = cos(degToRad([constGlobalBearingOffsets[i] floatValue])) * projecDist;
             pLng = sin(degToRad([constGlobalBearingOffsets[i] floatValue])) * projecDist;
             
-            pinList[i].position = {pLat, 0.0f, pLng};
+            pinList[i].position = {pLat, altitude, pLng};
         }
         
         updateHeadingStored = true;
