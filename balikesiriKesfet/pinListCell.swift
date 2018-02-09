@@ -11,7 +11,6 @@ import UIKit
 class pinListCell: UITableViewCell {
 
     @IBOutlet weak var cardView: UIView!
-    @IBOutlet weak var distanceLabel: UILabel!
     @IBOutlet weak var pinTitleLabel: UILabel!
     @IBOutlet weak var openInfoBut: UIButton!
     
@@ -24,5 +23,4 @@ class pinListCell: UITableViewCell {
         openInfoBut.layer.borderWidth = 1
         // Initialization code
     }
-    
 }

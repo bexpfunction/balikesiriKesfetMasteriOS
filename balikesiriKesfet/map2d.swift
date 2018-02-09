@@ -90,7 +90,8 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         
         //
         self.pinListTV.delegate = self
-        
+        self.pinListTV.estimatedRowHeight = 80.0
+        self.pinListTV.rowHeight = UITableViewAutomaticDimension
         
         //Ask authorisation
         self.locationManager.requestAlwaysAuthorization()
@@ -385,12 +386,12 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
             cell.cardView.backgroundColor = UIColor(red: 59/255, green: 110/255, blue: 177/255, alpha: 1.0)
         }
         cell.contentView.backgroundColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0)
-        cell.pinTitleLabel.text = self.pinList[indexPath.item].title
         var distance : Double
         var pinLocation : CLLocation
         pinLocation = CLLocation(latitude: Double(self.pinList[indexPath.item].lat!)!, longitude: Double(self.pinList[indexPath.item].lng!)!)
         distance = currentLocation.distance(from: pinLocation) / 1000.0
-        cell.distanceLabel.text = String(format: "%.1f KM", distance)
+        cell.pinTitleLabel.text = String(format: "%@ - %@",self.pinList[indexPath.item].title,String(format: "%.1f KM",distance))
+        //cell.distanceLabel.text = String(format: "%.1f KM", distance)
         cell.openInfoBut.tag = indexPath.row
         cell.openInfoBut.addTarget(self, action: #selector(self.openInfoButClicked(_:)), for: UIControlEvents.touchUpInside)
         return cell

@@ -181,8 +181,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             let pinId = pin["id"] as? String
                             notifiedPins?.append(pinId!)
                             UserDefaults.standard.set(notifiedPins, forKey: "notifiedPinList")
-                            let title = pin["title"] as? String
-                            self.scheduleLocal(title: "Yeni Yer Bildirimi", description: "\(String(describing: title)) çok yakınınızda")
+                            let title = pin["title"] as! String
+                            if UIApplication.shared.applicationState != .active {
+                                self.scheduleLocal(title: "Yeni Yer Bildirimi", description: "\(title) çok yakınınızda")
+                            }
                             break
                         } else {
                             let pinId = pin["id"] as! String
@@ -192,7 +194,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                                 notifiedPins?.append(pinId)
                                 UserDefaults.standard.set(notifiedPins, forKey: "notifiedPinList")
                                 let title = pin["title"] as! String
-                                self.scheduleLocal(title: "Yeni Yer Bildirimi", description: "\(title) çok yakınınızda")
+                                if UIApplication.shared.applicationState != .active {
+                                    self.scheduleLocal(title: "Yeni Yer Bildirimi", description: "\(title) çok yakınınızda")
+                                }
                                 break
                             }
                         }
