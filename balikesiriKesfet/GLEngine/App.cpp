@@ -132,8 +132,6 @@ void AppToucheBegan( float x, float y, unsigned int tap_count )
                     else
                         App::selectedPin = NULL;
                     break;
-                } else {
-                    App::selectedPin = NULL;
                 }
             }
         }
