@@ -56,6 +56,7 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.newsText1.text = ""
         self.newsText2.text = ""
         self.linkListText.text = ""
+        self.newsAbstract.text = ""
         self.linkList.removeAll()
         
         self.thumbsImage.layer.borderWidth = 1
