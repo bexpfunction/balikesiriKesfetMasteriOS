@@ -103,21 +103,39 @@ int cameraTextureIdUV;
 
 void AppToucheBegan( float x, float y, unsigned int tap_count )
 {
-    App::selectedPin = NULL;
-    
     touchBegan = true;
     touchPos.x = x;
     touchPos.y = y;
     
-    for(int i=0;i<pinSize;i++) {
+    if(App::selectedPin == NULL) {
+        for(int i=0;i<pinSize;i++) {
+            Raycast *r = RAYCAST_createFromScreenPos(x,y,cam);
+            bool hit = CheckPinHit(r,&App::pinDatas[i]);
+            if(hit) {
+                if(App::selectedPin != &App::pinDatas[i])
+                    App::selectedPin = &App::pinDatas[i];
+                else
+                    App::selectedPin = NULL;
+                break;
+            }
+        }
+    } else {
         Raycast *r = RAYCAST_createFromScreenPos(x,y,cam);
-        bool hit = CheckPinHit(r,&App::pinDatas[i]);
-        if(hit) {
-            if(App::selectedPin != &App::pinDatas[i])
-                App::selectedPin = &App::pinDatas[i];
-            else
-                App::selectedPin = NULL;
-            break;
+        bool hit = CheckPinHit(r,App::selectedPin);
+        if(!hit) {
+            for(int i=0;i<pinSize;i++) {
+                Raycast *r = RAYCAST_createFromScreenPos(x,y,cam);
+                bool hit1 = CheckPinHit(r,&App::pinDatas[i]);
+                if(hit1) {
+                    if(App::selectedPin != &App::pinDatas[i])
+                        App::selectedPin = &App::pinDatas[i];
+                    else
+                        App::selectedPin = NULL;
+                    break;
+                } else {
+                    App::selectedPin = NULL;
+                }
+            }
         }
     }
 }

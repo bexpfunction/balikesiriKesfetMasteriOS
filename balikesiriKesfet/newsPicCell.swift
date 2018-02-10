@@ -13,7 +13,7 @@ class newsPicCell: UICollectionViewCell {
     @IBOutlet weak var detailPic: UIImageView!
     
     override func awakeFromNib() {
-        self.layer.borderColor = UIColor.white.cgColor
+        self.layer.borderColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0).cgColor
         self.layer.borderWidth = 3
     }
 }

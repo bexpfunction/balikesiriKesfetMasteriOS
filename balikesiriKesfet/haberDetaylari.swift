@@ -34,6 +34,9 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     var linkList : [String?] = []
     var galeri : [String?] = []
     var sv : UIView!
+    var CellWidth : Int?
+    var CellCount : Int?
+    var CellSpacing : Int?
     
     let network: NetworkManager = NetworkManager.sharedInstance
     
@@ -56,13 +59,14 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.linkList.removeAll()
         
         self.thumbsImage.layer.borderWidth = 1
-        self.thumbsImage.layer.borderColor = UIColor.white.cgColor
+        self.thumbsImage.layer.borderColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0).cgColor
         self.thumbsImage.layer.cornerRadius = 1
         
         //Gallery Collection View Setup
-        self.galleryColView.layer.cornerRadius = 5
-        self.galleryColView.layer.borderWidth = 1
-        self.galleryColView.layer.borderColor = UIColor.white.cgColor
+        //self.galleryColView.layer.cornerRadius = 5
+        //self.galleryColView.layer.borderWidth = 1
+        //self.galleryColView.layer.borderColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0).cgColor
+        self.galleryColView.flashScrollIndicators()
         
         self.linkListText.delegate = self
         if(FBSDKAccessToken.current() == nil) {
@@ -174,11 +178,8 @@ class haberDetaylari: UIViewController, UICollectionViewDelegate, UICollectionVi
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newsPicCell", for: indexPath) as! newsPicCell
         cell.detailPic.downloadImage(from: self.galeri[indexPath.item]!)
-        
         return cell
     }
-    
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.galeri.count

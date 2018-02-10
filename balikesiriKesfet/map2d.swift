@@ -381,7 +381,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         cell.cardView.layer.shadowColor = UIColor.black.cgColor
         cell.cardView.layer.shadowOffset = CGSize(width: 0.2, height: 0.2)
         cell.cardView.layer.shadowRadius = 0.2
-        cell.cardView.backgroundColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0)
+        cell.cardView.backgroundColor = UIColor(red: 49/255, green: 100/255, blue: 147/255, alpha: 1.0)
         if(indexPath.row == self.selectedPinId) {
             cell.cardView.backgroundColor = UIColor(red: 59/255, green: 110/255, blue: 177/255, alpha: 1.0)
         }
