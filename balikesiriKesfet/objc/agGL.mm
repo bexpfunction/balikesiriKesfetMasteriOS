@@ -42,12 +42,12 @@
 bool checkFrameBuffer, drawTest, drawApp, glInitialized, iAvailable, locationInited, drawAppCalled, pinInfoViewOpened = false;
 bool annotationOpened = false;
 #pragma mark - Global floats
-float cPitch, cYaw, cRoll, initYaw, heading, motionLastYaw=0.0f, startingHeading, updatingHeading;
+float cPitch, cYaw, cRoll, initYaw, heading, motionLastYaw=0.0f, startingHeading, updatingHeading, startHeadingOffset;
 #pragma mark - Global Strings
 NSString *curLat, *curLng;
 #pragma mark - Global Locations
 CLLocation *currentLocation, *averageLocation;
-CLLocation* closestPinLoc, *furthestPinLoc;
+//CLLocation* closestPinLoc, *furthestPinLoc;
 #pragma mark - Global pinList
 static pinData* pinList = NULL;
 #pragma mark - Globals ints
@@ -167,7 +167,7 @@ NSUserDefaults *pinDefaults;
         [self animateTexts];
     }];
     
-    [NSTimer scheduledTimerWithTimeInterval:3.0f repeats:true block:^(NSTimer * _Nonnull timer) {
+    [NSTimer scheduledTimerWithTimeInterval:0.01f repeats:true block:^(NSTimer * _Nonnull timer) {
         [self updatePinPositions];
     }];
 
@@ -367,7 +367,7 @@ bool pInited = false;
         curLat = [NSString stringWithFormat:@"%.8f",newLocation.coordinate.latitude];
         curLng = [NSString stringWithFormat:@"%.8f",newLocation.coordinate.longitude];
         initYaw = degToRad(heading);
-        [self updatePinPositions];
+        //[self updatePinPositions];
     }
 }
 
@@ -383,7 +383,6 @@ bool startHeadingStored=false, updateHeadingStored = false;
     if(!updateHeadingStored) {
         updatingHeading = newHeading.trueHeading;
     }
-    //NSLog(@"current heading: %f",heading);
 }
 
 
@@ -476,40 +475,39 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       [constGlobalBearingOffsets removeAllObjects];
                                                       
                                                       //Get furthest and closest distances and record them
-                                                    closestPinLoc     = [[CLLocation alloc] initWithLatitude:[(jsonArray[0][@"lat"]) floatValue] longitude:[(jsonArray[0][@"lng"]) floatValue]];
-                                                    furthestPinLoc    = [[CLLocation alloc] initWithLatitude:[(jsonArray[jsonArray.count-1][@"lat"]) floatValue] longitude:[(jsonArray[jsonArray.count-1][@"lng"]) floatValue]];
+//                                                    closestPinLoc     = [[CLLocation alloc] initWithLatitude:[(jsonArray[0][@"lat"]) floatValue] longitude:[(jsonArray[0][@"lng"]) floatValue]];
+//                                                    furthestPinLoc    = [[CLLocation alloc] initWithLatitude:[(jsonArray[jsonArray.count-1][@"lat"]) floatValue] longitude:[(jsonArray[jsonArray.count-1][@"lng"]) floatValue]];
                                                       
-                                                      float closestDist  = [currentLocation distanceFromLocation:closestPinLoc];
-                                                      float furthestDist = [currentLocation distanceFromLocation:furthestPinLoc];
+                                                      float closestDist  = 0.01f; //CLosest const
+                                                      float furthestDist = 2.0f; //Furthest const
                                                       float k10 = 0.7f;
                                                       float k25 = 0.33f;
                                                       float start = -0.12f;
                                                       float end = 0.17f;
                                                       
+                                                      startingHeading = heading;
+
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
                                                           float pLng = [(jsonArray[cnt][@"lng"]) floatValue];
+                                                          CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
+                                                          
+                                                          if([currentLocation distanceFromLocation:tmpPinLoc]/1000.0f<0.01f) {
+                                                              continue;
+                                                          }
                                                           
                                                           [constPinLatList addObject:jsonArray[cnt][@"lat"]];
                                                           [constPinLngList addObject:jsonArray[cnt][@"lng"]];
                                                           
-                                                          CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
-                                                          
 #pragma mark Calculate Bearing and set pin positions
                                                           double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
-                                                          float dist = [currentLocation distanceFromLocation:tmpPinLoc];
+                                                          float dist = [currentLocation distanceFromLocation:tmpPinLoc]/1000.0f;
+                                                        
                                                           float projecDist = [self mapNumber:closestDist :furthestDist :0.4f :0.8f :dist];
+                                                          double bearingOffset = 0.0f;
                                                           
-                                                          
-                                                          double bearingOffset = (heading-bearing) + 90.0f;
-                                                          if(bearingOffset<0.0f){
-                                                              bearingOffset = 360.0f + bearingOffset;
-                                                          }
-                                                          if(bearingOffset>360.0f){
-                                                              bearingOffset = bearingOffset-360.0f;
-                                                          }
-                                                          NSNumber* bearOff = [NSNumber numberWithFloat:bearingOffset];
-                                                          [constGlobalBearingOffsets addObject:bearOff];
+                                                          [self getBearingOffset:bearing bearingOffset:bearingOffset];
+
                                                           pLat = cos(degToRad(bearingOffset)) * projecDist;
                                                           pLng = sin(degToRad(bearingOffset)) * projecDist;
                                                           float altitude = [self mapNumber:closestDist :furthestDist :start :end :dist];
@@ -523,7 +521,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           }
                                                           [constDescrpList addObject:tmpDesc];
 //                                                          float dist = [currentLocation distanceFromLocation:tmpPinLoc];
-                                                          [constDistanceList addObject:[NSString stringWithFormat:@"%.2f KM",dist/1000.0f]];
+                                                          [constDistanceList addObject:[NSString stringWithFormat:@"%.2f KM",dist]];
     
                                                           //Set offset and animstates depending on the title
                                                           if([constTextList[cnt] length] <= 10)
@@ -571,6 +569,10 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           } else {
                                                               constPinImageList[cnt] = [[NSMutableArray alloc] init];
                                                           }
+                                                          
+                                                          if(cnt==0) {
+                                                              NSLog(@"init name: %@ bearingOff: %f , projectDist: %f , tmpPinLoc: %f",constTextList[cnt],bearingOffset,projecDist, tmpPinLoc.coordinate.latitude);
+                                                          }
                                                       }
                                                       LOGI("\n\n");
                                                       templateApp.SetPinDatas(pinList,pinCount,1.0f);
@@ -589,38 +591,47 @@ bool startHeadingStored=false, updateHeadingStored = false;
     [dataTask resume];
 }
 
+- (void)getBearingOffset:(double)bearing bearingOffset:(double &)bearingOffset {
+    bearingOffset = (startingHeading-bearing) + 90.0f ;
+    if(bearingOffset<0.0f){
+        bearingOffset = 360.0f + bearingOffset;
+    }
+    if(bearingOffset>360.0f){
+        bearingOffset = bearingOffset-360.0f;
+    }
+}
+
 -(void) updatePinPositions {
     if(pInited && pinCount>0) {
-        float closestDist  = [currentLocation distanceFromLocation:closestPinLoc];
-        float furthestDist = [currentLocation distanceFromLocation:furthestPinLoc];
+        float closestDist  = 0.01f;
+        float furthestDist = 2.0f;
         float start = -0.12f;
         float end = 0.17f;
-        
-        //NSLog(@"update furthest: %f , closest: %f",furthestDist, closestDist);
+
         double bearingOffset = 0.0f;
         for(int i=0;i<pinCount;i++) {
             float pLat = [constPinLatList[i] floatValue]; float pLng = [constPinLngList[i] floatValue];
             CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
-            double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
-            float dist = [currentLocation distanceFromLocation:tmpPinLoc];
-            float projecDist = [self mapNumber:closestDist :furthestDist :0.4f :0.8f :dist];
-            float altitude = [self mapNumber:closestDist :furthestDist :start :end :dist];
-            bearingOffset = (heading-bearing) + 90.0f;
-            if(bearingOffset<0.0f){
-                bearingOffset = 360.0f + bearingOffset;
-            }
-            if(bearingOffset>360.0f){
-                bearingOffset = bearingOffset-360.0f;
-            }
-            pLat = cos(degToRad([constGlobalBearingOffsets[i] floatValue])) * projecDist;
-            pLng = sin(degToRad([constGlobalBearingOffsets[i] floatValue])) * projecDist;
             
+            double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
+            float dist = [currentLocation distanceFromLocation:tmpPinLoc]/1000.0f;
+            
+            constDistanceList[i] = [NSString stringWithFormat:@"%.2f KM",dist];
+            float projecDist = [self mapNumber:closestDist :furthestDist :0.4f :0.8f :dist];
+            [self getBearingOffset:bearing bearingOffset:bearingOffset];
+
+            pLat = cos(degToRad(bearingOffset)) * projecDist;
+            pLng = sin(degToRad(bearingOffset)) * projecDist;
+            
+            float altitude = [self mapNumber:closestDist :furthestDist :start :end :dist];
             pinList[i].position = {pLat, altitude, pLng};
+            
         }
-        
         updateHeadingStored = true;
     }
 }
+
+
 
 -(double)getBearing:(double)lt1:(double)lg1:(double)lt2:(double)lg2 {
     double dLon = (lg2-lg1);
