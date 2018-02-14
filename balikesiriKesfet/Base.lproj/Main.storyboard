@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="hvs-J4-wf3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="hvs-J4-wf3">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -25,7 +25,7 @@
         <!--ANA SAYFA-->
         <scene sceneID="DRF-fL-fTk">
             <objects>
-                <viewController title="ANA SAYFA" id="ZYu-Ll-96Z" userLabel="ANA SAYFA" customClass="AnaSayfa" customModule="balikesiriKesfet" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="anaSayfaVC" title="ANA SAYFA" id="ZYu-Ll-96Z" userLabel="ANA SAYFA" customClass="AnaSayfa" customModule="balikesiriKesfet" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="wQF-Vg-5uU"/>
                         <viewControllerLayoutGuide type="bottom" id="ah1-O7-ee9"/>
@@ -2229,7 +2229,7 @@ Balıkesir'i Keşfet uygulaması sayesinde kullanıcılar şehirde bulundukları
         <!--AnaSayfaNavC-->
         <scene sceneID="nGj-E2-bgU">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="1Ue-P5-qQZ" userLabel="AnaSayfaNavC" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="anaSayfaNavC" automaticallyAdjustsScrollViewInsets="NO" id="1Ue-P5-qQZ" userLabel="AnaSayfaNavC" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="etJ-2A-Z7M">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -2454,7 +2454,7 @@ Balıkesir'i Keşfet uygulaması sayesinde kullanıcılar şehirde bulundukları
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="sZi-0r-fjD"/>
-        <segue reference="BlR-cA-HGs"/>
+        <segue reference="7g6-Kw-3z4"/>
         <segue reference="H0n-th-AwB"/>
     </inferredMetricsTieBreakers>
 </document>

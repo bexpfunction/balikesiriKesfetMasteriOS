@@ -452,11 +452,14 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                   NSArray *jsonArray = (NSArray *)jsonObj;
                                                   
                                                   if(jsonArray.count<=0){
-                                                      UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Name" message:@"YOUR ALERT MESSAGE" preferredStyle:UIAlertControllerStyleAlert];
+                                                      UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"UYARI" message:@"Bulunduğunuz noktanın yakınlarında herhangi bir yer bildirimi bulunmamaktadır!" preferredStyle:UIAlertControllerStyleAlert];
                                                       
-                                                      UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+                                                      UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Tamam" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
                                                                            {
-                                                                               //BUTTON OK CLICK EVENT
+                                                                               UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                                                                               UIViewController *vc = [sb instantiateViewControllerWithIdentifier:@"anaSayfaVC"];
+                                                                               //map2d *vc = [sb instantiateViewControllerWithIdentifier:@"haritaVC"];
+                                                                               [self.navigationController pushViewController:vc animated:true];
                                                                            }];
                                                       [alert addAction:ok];
                                                       [self presentViewController:alert animated:YES completion:nil];

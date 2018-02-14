@@ -256,6 +256,25 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
             do {
                 
                 let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as! [[String:AnyObject]]
+                if json.count <= 0 {
+                    let alert = UIAlertController(title: "UYARI", message: "Bulunduğunuz noktanın yakınlarında herhangi bir yer bildirimi bulunmamaktadır!", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Tamam", style: UIAlertActionStyle.default, handler: {
+                        action in
+                        switch action.style{
+                        case .default:
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let controller = storyboard.instantiateViewController(withIdentifier: "anaSayfaVC")
+                            self.navigationController?.pushViewController(controller, animated: true)
+                            break
+                        case.cancel:
+                            break
+                        case.destructive:
+                            break
+                        }
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                }
+                
                 var tmpPin = Pin()
                 var count : Int
                 count = 0
