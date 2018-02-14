@@ -450,6 +450,18 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                               {
                                                   //NSLog(@"it is an array!");
                                                   NSArray *jsonArray = (NSArray *)jsonObj;
+                                                  
+                                                  if(jsonArray.count<=0){
+                                                      UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Name" message:@"YOUR ALERT MESSAGE" preferredStyle:UIAlertControllerStyleAlert];
+                                                      
+                                                      UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+                                                                           {
+                                                                               //BUTTON OK CLICK EVENT
+                                                                           }];
+                                                      [alert addAction:ok];
+                                                      [self presentViewController:alert animated:YES completion:nil];
+                                                  }
+                                                  
                                                   if(jsonArray.count>0 && glInitialized) {
                                                       pinCount = (int)jsonArray.count;
                                                       pinList = NULL;
@@ -960,6 +972,8 @@ int storedPinId=-1;
         }
     return cell;
 }
+
+#pragma mark AlertView
 
 // Checks if we have an internet connection or not
 - (void)testInternetConnection
