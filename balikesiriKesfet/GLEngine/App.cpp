@@ -219,6 +219,7 @@ const GLfloat gTriangleColors[12] = {
 GLfloat *gCamUvs;
 
 void AppInit(int width, int height) {
+    pinSize = 0;
     screenSize.x = width;
     screenSize.y = height;
     LOGI("\n\nScreen size: %dx%d\n\n", width, height);

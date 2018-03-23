@@ -228,7 +228,7 @@ NSUserDefaults *pinDefaults;
 bool pInited = false;
 -(void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     drawAppCalled = false;
-    
+
     if(drawApp && glInitialized) {
 
         templateApp.SetCameraRotationQuat(deviceQuat);
@@ -420,6 +420,21 @@ bool startHeadingStored=false, updateHeadingStored = false;
 #pragma mark UpdatePins
 -(void) updatePins {
     pInited = false;
+    //Reset arrays
+    [constTextList removeAllObjects];
+    [constDistanceList removeAllObjects];
+    [constDescrpList removeAllObjects];
+    [constPinLatList removeAllObjects];
+    [constPinLngList removeAllObjects];
+    [constPinImageList removeAllObjects];
+    [constPinGalleryImages removeAllObjects];
+    [constAnimTextList removeAllObjects];
+    [constAnimStates removeAllObjects];
+    [constPinOriginY removeAllObjects];
+    [constPinIsAnimated removeAllObjects];
+    [constGlobalBearingOffsets removeAllObjects];
+    pinCount = 0;
+    pinList = NULL;
     NSString *generatedURL = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=2",curLat,curLng];
     NSLog(@"generated: %@",generatedURL);
     NSURLRequest *request = [NSURLRequest requestWithURL:
@@ -469,30 +484,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       pinCount = (int)jsonArray.count;
                                                       pinList = NULL;
                                                       pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
-                                                      
-                                                      //Store defaults
-//                                                      [pinDefaults removeObjectForKey:@"pinDefaults"];
-//                                                      [pinDefaults setObject:jsonArray forKey:@"pinDefaults"];
-//                                                      [pinDefaults synchronize];
-                                                      
-                                                      //Reset arrays
-                                                      [constTextList removeAllObjects];
-                                                      [constDistanceList removeAllObjects];
-                                                      [constDescrpList removeAllObjects];
-                                                      [constPinLatList removeAllObjects];
-                                                      [constPinLngList removeAllObjects];
-                                                      [constPinImageList removeAllObjects];
-                                                      [constPinGalleryImages removeAllObjects];
-                                                      [constAnimTextList removeAllObjects];
-                                                      [constAnimStates removeAllObjects];
-                                                      [constPinOriginY removeAllObjects];
-                                                      [constPinIsAnimated removeAllObjects];
-                                                      [constGlobalBearingOffsets removeAllObjects];
-                                                      
-                                                      //Get furthest and closest distances and record them
-//                                                    closestPinLoc     = [[CLLocation alloc] initWithLatitude:[(jsonArray[0][@"lat"]) floatValue] longitude:[(jsonArray[0][@"lng"]) floatValue]];
-//                                                    furthestPinLoc    = [[CLLocation alloc] initWithLatitude:[(jsonArray[jsonArray.count-1][@"lat"]) floatValue] longitude:[(jsonArray[jsonArray.count-1][@"lng"]) floatValue]];
-                                                      
+
                                                       float closestDist  = 0.01f; //CLosest const
                                                       float furthestDist = 2.0f; //Furthest const
                                                       float k10 = 0.7f;

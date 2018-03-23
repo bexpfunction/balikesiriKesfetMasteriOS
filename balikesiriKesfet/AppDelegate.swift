@@ -182,8 +182,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                             notifiedPins?.append(pinId!)
                             UserDefaults.standard.set(notifiedPins, forKey: "notifiedPinList")
                             let title = pin["title"] as! String
-                            if UIApplication.shared.applicationState != .active {
-                                self.scheduleLocal(title: "Yeni Yer Bildirimi", description: "\(title) çok yakınınızda")
+                            DispatchQueue.main.async {
+                                if UIApplication.shared.applicationState != .active {
+                                    self.scheduleLocal(title: "Yeni Yer Bildirimi", description: "\(title) çok yakınınızda")
+                                }
                             }
                             break
                         } else {

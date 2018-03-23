@@ -66,6 +66,15 @@ class backTVController: UITableViewController, FBSDKLoginButtonDelegate {
                 })
             }
         }
+        
+        if(indexPath.row == 7){
+            if(checkConnection(failMessage: "Balıkesir Büyükşehir Belediyesi Facebook sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let controller = storyboard.instantiateViewController(withIdentifier: "bbbFacebookNavC")
+                self.revealViewController().pushFrontViewController(controller, animated: true)
+            }
+        }
+        
         if(indexPath.row == 5) {
             if(FBSDKAccessToken.current() == nil) {
                 let alert = UIAlertController(title: "UYARI", message: "Mesaj gönderebilmek için mevcut Facebook hesabınız ile giriş yapmanız gerekmektedir.", preferredStyle: UIAlertControllerStyle.alert)
