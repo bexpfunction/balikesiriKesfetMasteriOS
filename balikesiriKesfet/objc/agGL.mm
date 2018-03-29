@@ -44,7 +44,7 @@ bool annotationOpened = false;
 #pragma mark - Global floats
 float cPitch, cYaw, cRoll, initYaw, heading, motionLastYaw=0.0f, startingHeading, updatingHeading, startHeadingOffset;
 #pragma mark - Global Strings
-NSString *curLat, *curLng;
+NSString *curLat, *curLng, *model;
 #pragma mark - Global Locations
 CLLocation *currentLocation, *averageLocation;
 //CLLocation* closestPinLoc, *furthestPinLoc;
@@ -85,6 +85,11 @@ NSUserDefaults *pinDefaults;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //Get the model
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    model = [defaults stringForKey:@"currentDeviceModel"];
+    NSLog(@" model %@" , model);
+    
     //Setup side menu
     [self.openMenuBut setTarget:self.revealViewController];
     [self.openMenuBut setAction:@selector(revealToggle:)];
@@ -113,6 +118,18 @@ NSUserDefaults *pinDefaults;
     self.showOnMapBut.layer.borderWidth = 1;
     self.showOnMapBut.layer.borderColor = UIColor.whiteColor.CGColor;
     self.galleryColView.delegate = self;
+    if([model isEqualToString:@"iPhone 5c"] || [model isEqualToString:@"iPhone SE"] || [model isEqualToString:@"iPhone 5s"] || [model isEqualToString:@"iPhone 5"]){
+        NSLog(@"model worked %@", model);
+        CGRect newFrame = self.annotationPopup.frame;
+        newFrame.size.width = newFrame.size.width * 0.8516;
+        newFrame.size.height = newFrame.size.height * 0.8516;
+        [self.annotationPopup setFrame:newFrame];
+        
+        newFrame = self.pinInfoView.frame;
+        newFrame.size.width = newFrame.size.width * 0.8516;
+        newFrame.size.height = newFrame.size.height * 0.8516;
+        [self.pinInfoView setFrame:newFrame];
+    }
     
     //Setup pininfoview
     self.pinInfoBg.layer.cornerRadius = 5;

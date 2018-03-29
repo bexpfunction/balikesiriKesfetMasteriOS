@@ -33,6 +33,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     var currentLocation = CLLocation()
     var annotationList : [MKPointAnnotation] = []
     var sv : UIView!
+    var model : String!
     
     let prefs:UserDefaults = UserDefaults.standard
     
@@ -53,6 +54,10 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Get the device model
+        model = UserDefaults.standard.string(forKey: "currentDeviceModel")
+        print(model!)
+        
         //Reveal View Controller Setup
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
@@ -73,6 +78,16 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         annotationPopup.layer.cornerRadius = 5
         annotationPopup.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         annotationPopup.layer.borderWidth = 1
+        switch model {
+        case "iPhone 5c","iPhone 5","iPhone 5s","iPhone SE":
+            print("\n\nmodel worked")
+            print(model)
+            self.annotationPopup.frame.size.width = self.annotationPopup.frame.size.width * 0.8516
+            self.annotationPopup.frame.size.height = self.annotationPopup.frame.size.height * 0.8516
+            break
+        default:
+            break
+        }
         
         self.mapKitView.delegate = self
         self.mapKitView.showsUserLocation = true
