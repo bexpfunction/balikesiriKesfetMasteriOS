@@ -64,6 +64,8 @@ NSMutableArray *constPinImageList;
 NSMutableArray *constPinGalleryImages;
 NSMutableArray *constPinOriginY;
 NSMutableArray *constPinIsAnimated;
+NSMutableArray *constPinTypes;
+NSMutableArray *constPinWillRendered;
 NSMutableArray *constGlobalBearingOffsets;
 #pragma mark UserDefaults
 NSUserDefaults *pinDefaults;
@@ -93,8 +95,8 @@ NSUserDefaults *pinDefaults;
     //Setup side menu
     [self.openMenuBut setTarget:self.revealViewController];
     [self.openMenuBut setAction:@selector(revealToggle:)];
-    self.revealViewController.rearViewRevealWidth = 190;
-    self.revealViewController.rearViewRevealOverdraw = 200;
+    self.revealViewController.rearViewRevealWidth = 240;
+    self.revealViewController.rearViewRevealOverdraw = 300;
     self.revealViewController.delegate = self;
     //[self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     //[self.navigationController.navigationBar addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
@@ -152,6 +154,8 @@ NSUserDefaults *pinDefaults;
     constPinOriginY       = [[NSMutableArray alloc]init];
     constPinIsAnimated    = [[NSMutableArray alloc]init];
     constGlobalBearingOffsets = [[NSMutableArray alloc]init];
+    constPinTypes         = [[NSMutableArray alloc]init];
+    constPinWillRendered = [[NSMutableArray alloc]init];
     pinDefaults = [NSUserDefaults standardUserDefaults];
     
     [self testInternetConnection];
@@ -250,7 +254,7 @@ bool pInited = false;
 
         templateApp.SetCameraRotationQuat(deviceQuat);
         if(pInited) {
-            if(pinCount>0 && pinList != NULL){
+            if((int)pinCount>0 && pinList != NULL){
                 
                 //Check for pin on crosshair
                 CGRect screenRect = [[UIScreen mainScreen] bounds];
@@ -295,7 +299,8 @@ bool pInited = false;
             }
             for(int c=0; c<pinCount; c++){
                 pinList[c].text = (char*)[constAnimTextList[c] cStringUsingEncoding:NSUTF8StringEncoding];
-                //NSLog(@"name: %s",pinList[c].text);
+                
+                //NSLog(@"name: %s willRendered %d\n",pinList[c].text,pinList[c].willBeRendered);
             }
             //NSLog(@"\n");
             templateApp.SetPinDatas(pinList, pinCount, 1);
@@ -450,6 +455,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
     [constPinOriginY removeAllObjects];
     [constPinIsAnimated removeAllObjects];
     [constGlobalBearingOffsets removeAllObjects];
+    [constPinTypes removeAllObjects];
     pinCount = 0;
     pinList = NULL;
     NSString *generatedURL = [NSString stringWithFormat:@"http://app.balikesirikesfet.com/json_distance?lat=%@&lng=%@&dis=2",curLat,curLng];
@@ -473,7 +479,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                           NSError *jsError;
                                           id jsonObj = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&jsError];
                                           if (error) {
-                                              NSLog(@"Error parsing JSON: %@", error);
+                                              //NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                                           }
                                           else
                                           {
@@ -485,7 +491,7 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                   
                                                   if(jsonArray.count<=0){
                                                       UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"UYARI" message:@"Bulunduğunuz noktanın yakınlarında herhangi bir yer bildirimi bulunmamaktadır!" preferredStyle:UIAlertControllerStyleAlert];
-                                                      
+
                                                       UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Tamam" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
                                                                            {
                                                                                UIStoryboard *sb = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -496,8 +502,12 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       [alert addAction:ok];
                                                       [self presentViewController:alert animated:YES completion:nil];
                                                   }
-                                                  
+
                                                   if(jsonArray.count>0 && glInitialized) {
+                                                      NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                                                      
+                                                      NSLog(@"\n\nselected %ld\n\n",(long)[defaults integerForKey:@"pinCategorySelection"]);
+                                                      
                                                       pinCount = (int)jsonArray.count;
                                                       pinList = NULL;
                                                       pinList = (pinData*)malloc(sizeof(pinData)*(int)jsonArray.count);
@@ -510,18 +520,26 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                       float end = 0.17f;
                                                       
                                                       startingHeading = heading;
-
+                                                      
+                                                      
                                                       for(int cnt=0; cnt<jsonArray.count; cnt++){
+                                                          
                                                           float pLat = [(jsonArray[cnt][@"lat"]) floatValue];
                                                           float pLng = [(jsonArray[cnt][@"lng"]) floatValue];
                                                           CLLocation* tmpPinLoc = [[CLLocation alloc] initWithLatitude:pLat longitude:pLng];
                                                           
-                                                          if([currentLocation distanceFromLocation:tmpPinLoc]/1000.0f<0.01f) {
-                                                              continue;
+                                                          if([currentLocation distanceFromLocation:tmpPinLoc]/1000.0f<0.01f || [defaults integerForKey:@"pinCategorySelection"] != [(jsonArray[cnt][@"type"]) integerValue] ) {
+                                                              //NSLog(@"skipped: %@ \n",jsonArray[cnt][@"title"]);
+                                                              pinList[cnt].willBeRendered = false;
+                                                              //continue;
+                                                          } else {
+                                                              pinList[cnt].willBeRendered = true;
                                                           }
+                                                          
                                                           
                                                           [constPinLatList addObject:jsonArray[cnt][@"lat"]];
                                                           [constPinLngList addObject:jsonArray[cnt][@"lng"]];
+                                                          [constPinTypes addObject:jsonArray[cnt][@"type"]];
                                                           
 #pragma mark Calculate Bearing and set pin positions
                                                           double bearing = [self getBearing:currentLocation.coordinate.latitude :currentLocation.coordinate.longitude :tmpPinLoc.coordinate.latitude :tmpPinLoc.coordinate.longitude];
@@ -543,7 +561,27 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           if(tmpDesc == [NSNull null]) {
                                                               tmpDesc = @" ";
                                                           }
-                                                          [constDescrpList addObject:tmpDesc];
+                                                          
+                                                          NSInteger defs = [defaults integerForKey:@"pinCategorySelection"];
+                                                          NSString* tmpDate1 = [NSString stringWithFormat:@"%@ - %@\n",jsonArray[cnt][@"date1"],jsonArray[cnt][@"time1"]];
+                                                          if(tmpDate1 == [NSNull null]) {
+                                                              tmpDate1 = @" ";
+                                                          }
+                                                          NSString* tmpDate2 = [NSString stringWithFormat:@"%@ - %@\n",jsonArray[cnt][@"date2"],jsonArray[cnt][@"time2"]];
+                                                          if(tmpDate2 == [NSNull null]) {
+                                                              tmpDate2 = @" ";
+                                                          }
+                                                          if([(jsonArray[cnt][@"type"]) integerValue] == 1){
+                                                              
+                                                              NSString *tmpdsc1 = [NSString stringWithFormat:@"%@\nEtkinlik Başlama Tarihi: %@\nBitiş Tarihi: %@",tmpDesc,tmpDate1,tmpDate2];
+                                                              [constDescrpList addObject:tmpdsc1];
+                                                              NSLog(@"%@ : desc1: %@",jsonArray[cnt][@"title"],tmpdsc1);
+                                                          } else {
+                                                              [constDescrpList addObject:tmpDesc];
+                                                              NSLog(@"%@ : descNOT1: %@",jsonArray[cnt][@"title"],tmpDesc);
+                                                          }
+                                                          
+                                                          
 //                                                          float dist = [currentLocation distanceFromLocation:tmpPinLoc];
                                                           [constDistanceList addObject:[NSString stringWithFormat:@"%.2f KM",dist]];
     
@@ -595,12 +633,13 @@ bool startHeadingStored=false, updateHeadingStored = false;
                                                           }
                                                           
                                                           if(cnt==0) {
-                                                              NSLog(@"init name: %@ bearingOff: %f , projectDist: %f , tmpPinLoc: %f",constTextList[cnt],bearingOffset,projecDist, tmpPinLoc.coordinate.latitude);
+                                                              //NSLog(@"init name: %@ bearingOff: %f , projectDist: %f , tmpPinLoc: %f",constTextList[cnt],bearingOffset,projecDist, tmpPinLoc.coordinate.latitude);
                                                           }
                                                       }
-                                                      LOGI("\n\n");
-                                                      templateApp.SetPinDatas(pinList,pinCount,1.0f);
-                                                      pInited = true;
+                                                          LOGI("\n\n");
+                                                          templateApp.SetPinDatas(pinList,pinCount,1.0f);
+                                                          pInited = true;
+                                                      
                                                   } else {
                                                       pinCount = 0;
                                                   }
@@ -833,6 +872,10 @@ bool camSizeSet = false;
 
 -(void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    if(pinInfoViewOpened)
+        [self pinInfoViewOut];
+    if(annotationOpened)
+        [self annotationOut];
     glInitialized = false; drawApp = false;
     [self.motionManager stopDeviceMotionUpdates];
     [self.motionManager stopGyroUpdates];
@@ -846,6 +889,20 @@ bool camSizeSet = false;
     pinList = NULL;
     free(pinList);
     pinCount = 0;
+    
+    [constTextList removeAllObjects];
+    [constDistanceList removeAllObjects];
+    [constDescrpList removeAllObjects];
+    [constPinLatList removeAllObjects];
+    [constPinLngList removeAllObjects];
+    [constPinImageList removeAllObjects];
+    [constPinGalleryImages removeAllObjects];
+    [constAnimTextList removeAllObjects];
+    [constAnimStates removeAllObjects];
+    [constPinOriginY removeAllObjects];
+    [constPinIsAnimated removeAllObjects];
+    [constGlobalBearingOffsets removeAllObjects];
+    [constPinTypes removeAllObjects];
 }
 
 #pragma mark SWRevealControllerDelegate
@@ -892,6 +949,7 @@ bool camSizeSet = false;
     }
 }
 -(void) pinInfoViewOut{
+    //self.pinInfo.text = @" ";
     self.pinInfoView.alpha = 1.0f;
     [UIView animateWithDuration:0.3f animations:^{
         self.pinInfoView.alpha = 0.0f;
@@ -915,12 +973,14 @@ bool camSizeSet = false;
     }];
 }
 -(void) annotationOut{
+    
     self.annotationPopup.alpha = 1.0f;
     [UIView animateWithDuration:0.3f animations:^{
         self.annotationPopup.alpha = 0.0f;
     } completion:^(BOOL finished) {
         [self.annotationPopup removeFromSuperview];
         annotationOpened = false;
+        self.pinInfo.text = @" ";
     }];
 }
 
@@ -936,6 +996,7 @@ int storedPinId=-1;
             self.galleryColView.alpha = 1.0f;
         }
         [self.pinTitle setText:constTextList[storedPinId]];
+        NSLog(@"\n\ndescList: %@\n\n",constDescrpList[storedPinId]);
         [self.pinInfo setText:constDescrpList[storedPinId]];
         [self annotationIn];
     }
@@ -943,6 +1004,7 @@ int storedPinId=-1;
 
 - (IBAction)closeAnnotation:(id)sender {
     storedPinId = -1;
+    //[self.pinInfo setText:@" "];
     [self annotationOut];
 }
 

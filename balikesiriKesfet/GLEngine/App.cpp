@@ -111,7 +111,7 @@ void AppToucheBegan( float x, float y, unsigned int tap_count )
         for(int i=0;i<pinSize;i++) {
             Raycast *r = RAYCAST_createFromScreenPos(x,y,cam);
             bool hit = CheckPinHit(r,&App::pinDatas[i]);
-            if(hit) {
+            if(hit && App::pinDatas[i].willBeRendered) {
                 if(App::selectedPin != &App::pinDatas[i])
                     App::selectedPin = &App::pinDatas[i];
                 else
@@ -126,7 +126,7 @@ void AppToucheBegan( float x, float y, unsigned int tap_count )
             for(int i=0;i<pinSize;i++) {
                 Raycast *r = RAYCAST_createFromScreenPos(x,y,cam);
                 bool hit1 = CheckPinHit(r,&App::pinDatas[i]);
-                if(hit1) {
+                if(hit1 && App::pinDatas[i].willBeRendered) {
                     if(App::selectedPin != &App::pinDatas[i])
                         App::selectedPin = &App::pinDatas[i];
                     else
@@ -573,6 +573,7 @@ void AppDraw() {
                 if(App::selectedPin == &App::pinDatas[i]){
                     continue;
                 }
+                if(App::pinDatas[i].willBeRendered == true){
                 glDisable(GL_BLEND);
                 glBindVertexArrayOES(mvao);
                 PROGRAM_draw( program );
@@ -600,7 +601,9 @@ void AppDraw() {
                 modelMat.m[2].z = App::pinDatas[i].size;
                 
                 TEXT3D_print(App::pinDatas[i].text3D,font->program,cam,&modelMat,pinTextOffset);
+                }
             }
+            if(App::selectedPin->willBeRendered){
             //Draw selected later
             glDisable(GL_BLEND);
             glBindVertexArrayOES(mvao);
@@ -629,8 +632,10 @@ void AppDraw() {
             modelMat.m[2].z = App::selectedPin->size;
             
             TEXT3D_print(App::selectedPin->text3D,font->program,cam,&modelMat,pinTextOffset);
+            }
         } else {
             for(int i=pinSize-1;i>=0;i--) {
+                if(App::pinDatas[i].willBeRendered){
                 glDisable(GL_BLEND);
                 glBindVertexArrayOES(mvao);
                 PROGRAM_draw( program );
@@ -658,12 +663,14 @@ void AppDraw() {
                 modelMat.m[2].z = App::pinDatas[i].size;
 
                 TEXT3D_print(App::pinDatas[i].text3D,font->program,cam,&modelMat,pinTextOffset);
+                }
             }
         }
     }
 }
 quat mq = quaternion_fromEuler(0,0,0);
 void drawPin(pinData data){
+    
     //LOGI("\n\napppinsingle x: %f y: %f z: %f\n\n",data.position.x,data.position.y,data.position.z);
     modelMat.m[3].x = data.position.x * worldScale;
     modelMat.m[3].y = data.position.y;
@@ -772,6 +779,7 @@ bool CheckPinHit(Raycast *ray,pinData *pin){
     vec3_multiply_mat4v2(&triangle[2],&triangle[2],&modelMat);
     
     isHit = GFX_isPointInsideTriangle(triangle,pHit.point);
+
     return isHit;
 }
 
@@ -864,6 +872,7 @@ void debugMatricies(){
 
 void  AppExit(){
     pinSize = 0;
+    App::selectedPin = NULL;
     if(program != NULL){
         SHADER_free(program->fragment_shader);
         SHADER_free(program->vertex_shader);

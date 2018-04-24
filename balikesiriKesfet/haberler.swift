@@ -39,8 +39,8 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource, SW
         //Reveal View Controller Setup
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
-        revealViewController().rearViewRevealWidth = 190
-        revealViewController().rearViewRevealOverdraw = 250
+        revealViewController().rearViewRevealWidth = 240
+        revealViewController().rearViewRevealOverdraw = 300
         revealViewController().delegate = self
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
@@ -72,7 +72,7 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource, SW
                         tmpArticle.id = id
                         tmpArticle.title = title
                         tmpArticle.abstract = abstract
-                        let picUrlBegin = "http://app.balikesirikesfet.com/file/"
+                        let picUrlBegin = "http://app.balikesirikesfet.com/"
                         tmpArticle.picUrl = picUrlBegin + picUrl
                         tmpArticle.date = date
                     }
@@ -123,9 +123,17 @@ class haberler: UIViewController, UITableViewDelegate, UITableViewDataSource, SW
         cell.cardView.layer.shadowRadius = 0.2
         cell.contentView.backgroundColor = UIColor(red: 35/255, green: 77/255, blue: 110/255, alpha: 1.0)
         cell.title.text = self.articleList[indexPath.item].title
+        if(self.articleList[indexPath.item].abstract?.isEmpty)!{
+            print("abstract empty!!!")
+            self.articleList[indexPath.item].abstract = "\n\n\n"
+        }
         cell.abstract.text = self.articleList[indexPath.item].abstract
         cell.date.text = self.articleList[indexPath.item].date
-        cell.imgView.downloadImage(from: (self.articleList[indexPath.item].picUrl!))
+        if(self.articleList[indexPath.item].picUrl! == "http://app.balikesirikesfet.com/file/null"){
+            cell.imgView.image = #imageLiteral(resourceName: "noImage")
+        }else{
+            cell.imgView.downloadImage(from: (self.articleList[indexPath.item].picUrl!))
+        }
         cell.imgView.layer.cornerRadius = 3
         cell.imgView.layer.borderWidth = 1
         cell.imgView.layer.borderColor = UIColor.white.cgColor

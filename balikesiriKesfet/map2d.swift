@@ -19,6 +19,7 @@ struct Pin {
     var lng : String!
     var pic : String!
     var distance : Double!
+    var type : Int!
     var gallery : [String] = []
 }
 
@@ -54,6 +55,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.pinList.removeAll()
         //Get the device model
         model = UserDefaults.standard.string(forKey: "currentDeviceModel")
         print(model!)
@@ -61,8 +63,8 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         //Reveal View Controller Setup
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
-        revealViewController().rearViewRevealWidth = 190
-        revealViewController().rearViewRevealOverdraw = 250
+        revealViewController().rearViewRevealWidth = 240
+        revealViewController().rearViewRevealOverdraw = 300
         revealViewController().delegate = self
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
@@ -153,6 +155,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     }
     
     func animateOut() {
+        self.pinInfo.text = "";
         UIView.animate(withDuration: 0.3, animations: {
             self.annotationPopup.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
             self.annotationPopup.alpha = 0
@@ -247,6 +250,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
         //http://app.balikesirikesfet.com/json?l=1000
         
         let urlString = "http://app.balikesirikesfet.com/json_distance?lat=\(self.currentLocation.coordinate.latitude)&lng=\(self.currentLocation.coordinate.longitude)&dis=2"
+        print(urlString)
         let urlRequest = URLRequest(url: URL(string: urlString)!)
         
         //temp request test
@@ -266,6 +270,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                 return
             }
             
+            self.pinList.removeAll(keepingCapacity: false)
             self.pinList = []
             
             do {
@@ -294,9 +299,16 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                 var count : Int
                 count = 0
                 for pin in json {
+                    let selectedType = UserDefaults.standard.integer(forKey: "pinCategorySelection") as Int
+                    
                     if let title = pin["title"] as? String{
                         tmpPin.title = title
                     }
+                    
+                    if let type = pin["type"] as? String{
+                        tmpPin.type = Int(type)
+                    }
+                    
                     if let lat = pin["lat"] as? String{
                         tmpPin.lat = lat
                     }
@@ -307,14 +319,44 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                         tmpPin.pic = pic
 
                     }
+                    tmpPin.info = " "
                     if let info = pin["description"] as? String {
+                        print("info: " + info)
                         if(info.isEmpty) {
-                            tmpPin.info = ""
+                            tmpPin.info = " "
                         } else {
                         tmpPin.info = info
                         }
                     }
-                    
+                    if let date1 = pin["date1"] as? String {
+                        print(date1)
+                        if(date1.isEmpty == false && selectedType == tmpPin.type && selectedType == 1) {
+                            tmpPin.info = tmpPin.info + "\nEtkinlik Başlangıcı: " + date1
+                        } else {
+                            
+                        }
+                    }
+                    if let time1 = pin["time1"] as? String {
+                        if(time1.isEmpty == false && selectedType == tmpPin.type && selectedType == 1) {
+                            tmpPin.info = tmpPin.info + " - " + time1 + "\n"
+                        } else {
+                            
+                        }
+                    }
+                    if let date2 = pin["date2"] as? String {
+                        if(date2.isEmpty == false && selectedType == tmpPin.type && selectedType == 1) {
+                            tmpPin.info = tmpPin.info + "Etkinlik Sonu: " + date2
+                        } else {
+                            
+                        }
+                    }
+                    if let time2 = pin["time2"] as? String {
+                        if(time2.isEmpty  == false && selectedType == tmpPin.type && selectedType == 1) {
+                            tmpPin.info = tmpPin.info + " - " + time2
+                        } else {
+                            
+                        }
+                    }
                     if let gallery = pin["pic2"] as? [String] {
                         tmpPin.gallery.removeAll(keepingCapacity: false)
                         for pct in gallery {
@@ -324,6 +366,13 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                             }
                         }
                     }
+                    
+                    if(selectedType != tmpPin.type && selectedType != -1){
+                        print("Skipped ",tmpPin.title,tmpPin.type)
+                        continue
+                    }
+                    print("Not skipped ",tmpPin.title,tmpPin.type)
+                    
                     let annotation = MKPointAnnotation()
                     annotation.coordinate = CLLocationCoordinate2D(latitude: (tmpPin.lat! as NSString).doubleValue, longitude: (tmpPin.lng! as NSString).doubleValue)
                     annotation.title = tmpPin.title;
@@ -339,7 +388,28 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                     count = count + 1
                     
                     self.pinList.append(tmpPin)
+                    tmpPin = Pin()
                 }
+                
+                if self.pinList.count <= 0 {
+                    let alert = UIAlertController(title: "UYARI", message: "Bulunduğunuz noktanın yakınlarında herhangi bir yer bildirimi bulunmamaktadır!", preferredStyle: UIAlertControllerStyle.alert)
+                    alert.addAction(UIAlertAction(title: "Tamam", style: UIAlertActionStyle.default, handler: {
+                        action in
+                        switch action.style{
+                        case .default:
+                            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                            let controller = storyboard.instantiateViewController(withIdentifier: "anaSayfaVC")
+                            self.navigationController?.pushViewController(controller, animated: true)
+                            break
+                        case.cancel:
+                            break
+                        case.destructive:
+                            break
+                        }
+                    }))
+                    self.present(alert, animated: true, completion: nil)
+                } else {
+                
                 self.pinList.sort{$0.distance! < $1.distance!}
                 DispatchQueue.main.async {
                     self.pinListTV.reloadData() {
@@ -359,6 +429,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
                         self.pinListTV.selectRow(at: indPath as IndexPath, animated: true, scrollPosition: UITableViewScrollPosition.middle)
                     }
                 }
+            }
             } catch let error {
                 print(error)
             }
@@ -394,6 +465,7 @@ class map2d: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UIT
     func openInfoButClicked(_ sender: UIButton) {
         selectedPinId = sender.tag
         pinTitle.text = pinList[sender.tag].title
+        pinInfo.text = " "
         pinInfo.text = pinList[sender.tag].info
         if(pinList[sender.tag].gallery.count > 0) {
             pinGalleryColView.isHidden = false

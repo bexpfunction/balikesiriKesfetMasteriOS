@@ -20,8 +20,8 @@ class bbbFacebook: UIViewController, UIWebViewDelegate, SWRevealViewControllerDe
         //Reveal View Controller Setup
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
-        revealViewController().rearViewRevealWidth = 190
-        revealViewController().rearViewRevealOverdraw = 250
+        revealViewController().rearViewRevealWidth = 240
+        revealViewController().rearViewRevealOverdraw = 300
         revealViewController().delegate = self
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())

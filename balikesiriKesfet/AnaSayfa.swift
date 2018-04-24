@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
     
@@ -19,6 +20,8 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
     @IBOutlet weak var webBut: UIButton!
     @IBOutlet weak var quitBut: UIButton!
     @IBOutlet weak var openMenuBut: UIBarButtonItem!
+    @IBOutlet weak var agPopupBut: UIButton!
+    @IBOutlet weak var mapPopupBut: UIButton!
     
     //Views
     @IBOutlet weak var agbView: UIView!
@@ -27,11 +30,14 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
     @IBOutlet weak var duyuruBView: UIView!
     @IBOutlet weak var webBView: UIView!
     @IBOutlet weak var bizeYazinBView: UIView!
+    @IBOutlet var pinPopup: UIView!
     
     let network: NetworkManager = NetworkManager.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        UserDefaults.standard.set(-1, forKey: "pinCategorySelection")
+        
         //Buttons and view setup
         agbView.layer.cornerRadius = 5
         agbView.layer.borderWidth = 1
@@ -69,12 +75,24 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
         uygHakkindaBut.layer.borderWidth = 1
         uygHakkindaBut.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
         
+        agPopupBut.layer.cornerRadius = 5
+        agPopupBut.layer.borderWidth = 1
+        agPopupBut.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        
+        mapPopupBut.layer.cornerRadius = 5
+        mapPopupBut.layer.borderWidth = 1
+        mapPopupBut.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        
+        pinPopup.layer.cornerRadius = 5
+        pinPopup.layer.borderWidth = 1
+        pinPopup.layer.borderColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1).cgColor
+        
         
         //Reveal View Controller Setup
         openMenuBut.target = self.revealViewController()
         openMenuBut.action = #selector(SWRevealViewController.revealToggle(_:))
-        revealViewController().rearViewRevealWidth = 190
-        revealViewController().rearViewRevealOverdraw = 250
+        revealViewController().rearViewRevealWidth = 240
+        revealViewController().rearViewRevealOverdraw = 300
         //Gesture recognizer for reveal view controller
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
@@ -93,11 +111,50 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
     }
     
     @IBAction func agModuClick(_ sender: UIButton) {
-        if(checkConnection(failMessage: "Artırılmış gerçeklik moduna ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let controller = storyboard.instantiateViewController(withIdentifier: "agVC")
-            self.navigationController?.pushViewController(controller, animated: true)
+        if(checkConnection(failMessage: "Projeler sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+            if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) ==  AVAuthorizationStatus.denied {
+                let alert = UIAlertController(title: "UYARI", message: "Artırılmış gerçeklik moduna ulaşabilmeniz için uygulamanın kameraya erişimine izin vermiş olmanız gerekmektedir!", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Tamam", style: UIAlertActionStyle.default, handler: {
+                    action in
+                    switch action.style{
+                    case .default:
+                        break
+                    case.cancel:
+                        break
+                    case.destructive:
+                        break
+                    }
+                }))
+                alert.addAction(UIAlertAction(title: "Ayarlar", style: UIAlertActionStyle.default, handler: {
+                    action in
+                    switch action.style{
+                    case .default:
+                        UIApplication.shared.open(URL(string:UIApplicationOpenSettingsURLString)!)
+                        break
+                    case.cancel:
+                        break
+                    case.destructive:
+                        break
+                    }
+                }))
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                UserDefaults.standard.set(3, forKey: "pinCategorySelection")
+                animateIn()
+                //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                //let controller = storyboard.instantiateViewController(withIdentifier: "agVC")
+                //self.navigationController?.pushViewController(controller, animated: true)
+            }
+            
         }
+        //        let url = URL(string: "http://www.balikesir.bel.tr")!
+        //        if UIApplication.shared.canOpenURL(url) {
+        //            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        //            //If you want handle the completion block than
+        //            UIApplication.shared.open(url, options: [:], completionHandler: { (success) in
+        //                print("Open url : \(success)")
+        //            })
+        //        }
     }
     
     @IBAction func haritaClick(_ sender: UIButton) {
@@ -109,22 +166,87 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
     }
     
     @IBAction func duyuruClicked(_ sender: UIButton) {
-        if(checkConnection(failMessage: "Duyurular sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let controller = storyboard.instantiateViewController(withIdentifier: "duyuruVC")
-            self.navigationController?.pushViewController(controller, animated: true)
+        if(checkConnection(failMessage: "Kültürel Etkinlikler sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+            if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) ==  AVAuthorizationStatus.denied {
+                let alert = UIAlertController(title: "UYARI", message: "Artırılmış gerçeklik moduna ulaşabilmeniz için uygulamanın kameraya erişimine izin vermiş olmanız gerekmektedir!", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Tamam", style: UIAlertActionStyle.default, handler: {
+                    action in
+                    switch action.style{
+                    case .default:
+                        break
+                    case.cancel:
+                        break
+                    case.destructive:
+                        break
+                    }
+                }))
+                alert.addAction(UIAlertAction(title: "Ayarlar", style: UIAlertActionStyle.default, handler: {
+                    action in
+                    switch action.style{
+                    case .default:
+                        UIApplication.shared.open(URL(string:UIApplicationOpenSettingsURLString)!)
+                        break
+                    case.cancel:
+                        break
+                    case.destructive:
+                        break
+                    }
+                }))
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                UserDefaults.standard.set(1, forKey: "pinCategorySelection")
+                animateIn()
+                //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                //let controller = storyboard.instantiateViewController(withIdentifier: "agVC")
+                //self.navigationController?.pushViewController(controller, animated: true)
+            }
+            
         }
+//        if(checkConnection(failMessage: "Duyurular sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+//            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//            let controller = storyboard.instantiateViewController(withIdentifier: "duyuruVC")
+//            self.navigationController?.pushViewController(controller, animated: true)
+//        }
     }
     
     @IBAction func webButClicked(_ sender: UIButton) {
-        let url = URL(string: "http://www.balikesir.bel.tr")!
-        if UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            //If you want handle the completion block than
-            UIApplication.shared.open(url, options: [:], completionHandler: { (success) in
-                print("Open url : \(success)")
-            })
+        if(checkConnection(failMessage: "Görülmesi Gereken Yerler sayfasına ulaşabilmeniz için internet bağlantınızın aktif olması gerekmektedir!")) {
+            if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) ==  AVAuthorizationStatus.denied {
+                let alert = UIAlertController(title: "UYARI", message: "Artırılmış gerçeklik moduna ulaşabilmeniz için uygulamanın kameraya erişimine izin vermiş olmanız gerekmektedir!", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Tamam", style: UIAlertActionStyle.default, handler: {
+                    action in
+                    switch action.style{
+                    case .default:
+                        break
+                    case.cancel:
+                        break
+                    case.destructive:
+                        break
+                    }
+                }))
+                alert.addAction(UIAlertAction(title: "Ayarlar", style: UIAlertActionStyle.default, handler: {
+                    action in
+                    switch action.style{
+                    case .default:
+                        UIApplication.shared.open(URL(string:UIApplicationOpenSettingsURLString)!)
+                        break
+                    case.cancel:
+                        break
+                    case.destructive:
+                        break
+                    }
+                }))
+                self.present(alert, animated: true, completion: nil)
+            } else {
+                UserDefaults.standard.set(2, forKey: "pinCategorySelection")
+                animateIn()
+                //let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                //let controller = storyboard.instantiateViewController(withIdentifier: "agVC")
+                //self.navigationController?.pushViewController(controller, animated: true)
+            }
+            
         }
+        
     }
     
     @IBAction func bizeYazClicked(_ sender: UIButton) {
@@ -153,8 +275,30 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
     }
     
     @IBAction func uygHkClicked(_ sender: UIButton) {
+                let url = URL(string: "http://www.balikesir.bel.tr")!
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    //If you want handle the completion block than
+                    UIApplication.shared.open(url, options: [:], completionHandler: { (success) in
+                        print("Open url : \(success)")
+                    })
+                }
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let controller = storyboard.instantiateViewController(withIdentifier: "uygHkVC")
+//        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    @IBAction func toAgModeGlobal(_ sender: Any) {
+        animateOut()
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let controller = storyboard.instantiateViewController(withIdentifier: "uygHkVC")
+        let controller = storyboard.instantiateViewController(withIdentifier: "agVC")
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    @IBAction func toMapModeGlobal(_ sender: Any) {
+        animateOut()
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let controller = storyboard.instantiateViewController(withIdentifier: "haritaVC")
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -162,6 +306,31 @@ class AnaSayfa: UIViewController, SWRevealViewControllerDelegate {
         exit(0)
     }
 
+    
+    //Popup animations
+    func animateIn() {
+        self.view.addSubview(pinPopup)
+        pinPopup.center = self.view.center
+        
+        pinPopup.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+        pinPopup.alpha = 0
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            self.pinPopup.alpha = 1
+            self.pinPopup.transform = CGAffineTransform.identity
+        })
+    }
+    
+    func animateOut() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.pinPopup.transform = CGAffineTransform.init(scaleX: 1.3, y: 1.3)
+            self.pinPopup.alpha = 0
+            
+        }, completion: {
+            (success:Bool) in
+            self.pinPopup.removeFromSuperview()
+        })
+    }
     
     func checkConnection(failMessage: String) -> Bool {
         var connected:Bool

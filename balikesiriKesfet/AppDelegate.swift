@@ -13,6 +13,7 @@ import Firebase
 import FirebaseMessaging
 import FBSDKShareKit
 import CoreLocation
+import AVFoundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, CLLocationManagerDelegate {
@@ -51,6 +52,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         self.setupLocationManager()
 
+        if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) ==  AVAuthorizationStatus.authorized {
+            // Already Authorized
+        } else {
+            AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (granted: Bool) -> Void in
+                if granted == true {
+                    // User granted
+                } else {
+                    // User Rejected
+                }
+            })
+        }
+        
+        UserDefaults.standard.set(-1, forKey: "pinCategorySelection")
+        
         return true
     }
     

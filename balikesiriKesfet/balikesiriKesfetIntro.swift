@@ -93,11 +93,12 @@ class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
     
     //MARK: FBSDKLoginButtonDelegate
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
-        NSLog("hahahah fb description: %s", loginButton.description)
+        //NSLog("hahahah fb description: %s", loginButton.description)
         if ((error) != nil) {
             // Process error
             //print ("facebook login error")
             self.guestEntryButton.isHidden = false;
+            
         }
         else if result.isCancelled {
             // Handle cancellations
@@ -108,8 +109,65 @@ class balikesiriKesfetIntro: UIViewController, FBSDKLoginButtonDelegate {
             // Navigate to other view
             //print ("facebook login complete")
             self.guestEntryButton.isHidden = true;
-            //go to main
-           // self.performSegue(withIdentifier: "toMainNav", sender: self)
+            
+            //FACEBOOK REQ
+            var ageRange : String?
+            var birthday : String?
+            var gender : String?
+            var name : String?
+            if((FBSDKAccessToken.current()) != nil){
+                let graphRequest:FBSDKGraphRequest = FBSDKGraphRequest(graphPath: "me", parameters: ["fields":"first_name, age_range, birthday, gender"])
+                
+                graphRequest.start(completionHandler: { (connection, result, error) -> Void in
+                    
+                    if ((error) != nil)
+                    {
+                        print("Error: \(error)")
+                    }
+                    else
+                    {
+                        let data:[String:AnyObject] = result as! [String : AnyObject]
+                        if let fName = data["first_name"] as? String{
+                            name = fName
+                            NSLog("\n\name: %@\n\n", name!)
+                        }
+                        if let aRange = data["age_range"] as? String{
+                            ageRange = aRange
+                            NSLog("\n\ngender: %@\n\n", aRange)
+                        }
+                        if let bDay = data["birthday"] as? String{
+                            birthday = bDay
+                        }
+                        if let gen = data["gender"] as? String{
+                            gender = gen
+                        }
+                    }
+                })
+            }
+            // prepare json data
+            if(gender != nil && ageRange != nil){
+            // create post request
+                let url = URL(string: "http://app.balikesirikesfet.com/facebook?json={\"age_range\":"+ageRange!+"\"gender\":"+gender!)!
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            
+            // insert json data to the request
+            //request.httpBody = jsonData
+            
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data, error == nil else {
+                    print(error?.localizedDescription ?? "No data")
+                    return
+                }
+                let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+                if let responseJSON = responseJSON as? [String: Any] {
+                    print(responseJSON)
+                }
+            }
+
+            task.resume()
+            }
+            
         }
     }
     
